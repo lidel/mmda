@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; background:#eee; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; margin-bottom:.4em; }
+    h1 span { font-size:60%; color:#666; font-weight:normal; }
+    h5,h6 { margin-top: 10px; }
+    table { border:none; border-collapse: collapse; width:100%; }
+    td, th { vertical-align:top; padding:2px 3px; }
+    th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    #info { background:#f6f6f6; }
+    #info ol { margin: 0.5em 4em; }
+    #info ol li { font-family: monospace; }
+    #summary { background: #ffc; }
+    #explanation { background:#eee; border-bottom: 0px none; font-size: x-small; }
+    ul { margin-left: 50px; }
+    a {text-decoration:none; color:red;}
+    a:hover {border-bottom:1px solid black;}
+    img {border:none;}
+  </style>
+
+</head>
+<body>
+  <div id="summary">
+
+<form action="/search/" method="post" style="display:block;width:500px;float:right">
+<fieldset>
+    <legend>Search form</legend>
+        <label for="type">Search for</label>
+    <select id="type" name="type">
+        <option value="artist">Artist</option>
+        <option value="release">Release</option>
+    </select>
+    <label for="query">called</label>
+        <input type="text" id="query" name="query" tabindex="1" value="">
+    <button tabindex="2" class="search-button" type="submit"><span>Search</span></button>
+</fieldset>
+</form>
+
+
+{% block header %}{% endblock %}
+  </div>
+  <div id="info">
+{% block content %}{% endblock %}
+  </div>
+
+  <div id="explanation">
+{% block footer %}{% endblock %}
+  </div>
+
+</body>
+</html>
+

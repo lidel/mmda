@@ -1,0 +1,8 @@
+function(doc) {
+  if (doc.doc_type == "CachedReleaseGroup") {
+    if (doc.primary) {
+      emit(doc.artist_mbid,{"title": doc.title, "release_type": doc.release_type, "mbid": doc.primary[0], "year": doc.primary[1]});
+    }
+  }
+}
+

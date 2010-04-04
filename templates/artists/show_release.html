@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load release_helpers %}
+{% block title %}release page at mmda{% endblock %}
+{% block header %}
+{% if release.cover %}<img src="{{ release.cover }}" alt="artwork" width="160" height="160" style="float:right" />{% endif %}
+<h1>motherfuckin' release</h1>
+<h2>“{{ release.title }}”</h2>
+<h3>by <big><a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ artist.name }}</a></big></h3>
+
+{% endblock %}
+{% block content %}
+
+mbid: {{ mbid }}
+
+
+<h5>Release related websites:</h5>
+<ul>
+{% for type,links in release.urls.items %}
+    {% if links|length_is:"1" %}
+    <li><a href="{{ links|first }}">{{ type|spacecamel }}</a></li>
+    {% else %}
+    <li>Discogs: {% for link in links %}
+    <a href="{{ link }}">#{{ forloop.counter }}</a>
+    {% endfor %}
+    </li>
+    {% endif %}
+{% endfor %}
+    <li><a href="http://musicbrainz.org/release/{{ mbid }}.html">MusicBrainz</a></li>
+</ul>
+
+<h5>Track listing</h5>
+<ol>
+    {% for track in release.tracks %}
+    <li><small>[{{ track.duration|default:"?:??" }}]</small> {{ track.title }}</li>
+    {% endfor %}
+</ol>
+
+<h5>Release events:</h5>
+<ul>
+    {% for event in release.release_events %}
+    <li>{{ event|pprint }}</li>
+    {% endfor %}
+</ul>
+
+{% if release.credits %}
+<h5>Credits:</h5>
+{% regroup release.credits|dictsort:"type" by type as credits %}
+<ul>
+{% for credit_type in credits %}
+<li>{{ credit_type.grouper|lower }} by
+    {% for credit_artist in credit_type.list %}
+    <a href="{% url show-artist credit_artist.name|slugify2 credit_artist.mbid %}">{{ credit_artist.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+
+
+<h5>Alternative track listings</h5>
+<ul>
+{% for alt_mbid,alt_release in release_group.releases.items %}
+    {% ifnotequal alt_release release %}
+    <li><a href="{% url show-release uri_artist, alt_release.title|slugify, alt_mbid %}">{{ alt_release.title }}</a> {{alt_release.}} <small>({{alt_release.tracks_count}} tracks)</small></li>
+    {% endifnotequal %}
+{% empty %}
+    <li>none</li>
+{% endfor %}
+
+</ul>
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load release_helpers %}
+{% block title %}“{{ search_result.query }}” – release search results{% endblock %}
+{% block header %}
+<h1>Search results</h1>
+for query: <big>“{{ search_result.query }}”</big>
+
+{% endblock %}
+{% block content %}
+
+<ul>
+{% for result in search_result.results %}
+<li>
+<a href="{% url show-release result.artist|slugify2 result.title|slugify2 result.mbid %}">{{ result.title }}</a> ~{{ result.score }}% <br />
+by <a href="{% url show-artist result.artist|slugify2 result.artist_mbid %}">{{ result.artist }}</a>
+<small>{{ result.year }} / {{ result.tracks_count }} tracks</small> </li>
+{% endfor %}
+</ul>
+
+{% endblock %}

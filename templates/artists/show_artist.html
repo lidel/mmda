@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load release_helpers %}
+{% block title %}{{ artist.name }} - artist page at music.aergia.eu{% endblock %}
+{% block header %}
+<h1>motherfuckin' artist</h1>
+<h2>{{artist.name}}</h2>
+{% ifnotequal artist.artist_type 'Unknown' %}{{ artist.artist_type|lower }}{% endifnotequal %}
+{% if artist.disambiguation %}<h4>{{artist.disambiguation}}</h4>{% endif %}
+{% if artist.aliases %}also known as: <em>{{ artist.aliases|join:", " }}</em>{% endif %}
+{% if artist.dates %}<p><em>{{artist.dates|pprint}}</em><br/></p>{% endif %}
+
+
+{% endblock %}
+{% block content %}
+
+<p>
+{% for image in artist.images.lastfm|slice:":5" %}
+    {% if forloop.first %}
+    <a href="{{ image.url }}"><img src="{{ image.big}}" alt="{{ image.title }}" style="float:right" /></a><br>
+    {% else %}
+    <img src="{{ image.square}}" width=126" height=126" alt="{{ image.title }}" style="float:right" />
+    {% endif %}
+{% endfor %}
+</p>
+<strong>Artist related websites:</strong>
+<ul>
+    {% for type,links in artist.urls.items %}
+    {% if links|length_is:"1" %}
+    <li><a href="{{ links|first }}">{{ type|spacecamel }}</a></li>
+    {% else %}
+    <li>{{ type|spacecamel }}: {% for link in links %}
+    <a href="{{ link }}">#{{ forloop.counter }}</a>
+    {% endfor %}
+    </li>
+    {% endif %}
+    {% endfor %}
+    <li><a href="http://musicbrainz.org/artist/{{ mbid }}.html">MusicBrainz</a></li>
+</ul>
+
+
+<h5>Members:</h5>
+<ul>
+    {% for member in artist.members %}
+    <li><a href="{% url show-artist member.name|slugify2 member.mbid %}">{{ member.name }}</a>
+    <small>{% if member.from %} from {{ member.from }} {% endif %} {% if member.to %} to {{ member.to }}{% endif %}</small>
+    </li>
+    {% empty %}
+    <li> no info </li>
+    {% endfor %}
+</ul>
+
+
+<h5>Member of:</h5>
+<ul>
+    {% for member in artist.member_of %}
+    <li><a href="{% url show-artist member.name|slugify2 member.mbid %}">{{ member.name }}</a>
+    <small>{% if member.from %} from {{ member.from }} {% endif %} {% if member.to %} to {{ member.to }}{% endif %}</small>
+    </li>
+    {% empty %}
+    <li> no info </li>
+    {% endfor %}
+</ul>
+
+<h5>Collaborated on:</h5>
+<ul>
+    {% for project in artist.collaborations %}
+    <li><a href="{% url show-artist project.name|slugify2 project.mbid %}">{{ project.name }}</a></li>
+    {% empty %}
+    <li> no info </li>
+    {% endfor %}
+</ul>
+
+<h5>Is a collaboration of:</h5>
+<ul>
+    {% for project in artist.collaboration_of %}
+    <li><a href="{% url show-artist project.name|slugify2 project.mbid %}">{{ project.name }}</a></li>
+    {% empty %}
+    <li> no info </li>
+    {% endfor %}
+</ul>
+
+<h5>Release groups:</h5>
+    {% regroup release_groups|dictsort:"release_type" by release_type as releases_by_type %}
+    {% for type in releases_by_type %}
+    <h6>{{ type.grouper }}</h6>
+        <ul>
+        {% for release in type.list|inclusivedictsort:"year" %}
+        <li><small>({{ release.year|trim|default:"????" }})</small> <a href="{% url show-release artist.name|slugify2, release.title|slugify2, release.mbid %}">{{ release.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+<h5>Folksonomy:</h5>
+<ul>
+    {% for tag,score in artist.tags %}
+    <li>{{ tag }} ~{{ score|percentage:100 }}</li>
+    {% empty %}
+    <li> no info </li>
+    {% endfor %}
+</ul>
+
+<h5>Similar artists:</h5>
+<ul>
+    {% for similar_artist in artist.similar %}
+    <li><a href="{% url show-artist similar_artist.name|slugify2 similar_artist.mbid %}">{{ similar_artist.name }}</a> ~{{similar_artist.score|percentage:100}}</li>
+    {% empty %}
+    <li> no info </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
