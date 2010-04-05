@@ -74,6 +74,16 @@ def percentage(fraction, population=1):
         return ''
 percentage.is_safe = True
 
+@register.filter
+def gettagsize(value, top=100):
+    """
+    Simple helper that converts any number to one of 9 tag sizes.
+    """
+    try:
+        return "%.0d" % ( value / (top/8) )
+    except ValueError:
+        return '0'
+gettagsize.is_safe = True
 
 @register.filter
 def dict_get(dict, key):

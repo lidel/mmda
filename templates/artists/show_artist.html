@@ -13,15 +13,28 @@
 {% endblock %}
 {% block content %}
 
+<div style="float:right;width:252px;border:1px solid #888">
 <p>
 {% for image in artist.images.lastfm|slice:":5" %}
     {% if forloop.first %}
-    <a href="{{ image.url }}"><img src="{{ image.big}}" alt="{{ image.title }}" style="float:right" /></a><br>
+    <a href="{{ image.url }}"><img src="{{ image.big}}" width="252" alt="{{ image.title }}" style="float:right" /></a><br>
+
+    <ul class="tag-cloud">
+        {% for tag,score in artist.tags %}
+        <a class="tag-{{ score|gettagsize }}">{{ tag }}</li>
+        {% empty %}
+        <li> no info </li>
+        {% endfor %}
+    </ul>
+
     {% else %}
-    <img src="{{ image.square}}" width=126" height=126" alt="{{ image.title }}" style="float:right" />
+    <a href="{{ image.url }}"><img src="{{ image.square}}" width=126" height=126" alt="{{ image.title }}" style="float:right" /></a>
     {% endif %}
 {% endfor %}
 </p>
+
+</div>
+
 <strong>Artist related websites:</strong>
 <ul>
     {% for type,links in artist.urls.items %}
@@ -89,14 +102,7 @@
         {% endfor %}
         </ul>
     {% endfor %}
-<h5>Folksonomy:</h5>
-<ul>
-    {% for tag,score in artist.tags %}
-    <li>{{ tag }} ~{{ score|percentage:100 }}</li>
-    {% empty %}
-    <li> no info </li>
-    {% endfor %}
-</ul>
+
 
 <h5>Similar artists:</h5>
 <ul>
