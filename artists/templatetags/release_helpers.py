@@ -1,7 +1,7 @@
 # -*- coding: utf-8
 from django import template
 from musicbrainz2.utils import extractUuid
-from django.template.defaultfilters import slugify, urlencode
+from django.template.defaultfilters import slugify, urlencode, escape
 import re
 
 register = template.Library()
@@ -49,9 +49,9 @@ def slugify2(value):
     """
     slugified = slugify(value)
     if len(slugified):
-        return slugified
+        return escape(slugified)
     else:
-        return value.strip().replace(' ','-').lower()
+        return escape(value.strip().replace(' ','-').lower())
 slugify2.is_safe = True
 
 @register.filter

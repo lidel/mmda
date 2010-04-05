@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% load release_helpers %}
-{% block title %}“{{ search_result.query }}” – artist search results{% endblock %}
+{% block title %}“{{ search_result.query_string|escape }}” – artist search results{% endblock %}
 {% block header %}
 <h1>Search results</h1>
-for query: <big>“{{ search_result.query }}”</big> 
+for query: <big>“{{ search_result.query_string|escape }}”</big>
 
 {% endblock %}
 {% block content %}
@@ -12,7 +12,10 @@ for query: <big>“{{ search_result.query }}”</big>
 {% for result in search_result.results %}
 <li><a href="{% url show-artist result.name|slugify2|default:"0" result.mbid %}">{{ result.name }}</a> ~{{ result.score }}%<br>
     <small>{{ result.note|default:""}}</small> </li>
+{% empty %}
+<p>Sorry, no artist matched your query <big>:'-(</big></p>
 {% endfor %}
 </ul>
+
 
 {% endblock %}
