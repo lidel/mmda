@@ -12,6 +12,26 @@
 
 mbid: {{ mbid }}
 
+<h5>Relations with other releases:</h5>
+{% if release.remaster_of or release.remasters or release.set_prev or release.set_next %}
+
+{% if release.set_prev %}previous in set: <a href="{% url show-release uri_artist release.set_prev.title|slugify2 release.set_prev.mbid %}">{{ release.set_prev.title }}</a> {% endif %}
+{% if release.set_next %}next in set: <a href="{% url show-release uri_artist release.set_next.title|slugify2 release.set_next.mbid %}">{{ release.set_next.title }}</a> {% endif %}
+
+{% if release.remasters %}
+    this release has remastered versions:
+    {% for remaster in release.remasters %}
+    <a href="{% url show-release uri_artist remaster.title|slugify2 remaster.mbid %}">{{ remaster.title }}</a>
+    {% endfor %}
+{% endif %}
+{% if release.remaster_of %}
+This is a remastered version of
+    <a href="{% url show-release uri_artist release.remaster_of.title|slugify2 release.remaster_of.mbid %}">{{ release.remaster_of.title }}</a>
+{% endif %}
+
+{% else %}
+none
+{% endif %}
 
 <h5>Release related websites:</h5>
 <ul>

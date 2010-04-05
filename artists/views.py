@@ -220,7 +220,7 @@ def create_shallow_releases_mb(artist_mbid, mb_releases):
     # TODO: optimize? remove? wtf
     old_cached_release_groups = db.view('artists/release_groups', key=artist_mbid)
     for group in old_cached_release_groups:
-        CachedReleaseGroup.delete(group['id'])
+        CachedReleaseGroup.get(group['id']).delete()
 
     for release_group in there_will_be_dragons.itervalues():
         #cached_release_group = CachedReleaseGroup.get_or_create(group_mbid)
@@ -244,6 +244,7 @@ def populate_deep_release_mb(release_group,release_mbid):
     release = release_group.releases[release_mbid]
     if release['cache_state']['mb'][0] == 1:
         q = ws.Query(mb_webservice)
+        # TODO: remove unused includes
         inc = ws.ReleaseIncludes(
                 tracks=True,
                 trackRelations=True,
@@ -263,26 +264,46 @@ def populate_deep_release_mb(release_group,release_mbid):
             if 'artist_mbid' not in release_group:
                 release_group.artist_mbid = extractUuid(mb_release.artist.id)
 
+            # TRACK LISTING
             # TODO: think about duration representation here
             release['tracks'] = [{'title':t.title,'mbid':extractUuid(t.id),'duration':humanize_duration(t.duration) if t.duration else None} for t in mb_release.tracks]
 
+            # URL relations
             urls = {}
             for relation in mb_release.getRelations(m.Relation.TO_URL):
                 relation_type = decruft_mb(relation.type)
                 if relation_type not in urls:
                     urls[relation_type] = []
                 urls[relation_type].append(relation.targetId)
-
-            credits = [{'type':decruft_mb(r.type), 'mbid':extractUuid(r.targetId), 'name':r.target.name} for r in mb_release.getRelations(m.Relation.TO_ARTIST)]
-
             if urls:
                 release['urls']         = urls
+
+            # CREDIT relations
+            credits = [{'type':decruft_mb(r.type), 'mbid':extractUuid(r.targetId), 'name':r.target.name} for r in mb_release.getRelations(m.Relation.TO_ARTIST)]
             if credits:
                 release['credits']      = credits
 
-            # TODO: handle Relation.TO_RELEASE (part of set, remaster, etc)
-            # TODO: move level up, after/if advanced cover lookup is added (lolwut)
-            release = populate_cover_url(release)
+            # MULTI-DISC-RELEASE information
+            # TODO: add remaster handling
+            remasters = []
+            for relation in mb_release.getRelations(m.Relation.TO_RELEASE):
+                relation_type = decruft_mb(relation.type)
+                linked_release = {'mbid':extractUuid(relation.targetId), 'title':relation.target.title}
+                print "type: %s\tmbid: %s\ttitle: %s" % (relation_type, relation.targetId, relation.target.title)
+                if relation_type == 'PartOfSet':
+                    if relation.direction == 'backward':
+                        release['set_prev'] = linked_release
+                    else:
+                        release['set_next'] = linked_release
+                elif relation_type == 'Remaster':
+                    if relation.direction == 'backward':
+                        remasters.append(linked_release)
+                    else:
+                        release['remaster_of'] = linked_release
+            if remasters:
+                release['remasters'] = remasters
+
+            release = populate_cover_url(release) # TODO: move level up, after/if advanced cover lookup is added (lolwut)
 
             release['cache_state']['mb'] = [2,datetime.utcnow()]
             release_group.save()

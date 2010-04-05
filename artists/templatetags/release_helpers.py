@@ -74,4 +74,17 @@ def percentage(fraction, population=1):
         return ''
 percentage.is_safe = True
 
+
+@register.filter
+def dict_get(dict, key):
+    """
+    Return value under specified key.
+
+    usage: {{dictionary|dict_get:var}}
+    """
+    if key in dict:
+        return dict[key]
+    else:
+        return None
+
 # TODO: coralize (adds .nyud.net to links)
