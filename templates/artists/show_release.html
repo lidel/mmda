@@ -60,7 +60,7 @@ none
 <h5>Release events:</h5>
 <ul>
     {% for event in release.release_events %}
-    <li>{{ event.date|stringformat:"s, " }} {{ event.country|stringformat:"s, " }} {{ event.format|stringformat:"s, " }}</li>
+    <li>{{ event.date }} {{ event.country }} {{ event.format }}</li>
     {% endfor %}
 </ul>
 

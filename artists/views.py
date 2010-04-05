@@ -214,7 +214,7 @@ def create_shallow_releases_mb(artist_mbid, mb_releases):
 
         # primary release is the one with earliest release date (place for future improvements)
         mb_earliest_release_date = mb_release.getEarliestReleaseEvent().getDate() if mb_release.getEarliestReleaseEvent() else None
-        if 'primary' not in release_group or mb_earliest_release_date < release_group['primary'][1]:
+        if 'primary' not in release_group or release_group['primary'][1] == None or mb_earliest_release_date < release_group['primary'][1]:
             release_group['primary'] = [release_mbid, mb_earliest_release_date]
 
     # TODO: optimize? remove? wtf
@@ -266,7 +266,15 @@ def populate_deep_release_mb(release_group,release_mbid):
 
             # TRACK LISTING
             # TODO: think about duration representation here
-            release['tracks'] = [{'title':t.title,'mbid':extractUuid(t.id),'duration':humanize_duration(t.duration) if t.duration else None} for t in mb_release.tracks]
+            tracks = []
+            for mb_track in mb_release.tracks:
+                track = {}
+                track['title'] = mb_track.title
+                track['mbid']  = extractUuid(mb_track.id)
+                if mb_track.duration:
+                    track['duration'] = humanize_duration(mb_track.duration)
+                tracks.append(track)
+            release['tracks'] = tracks
 
             # URL relations
             urls = {}

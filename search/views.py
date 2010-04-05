@@ -75,7 +75,7 @@ def initialize_cached_search_result(query_type, query_string):
         if query_type == 'artist':
             filter  = ws.ArtistFilter(name=query_string,limit=RESULTS_LIMIT)
             results = q.getArtists(filter) #TODO: add try, or maybe better in 'create_search' as a global wrapper
-            search_result.results = [ {'name':r.artist.name, 'mbid':extractUuid(r.artist.id), 'score':r.score, 'disambiguation':r.artist.disambiguation } for r in results ]
+            search_result.results = [ {'name':r.artist.name, 'mbid':extractUuid(r.artist.id), 'score':r.score, 'note':r.artist.disambiguation } for r in results ]
         elif query_type == 'release':
             filter  = ws.ReleaseFilter(title=query_string,limit=RESULTS_LIMIT)
             results = q.getReleases(filter) #TODO: add try, or maybe better in 'create_search' as a global wrapper
