@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load release_helpers %}
-{% block title %}release page at mmda{% endblock %}
+{% block title %}“{{ release.title }}” release page at mmda{% endblock %}
 {% block header %}
+
 {% if release.cover %}<img src="{{ release.cover }}" alt="artwork" width="160" height="160" style="float:right" />{% endif %}
 <h1>motherfuckin' release</h1>
 <h2>“{{ release.title }}”</h2>
@@ -10,8 +11,6 @@
 {% endblock %}
 {% block content %}
 
-mbid: {{ mbid }}
-
 <h5>Relations with other releases:</h5>
 {% if release.remaster_of or release.remasters or release.set_prev or release.set_next %}
 
@@ -19,14 +18,17 @@ mbid: {{ mbid }}
 {% if release.set_next %}next in set: <a href="{% url show-release uri_artist release.set_next.title|slugify2 release.set_next.mbid %}">{{ release.set_next.title }}</a> {% endif %}
 
 {% if release.remasters %}
-    this release has remastered versions:
+    This release has remastered versions:
+    <ul>
     {% for remaster in release.remasters %}
-    <a href="{% url show-release uri_artist remaster.title|slugify2 remaster.mbid %}">{{ remaster.title }}</a>
+    <li><a href="{% url show-release uri_artist remaster.title|slugify2 remaster.mbid %}">{{ remaster.title }}</a></li>
     {% endfor %}
+    </ul>
 {% endif %}
+
 {% if release.remaster_of %}
 This is a remastered version of
-    <a href="{% url show-release uri_artist release.remaster_of.title|slugify2 release.remaster_of.mbid %}">{{ release.remaster_of.title }}</a>
+<a href="{% url show-release uri_artist release.remaster_of.title|slugify2 release.remaster_of.mbid %}">{{ release.remaster_of.title }}</a>
 {% endif %}
 
 {% else %}
@@ -58,7 +60,7 @@ none
 <h5>Release events:</h5>
 <ul>
     {% for event in release.release_events %}
-    <li>{{ event|pprint }}</li>
+    <li>{{ event.date|stringformat:"s, " }} {{ event.country|stringformat:"s, " }} {{ event.format|stringformat:"s, " }}</li>
     {% endfor %}
 </ul>
 
