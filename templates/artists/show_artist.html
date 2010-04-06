@@ -19,13 +19,13 @@
     {% if forloop.first %}
     <a href="{{ image.url }}"><img src="{{ image.big}}" width="252" alt="{{ image.title }}" style="float:right" /></a><br>
 
-    <ul class="tag-cloud">
+    <div class="tag-cloud">
         {% for tag,score in artist.tags %}
-        <a class="tag-{{ score|gettagsize }}">{{ tag }}</li>
+        <a class="tag-{{ score|gettagsize }}">{{ tag }}</a>
         {% empty %}
-        <li> no info </li>
+        no tags :-(
         {% endfor %}
-    </ul>
+    </div>
 
     {% else %}
     <a href="{{ image.url }}"><img src="{{ image.square}}" width=126" height=126" alt="{{ image.title }}" style="float:right" /></a>

@@ -274,9 +274,7 @@ def populate_deep_release_mb(release_group,release_mbid):
             # TODO: think about duration representation here
             tracks = []
             for mb_track in mb_release.tracks:
-                track = {}
-                track['title'] = mb_track.title
-                track['mbid']  = extractUuid(mb_track.id)
+                track = {'title':mb_track.title, 'mbid':extractUuid(mb_track.id)}
                 if mb_track.duration:
                     track['duration'] = humanize_duration(mb_track.duration)
                 tracks.append(track)
@@ -303,7 +301,6 @@ def populate_deep_release_mb(release_group,release_mbid):
             for relation in mb_release.getRelations(m.Relation.TO_RELEASE):
                 relation_type = decruft_mb(relation.type)
                 linked_release = {'mbid':extractUuid(relation.targetId), 'title':relation.target.title}
-                print "type: %s\tmbid: %s\ttitle: %s" % (relation_type, relation.targetId, relation.target.title)
                 if relation_type == 'PartOfSet':
                     if relation.direction == 'backward':
                         release['set_prev'] = linked_release
@@ -356,7 +353,7 @@ def populate_cover_url(release):
     CoverArtLink relation is removed, but AmazonASIN stays since it may serve other purpose.
     """
     cover_url = False
-    if 'urls' in release:
+    if 'cover' not in release and 'urls' in release:
         for link_type,links in release['urls'].iteritems():
             if link_type == 'CoverArtLink':
                 cover_url = links[0]
