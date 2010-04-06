@@ -24,6 +24,7 @@
     a {text-decoration:none; color:red;}
     a:hover {border-bottom:1px solid black;}
     img {border:none;}
+    fieldset { padding: 5px}
     /* TAG CLOUD PROTOTYPE */
     .tag-cloud {
         text-align: center;
@@ -31,32 +32,27 @@
         background-color: #FFFFCC;
         margin:0;
     }
-    .tag-cloud a { color: #223 }
+    /* TODO: make django tag that makes cloud from list */
+    .tag-cloud a {
+        color: #223;
+        vertical-align:middle;
+        margin-right:2px;
+        margin-left:2px;
+        line-height: 15px;
+    }
     .tag-0 {
-        font-size: 11px;
+        font-size: 7px;
     }
     .tag-1 {
-        font-size: 12px;
+        font-size: 10px;
     }
     .tag-2 {
-        font-size: 13px;
-    }
-    .tag-3 {
         font-size: 14px;
     }
-    .tag-4 {
-        font-size: 15px;
-    }
-    .tag-5 {
-        font-size: 16px;
-    }
-    .tag-6 {
+    .tag-3 {
         font-size: 17px;
     }
-    .tag-7 {
-        font-size: 18px;
-    }
-    .tag-8 {
+    .tag-4 {
         font-size: 19px;
     }
 </style>
@@ -65,7 +61,7 @@
 <body>
   <div id="summary">
 
-<form action="/search/" method="post" style="display:block;width:500px;float:right">
+<form action="/search/" method="post" style="display:block;width:410px;float:right">
 <fieldset>
     <legend>Search form</legend>
         <label for="type">Search for</label>

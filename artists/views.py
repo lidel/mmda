@@ -14,6 +14,7 @@ import pylast
 import time
 from django.conf import settings
 
+
 #from django.template.defaultfilters import slugify
 from mmda.artists.templatetags.release_helpers import slugify2
 from django.core.urlresolvers import reverse
@@ -130,6 +131,11 @@ def populate_artist_lastfm(artist):
             print 'Error pylast:', e
         else:
             # TODO: make it compatible with tags imported from mb (TODO2: add tags from MusicBrainz)
+
+            # TODO: remove random?
+            import random
+            random.shuffle(lastfm_tags)
+
             artist.tags                     = lastfm_tags
             artist.similar                  = lastfm_similar
             artist.urls['Last.fm']          = [lastfm_url]

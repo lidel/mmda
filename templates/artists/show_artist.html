@@ -98,7 +98,7 @@
     <h6>{{ type.grouper }}</h6>
         <ul>
         {% for release in type.list|inclusivedictsort:"year" %}
-        <li><small>({{ release.year|trim|default:"????" }})</small> <a href="{% url show-release artist.name|slugify2, release.title|slugify2, release.mbid %}">{{ release.title }}</a></li>
+        <li><small>({{ release.year|trim|default:"____" }})</small> <a href="{% url show-release artist.name|slugify2, release.title|slugify2, release.mbid %}">{{ release.title }}</a></li>
         {% endfor %}
         </ul>
     {% endfor %}

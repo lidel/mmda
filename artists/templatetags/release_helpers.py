@@ -3,6 +3,7 @@ from django import template
 from musicbrainz2.utils import extractUuid
 from django.template.defaultfilters import slugify, urlencode, escape
 import re
+import random
 
 register = template.Library()
 
@@ -77,10 +78,10 @@ percentage.is_safe = True
 @register.filter
 def gettagsize(value, top=100):
     """
-    Simple helper that converts any number to one of 9 tag sizes.
+    Convert any number to one of 5 predefined tag sizes.
     """
     try:
-        return "%.0d" % ( value / (top/8) )
+        return "%.0d" % ( value / (top/4) )
     except ValueError:
         return '0'
 gettagsize.is_safe = True
