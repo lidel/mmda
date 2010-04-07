@@ -10,6 +10,7 @@ from musicbrainz2.utils import extractUuid, extractFragment
 from datetime import datetime
 import re
 import pylast
+import surf
 #
 import time
 from django.conf import settings
@@ -39,6 +40,7 @@ def show_artist(request, uri_artist, mbid):
 
     # TODO: check if lasfm stuff is only used here
     artist = populate_artist_lastfm(artist)
+    artist = populate_dbpedia(artist)
 
     unsorted_release_groups = db.view('artists/release_groups', key=mbid)
 
@@ -60,6 +62,7 @@ def show_release(request, uri_artist, uri_release, mbid):
     release_group   = populate_deep_release_mb(release_group,mbid)
     release         = release_group.releases[mbid]
 
+    release = populate_dbpedia(release)
     # basic SEO check
     artist_seo_name     = slugify2(artist.name)
     release_seo_name    = slugify2(release['title'])
@@ -435,6 +438,41 @@ def populate_artist_mb(artist, mb_artist):
     if collaboration_of:
         artist.collaboration_of = collaboration_of
     return artist
+
+def populate_dbpedia(artist_or_release):
+    """
+    Populate artist or release with abstract from wikipedia (if present).
+    """
+    # TODO: fix WARNING:ReaderPlugin:cjson not available, falling back on slower simplejson
+    #wiki_resource = 'Marek_Grechuta'
+    #wiki_lang     = 'en'
+    if 'urls' in artist_or_release and 'Wikipedia' in artist_or_release['urls']:
+        for url in artist_or_release['urls']['Wikipedia']:
+            raped_url     = url.split('/')
+            wiki_resource = raped_url[-1]
+            wiki_lang     = raped_url[2].split('.')[0]
+            wiki_url      = url
+            if wiki_lang == 'en':
+                break
+        if wiki_resource and wiki_lang:
+            store = surf.Store(reader = "sparql_protocol", endpoint = "http://dbpedia.org/sparql")
+            session = surf.Session(store)
+            sparql_query = "SELECT ?abstract WHERE {{ <http://dbpedia.org/resource/%s> <http://dbpedia.org/property/abstract> ?abstract FILTER langMatches( lang(?abstract), '%s') } }" % (wiki_resource, wiki_lang)
+            try:
+                mmda_logger('wiki','request','abstract',wiki_resource)
+                # TODO: timeout?
+                sparql_result = session.default_store.execute_sparql(sparql_query) # TODO: error handling
+                mmda_logger('wiki','result','found abstracts',len(sparql_result['results']['bindings']))
+                if sparql_result['results']['bindings']:
+                    artist_or_release.wikipedia = {'abstract':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang}
+                    # TODO: add cache_status dbpedia
+                else:
+                    artist_or_release.wikipedia = {'abstract':'no results dawg'}
+            except Exception:
+                artist_or_release.wikipedia = {'abstract':'fail dawg'}
+    return artist_or_release
+
+# HELPERS
 
 def lastfm_get_similar_optimized(lastfm_artist,limit=10):
     """
