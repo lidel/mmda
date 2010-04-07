@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load release_helpers %}
-{% load render_partial %}
+{% load universal_abstract %}
 {% block title %}“{{ release.title }}” release page at mmda{% endblock %}
 {% block header %}
 
@@ -37,7 +37,7 @@ none
 {% endif %}
 
 
-{% render_partial "artists/partials/wikipedia_abstract.html" artist_or_releasegroup:release_group %}
+{% abstract_for release_group %}
 
 
 <h5>Release related websites:</h5>

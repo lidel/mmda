@@ -366,6 +366,9 @@ def populate_cover_url(release):
                 asin = links[0].split('/')[-1]
                 cover_url = "http://images.amazon.com/images/P/%s.01.MZZZZZZZ.jpg" % asin
     # TODO: additional/fallback cover lookoop here
+    if not cover_url:
+        # TODO: make it smart
+        release['cover'] = 'http://www.cornielyrics.org.nyud.net/images/jewelcase.png'
     if cover_url:
         release['cover'] = cover_url
     return release
@@ -446,6 +449,7 @@ def populate_dbpedia(artist_or_releasegroup):
     # if artist_or_releasegroup is ReleaseGroup, we look for release with wikipedia URL
     # TODO: check performance, and if better - replace in other parts
     # TODO: DRY: refactor
+    # TODO: make compatible with multiple abstract sources
     if 'wiki' not in artist_or_releasegroup.cache_state:
         wiki_resource = None
         if 'releases' in artist_or_releasegroup:
@@ -480,7 +484,7 @@ def populate_dbpedia(artist_or_releasegroup):
                 sparql_result = session.default_store.execute_sparql(sparql_query) # TODO: error handling
                 mmda_logger('wiki','result','found abstracts',len(sparql_result['results']['bindings']))
                 if sparql_result['results']['bindings']:
-                    artist_or_releasegroup.wikipedia = {'abstract':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang}
+                    artist_or_releasegroup.abstract = {'content':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang, 'provider':'Wikipedia'}
                     artist_or_releasegroup.cache_state['wiki'] = [1,datetime.utcnow()]
                     artist_or_releasegroup.save()
                     # TODO: add cache_status dbpedia

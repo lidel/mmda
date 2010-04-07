@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load release_helpers %}
-{% load render_partial %}
+{% load universal_abstract %}
 {% block title %}{{ artist.name }} - artist page at music.aergia.eu{% endblock %}
 {% block header %}
 <h1>motherfuckin' artist</h1>
@@ -14,7 +14,6 @@
 {% endblock %}
 {% block content %}
 
-{% render_partial "artists/partials/wikipedia_abstract.html" artist_or_releasegroup:artist %}
 
 <div style="float:right;width:252px;border:1px solid #888">
 <p>
@@ -35,8 +34,9 @@
     {% endif %}
 {% endfor %}
 </p>
-
 </div>
+
+{% abstract_for artist %}
 
 <h5>Artist related websites:</h5>
 <ul>

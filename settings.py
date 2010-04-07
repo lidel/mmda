@@ -4,7 +4,7 @@ LASTFM_API_KEY = '' # key that is used with last.fm database queries
                                                     # if you use this software please replace it with your own key(!)
                                                     # it can be obtained for free at http://www.last.fm/api/account
 
-MB_WEBSERVICE_HOST  = 'musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
+MB_WEBSERVICE_HOST  = 'www.uk.musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
                                                     # make more than 1 req/s, so it should use mirror server
                                                     # when deployed
 
