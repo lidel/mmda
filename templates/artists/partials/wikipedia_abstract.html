@@ -1,7 +1,7 @@
-{% if artist_or_release.wikipedia %}
+{% if artist_or_releasegroup.wikipedia %}
 <h4>Abstract</h4>
-<p>{{ artist_or_release.wikipedia.abstract }}
-<br/><small><a href="{{ artist_or_release.wikipedia.url }}">read more at Wikipedia [{{ artist_or_release.wikipedia.lang }}]</a></small>
+<p>{{ artist_or_releasegroup.wikipedia.abstract }}
+<br/><small><a href="{{ artist_or_releasegroup.wikipedia.url }}">read more at Wikipedia [{{ artist_or_releasegroup.wikipedia.lang }}]</a></small>
 <br/>
 <br/></p>
 {% endif %}

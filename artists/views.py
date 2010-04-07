@@ -62,7 +62,7 @@ def show_release(request, uri_artist, uri_release, mbid):
     release_group   = populate_deep_release_mb(release_group,mbid)
     release         = release_group.releases[mbid]
 
-    release = populate_dbpedia(release)
+    release_group   = populate_dbpedia(release_group)
     # basic SEO check
     artist_seo_name     = slugify2(artist.name)
     release_seo_name    = slugify2(release['title'])
@@ -439,22 +439,38 @@ def populate_artist_mb(artist, mb_artist):
         artist.collaboration_of = collaboration_of
     return artist
 
-def populate_dbpedia(artist_or_release):
+def populate_dbpedia(artist_or_releasegroup):
     """
-    Populate artist or release with abstract from wikipedia (if present).
+    Populate CachedArtist or CachedRleaseGroup with abstract from wikipedia (if present).
     """
-    # TODO: fix WARNING:ReaderPlugin:cjson not available, falling back on slower simplejson
-    #wiki_resource = 'Marek_Grechuta'
-    #wiki_lang     = 'en'
-    if 'urls' in artist_or_release and 'Wikipedia' in artist_or_release['urls']:
-        for url in artist_or_release['urls']['Wikipedia']:
-            raped_url     = url.split('/')
-            wiki_resource = raped_url[-1]
-            wiki_lang     = raped_url[2].split('.')[0]
-            wiki_url      = url
-            if wiki_lang == 'en':
-                break
-        if wiki_resource and wiki_lang:
+    # if artist_or_releasegroup is ReleaseGroup, we look for release with wikipedia URL
+    # TODO: check performance, and if better - replace in other parts
+    # TODO: DRY: refactor
+    if 'wiki' not in artist_or_releasegroup.cache_state:
+        wiki_resource = None
+        if 'releases' in artist_or_releasegroup:
+            for release in artist_or_releasegroup['releases'].itervalues():
+                if 'urls' in release  and 'Wikipedia' in release['urls']:
+                    for url in release['urls']['Wikipedia']:
+                        print wiki_resource
+                        raped_url     = url.split('/')
+                        wiki_resource = raped_url[-1]
+                        wiki_lang     = raped_url[2].split('.')[0]
+                        wiki_url      = url
+                        if wiki_lang == 'en':
+                            break
+        # TODO: fix WARNING:ReaderPlugin:cjson not available, falling back on slower simplejson
+        # TODO: move to release_group level?
+        elif 'urls' in artist_or_releasegroup and 'Wikipedia' in artist_or_releasegroup['urls']:
+            for url in artist_or_releasegroup['urls']['Wikipedia']:
+                raped_url     = url.split('/')
+                wiki_resource = raped_url[-1]
+                wiki_lang     = raped_url[2].split('.')[0]
+                wiki_url      = url
+                if wiki_lang == 'en':
+                    break
+
+        if wiki_resource:
             store = surf.Store(reader = "sparql_protocol", endpoint = "http://dbpedia.org/sparql")
             session = surf.Session(store)
             sparql_query = "SELECT ?abstract WHERE {{ <http://dbpedia.org/resource/%s> <http://dbpedia.org/property/abstract> ?abstract FILTER langMatches( lang(?abstract), '%s') } }" % (wiki_resource, wiki_lang)
@@ -464,13 +480,15 @@ def populate_dbpedia(artist_or_release):
                 sparql_result = session.default_store.execute_sparql(sparql_query) # TODO: error handling
                 mmda_logger('wiki','result','found abstracts',len(sparql_result['results']['bindings']))
                 if sparql_result['results']['bindings']:
-                    artist_or_release.wikipedia = {'abstract':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang}
+                    artist_or_releasegroup.wikipedia = {'abstract':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang}
+                    artist_or_releasegroup.cache_state['wiki'] = [1,datetime.utcnow()]
+                    artist_or_releasegroup.save()
                     # TODO: add cache_status dbpedia
-                else:
-                    artist_or_release.wikipedia = {'abstract':'no results dawg'}
             except Exception:
-                artist_or_release.wikipedia = {'abstract':'fail dawg'}
-    return artist_or_release
+                #artist_or_releasegroup.wikipedia = {'abstract':'fail dawg'}
+                # TODO: handle it?
+                pass
+    return artist_or_releasegroup
 
 # HELPERS
 
