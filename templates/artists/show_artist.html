@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load release_helpers %}
 {% load universal_abstract %}
+{% load related_websites %}
 {% block title %}{{ artist.name }} - artist page at music.aergia.eu{% endblock %}
 {% block header %}
 <h1>motherfuckin' artist</h1>
@@ -38,21 +39,7 @@
 
 {% abstract_for artist %}
 
-<h5>Artist related websites:</h5>
-<ul>
-    {% for type,links in artist.urls.items %}
-    {% if links|length_is:"1" %}
-    <li><a href="{{ links|first }}">{{ type|spacecamel }}</a></li>
-    {% else %}
-    <li>{{ type|spacecamel }}: {% for link in links %}
-    <a href="{{ link }}">#{{ forloop.counter }}</a>
-    {% endfor %}
-    </li>
-    {% endif %}
-    {% endfor %}
-    <li><a href="http://musicbrainz.org/artist/{{ mbid }}.html">MusicBrainz</a></li>
-</ul>
-
+{% urls_for artist artist._id %}
 
 <h5>Members:</h5>
 <ul>

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load release_helpers %}
 {% load universal_abstract %}
+{% load related_websites %}
 {% block title %}“{{ release.title }}” release page at mmda{% endblock %}
 {% block header %}
 
@@ -39,21 +40,7 @@ none
 
 {% abstract_for release_group %}
 
-
-<h5>Release related websites:</h5>
-<ul>
-{% for type,links in release.urls.items %}
-    {% if links|length_is:"1" %}
-    <li><a href="{{ links|first }}">{{ type|spacecamel }}</a></li>
-    {% else %}
-    <li>Discogs: {% for link in links %}
-    <a href="{{ link }}">#{{ forloop.counter }}</a>
-    {% endfor %}
-    </li>
-    {% endif %}
-{% endfor %}
-    <li><a href="http://musicbrainz.org/release/{{ mbid }}.html">MusicBrainz</a></li>
-</ul>
+{% urls_for release mbid %}
 
 <h5>Track listing</h5>
 <ol>
