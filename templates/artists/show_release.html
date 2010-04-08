@@ -61,7 +61,7 @@ none
 {% regroup release.credits|dictsort:"type" by type as credits %}
 <ul>
 {% for credit_type in credits %}
-<li>{{ credit_type.grouper|lower }} by
+<li>{{ credit_type.grouper|spacecamel|lower }}: 
     {% for credit_artist in credit_type.list %}
     <a href="{% url show-artist credit_artist.name|slugify2 credit_artist.mbid %}">{{ credit_artist.name }}</a>{% if not forloop.last %}, {% endif %}
     {% endfor %}

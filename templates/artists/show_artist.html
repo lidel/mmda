@@ -36,6 +36,7 @@
 
 {% urls_for artist artist._id %}
 
+{% if artist.members %}
 <h5>Members:</h5>
 <ul>
     {% for member in artist.members %}
@@ -46,8 +47,10 @@
     <li> no info </li>
     {% endfor %}
 </ul>
+{% endif %}
 
 
+{% if artist.member_of %}
 <h5>Member of:</h5>
 <ul>
     {% for member in artist.member_of %}
@@ -58,7 +61,9 @@
     <li> no info </li>
     {% endfor %}
 </ul>
+{% endif %}
 
+{% if artist.collaborations %}
 <h5>Collaborated on:</h5>
 <ul>
     {% for project in artist.collaborations %}
@@ -67,7 +72,9 @@
     <li> no info </li>
     {% endfor %}
 </ul>
+{% endif %}
 
+{% if artist.collaboration_of %}
 <h5>Is a collaboration of:</h5>
 <ul>
     {% for project in artist.collaboration_of %}
@@ -76,6 +83,7 @@
     <li> no info </li>
     {% endfor %}
 </ul>
+{% endif %}
 
 <h5>Release groups:</h5>
     {% regroup release_groups|dictsort:"release_type" by release_type as releases_by_type %}
