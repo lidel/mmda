@@ -40,11 +40,11 @@ def show_artist(request, uri_artist, mbid):
 
     # TODO: check if lasfm stuff is only used here
     artist = populate_artist_lastfm(artist)
-    artist = populate_dbpedia(artist)
+    artist = populate_abstract(artist)
 
     unsorted_release_groups = db.view('artists/release_groups', key=mbid)
 
-    release_groups = [release['value'] for release in unsorted_release_groups.all()]
+    release_groups = [rg['value'] for rg in unsorted_release_groups.all()]
 
     # basic SEO check
     artist_seo_name = slugify2(artist.name)
@@ -62,7 +62,7 @@ def show_release(request, uri_artist, uri_release, mbid):
     release_group   = populate_deep_release_mb(release_group,mbid)
     release         = release_group.releases[mbid]
 
-    release_group   = populate_dbpedia(release_group)
+    release_group   = populate_abstract(release_group)
     # basic SEO check
     artist_seo_name     = slugify2(artist.name)
     release_seo_name    = slugify2(release['title'])
@@ -442,37 +442,35 @@ def populate_artist_mb(artist, mb_artist):
         artist.collaboration_of = collaboration_of
     return artist
 
-def populate_dbpedia(artist_or_releasegroup):
+def populate_abstract(artist_or_releasegroup):
     """
-    Populate CachedArtist or CachedRleaseGroup with abstract from wikipedia (if present).
+    Populate CachedArtist or CachedRleaseGroup with short abstract.
     """
+    if 'abstract' not in artist_or_releasegroup:
+        abstract = get_abstract_from_dbpedia(artist_or_releasegroup)
+        # TODO: add other abstract sources here
+        if abstract:
+            artist_or_releasegroup.abstract = abstract
+            artist_or_releasegroup.cache_state[abstract['provider']]  = [1,datetime.utcnow()]
+            artist_or_releasegroup.save()
+    return artist_or_releasegroup
+
+def get_abstract_from_dbpedia(artist_or_releasegroup):
+    """
+    Populate CachedArtist or CachedRleaseGroup with short abstract.
+    """
+    abstract = {}
     # if artist_or_releasegroup is ReleaseGroup, we look for release with wikipedia URL
     # TODO: check performance, and if better - replace in other parts
     # TODO: DRY: refactor
-    # TODO: make compatible with multiple abstract sources
-    if 'wiki' not in artist_or_releasegroup.cache_state:
+    if 'Wikipedia' not in artist_or_releasegroup.cache_state:
         wiki_resource = None
         if 'releases' in artist_or_releasegroup:
             for release in artist_or_releasegroup['releases'].itervalues():
                 if 'urls' in release  and 'Wikipedia' in release['urls']:
-                    for url in release['urls']['Wikipedia']:
-                        print wiki_resource
-                        raped_url     = url.split('/')
-                        wiki_resource = raped_url[-1]
-                        wiki_lang     = raped_url[2].split('.')[0]
-                        wiki_url      = url
-                        if wiki_lang == 'en':
-                            break
-        # TODO: fix WARNING:ReaderPlugin:cjson not available, falling back on slower simplejson
-        # TODO: move to release_group level?
+                    wiki_resource, wiki_lang, wiki_url = find_best_wikipedia_resource(release['urls']['Wikipedia'])
         elif 'urls' in artist_or_releasegroup and 'Wikipedia' in artist_or_releasegroup['urls']:
-            for url in artist_or_releasegroup['urls']['Wikipedia']:
-                raped_url     = url.split('/')
-                wiki_resource = raped_url[-1]
-                wiki_lang     = raped_url[2].split('.')[0]
-                wiki_url      = url
-                if wiki_lang == 'en':
-                    break
+            wiki_resource, wiki_lang, wiki_url = find_best_wikipedia_resource(artist_or_releasegroup['urls']['Wikipedia'])
 
         if wiki_resource:
             store = surf.Store(reader = "sparql_protocol", endpoint = "http://dbpedia.org/sparql")
@@ -482,19 +480,30 @@ def populate_dbpedia(artist_or_releasegroup):
                 mmda_logger('wiki','request','abstract',wiki_resource)
                 # TODO: timeout?
                 sparql_result = session.default_store.execute_sparql(sparql_query) # TODO: error handling
-                mmda_logger('wiki','result','found abstracts',len(sparql_result['results']['bindings']))
+                mmda_logger('wiki','result','found',len(sparql_result['results']['bindings']))
                 if sparql_result['results']['bindings']:
-                    artist_or_releasegroup.abstract = {'content':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang, 'provider':'Wikipedia'}
-                    artist_or_releasegroup.cache_state['wiki'] = [1,datetime.utcnow()]
-                    artist_or_releasegroup.save()
+                    abstract = {'content':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang, 'provider':'Wikipedia'}
                     # TODO: add cache_status dbpedia
             except Exception:
                 #artist_or_releasegroup.wikipedia = {'abstract':'fail dawg'}
                 # TODO: handle it?
-                pass
-    return artist_or_releasegroup
+                print '[!] ->\tDbpedia abstract fetch ERROR:', e
+    return abstract
 
 # HELPERS
+
+def find_best_wikipedia_resource(wikipedia_urls):
+    """
+    Return wikipedia resource parameters. Prefer english one, if present.
+    """
+    for url in wikipedia_urls:
+        raped_url     = url.split('/')
+        wiki_resource = raped_url[-1]
+        wiki_lang     = raped_url[2].split('.')[0]
+        wiki_url      = url
+        if wiki_lang == 'en':
+            break
+    return [wiki_resource, wiki_lang, wiki_url]
 
 def lastfm_get_similar_optimized(lastfm_artist,limit=10):
     """

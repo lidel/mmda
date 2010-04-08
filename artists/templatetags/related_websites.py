@@ -21,6 +21,6 @@ class RelatedWebsitesNode(template.Node):
 
 @register.tag
 def urls_for(parser, token):
-    entity, mbid = token.split_contents()[1:]
+    entity, mbid = token.split_contents()[1:3]
     return RelatedWebsitesNode(entity, mbid)
 

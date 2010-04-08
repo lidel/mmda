@@ -76,10 +76,8 @@ none
 <ul>
 {% for alt_mbid,alt_release in release_group.releases.items %}
     {% ifnotequal alt_release release %}
-    <li><a href="{% url show-release uri_artist, alt_release.title|slugify, alt_mbid %}">{{ alt_release.title }}</a> {{alt_release.}} <small>({{alt_release.tracks_count}} tracks)</small></li>
+    <li><a href="{% url show-release uri_artist, alt_release.title|slugify2, alt_mbid %}">{{ alt_release.title }}</a> {{alt_release.}} <small>({{alt_release.tracks_count}} tracks)</small></li>
     {% endifnotequal %}
-{% empty %}
-    <li>none</li>
 {% endfor %}
 
 </ul>
