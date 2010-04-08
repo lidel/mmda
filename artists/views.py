@@ -11,6 +11,7 @@ from datetime import datetime
 import re
 import pylast
 import surf
+from django.utils.html import strip_tags
 #
 import time
 from django.conf import settings
@@ -38,9 +39,9 @@ def show_artist(request, uri_artist, mbid):
 
     artist = initiate_artist(mbid)
 
-    # TODO: check if lasfm stuff is only used here
-    artist = populate_artist_lastfm(artist)
+    # used only by show_artist.html
     artist = populate_abstract(artist)
+    artist = populate_artist_lastfm(artist)
 
     unsorted_release_groups = db.view('artists/release_groups', key=mbid)
 
@@ -59,10 +60,17 @@ def show_release(request, uri_artist, uri_release, mbid):
     """
     release_group   = initiate_release(mbid)
     artist          = initiate_artist(release_group.artist_mbid)
-    release_group   = populate_deep_release_mb(release_group,mbid)
+    release_group   = populate_deep_release_mb(release_group, mbid)
     release         = release_group.releases[mbid]
 
+    # used only by show_release.html
+    release         = populate_cover_url(release) # TODO: move level up, after/if advanced cover lookup is added (lolwut)
     release_group   = populate_abstract(release_group)
+    release_group   = populate_release_lastfm(release_group, mbid)
+    #
+
+    release         = release_group.releases[mbid]
+
     # basic SEO check
     artist_seo_name     = slugify2(artist.name)
     release_seo_name    = slugify2(release['title'])
@@ -111,25 +119,23 @@ def populate_artist_lastfm(artist):
     """
     Fetch last.fm data and append to CachedArtist document.
     """
-    if artist.cache_state['lastfm'][0] == 0:
+    if 'lastfm' not in artist.cache_state:
         lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
+        lastfm.enable_caching()
         try:
-            mmda_logger('last','request','artist',artist._id)
+            mmda_logger('last','request','artist-data',artist._id)
             lastfm_artist = lastfm.get_artist_by_mbid(artist._id)
-            mmda_logger('last','result','artist',artist._id)
             # TODO: run there in parallel (?)
-            mmda_logger('last','request','images',artist._id)
-            lastfm_images = images = [ {'full':i.sizes.original, 'square':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_artist.get_images(limit=5)]
-            mmda_logger('last','result','images',artist._id)
+            lastfm_images = lastfm_artist.get_images(limit=5)
             lastfm_url    = lastfm_artist.get_url()
             # we get similar artists from lastfm database, but only those with mbid (omg, omg)
             # TODO: think about numbers of fetched things
-            mmda_logger('last','request','similar',artist._id)
             lastfm_similar  = lastfm_get_similar_optimized(lastfm_artist,limit=10)
-            mmda_logger('last','result','similar',artist._id)
-            mmda_logger('last','request','tags',artist._id)
-            lastfm_tags     = [(t.item.name.lower(), int( float(t.weight)/(float(100)/float(4)) ) ) for t in lastfm_artist.get_top_tags(limit=10)]
-            mmda_logger('last','result','tags',artist._id)
+            lastfm_tags     = lastfm_artist.get_top_tags(limit=10)
+            lastfm_abstract = None
+            if 'abstract' not in artist:
+                lastfm_abstract = lastfm_artist.get_bio_summary()
+            mmda_logger('last','result','artist-data',artist._id)
         except Exception, e:
             print 'Error pylast:', e
         else:
@@ -139,15 +145,60 @@ def populate_artist_lastfm(artist):
             import random
             random.shuffle(lastfm_tags)
 
-            artist.tags                     = lastfm_tags
+            if lastfm_abstract:
+                artist.abstract = {'content':strip_tags(lastfm_abstract), 'lang':'en', 'provider':'Last.fm', 'url':lastfm_url}
+
+            artist.tags                     = [(t.item.name.lower(), int( float(t.weight)/(float(100)/float(4)) ) ) for t in lastfm_tags]
             artist.similar                  = lastfm_similar
             artist.urls['Last.fm']          = [lastfm_url]
-            artist.images['lastfm']         = lastfm_images
+            artist.images['lastfm']         = [ {'square':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images]
+
             mmda_logger('db','store','[last.fm data] artist',artist._id)
         # if fail, store state too -- to avoid future attempts
         artist.cache_state['lastfm']    = [1,datetime.utcnow()]
         artist.save()
     return artist
+
+def populate_release_lastfm(release_group, release_mbid):
+    """
+    Fetch last.fm data and append to CachedReleaseGroup document.
+
+    Data: abstract and cover artwork.
+    """
+    #if release_group.cache_state['lastfm'][0] == 0:
+    release = release_group.releases[release_mbid]
+    if 'lastfm' not in release_group.cache_state:
+        lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
+        lastfm.enable_caching()
+        try:
+            mmda_logger('last','request','release-data',release_mbid)
+
+            lastfm_album = lastfm.get_album_by_mbid(release_mbid)
+
+            lastfm_abstract = None
+            lastfm_cover    = None
+            lastfm_url      = None
+
+            if 'abstract' not in release_group:
+                lastfm_abstract = lastfm_album.get_wiki_summary()
+            if 'cover' not in release:
+                lastfm_cover = lastfm_album.get_cover_image()
+            if 'Last.fm' not in release['urls']:
+                lastfm_url = lastfm_album.get_url()
+
+            mmda_logger('last','result','release-data',release_mbid)
+        except Exception, e:
+            print '->\t%s %s:' (e.__class__, e)
+        else:
+                release['urls']['Last.fm'] = [lastfm_url]
+                if lastfm_abstract:
+                    lastfm_abstract = {'content':strip_tags(lastfm_abstract), 'lang':'en', 'provider':'Last.fm', 'url':lastfm_url}
+                if lastfm_cover:
+                    release['cover'] = lastfm_cover
+        # TODO: when to save? when failed do we retry?
+        release_group.cache_state['lastfm']    = [1,datetime.utcnow()]
+        release_group.save()
+    return release_group
 
 def create_mb_artist(mbid):
     """
@@ -290,8 +341,8 @@ def populate_deep_release_mb(release_group,release_mbid):
                 if relation_type not in urls:
                     urls[relation_type] = []
                 urls[relation_type].append(relation.targetId)
-            if urls:
-                release['urls']         = urls
+            # urls is used in many places, so its handy to have it ready
+            release['urls']         = urls
 
             # CREDIT relations
             credits = [{'type':decruft_mb(r.type), 'mbid':extractUuid(r.targetId), 'name':r.target.name} for r in mb_release.getRelations(m.Relation.TO_ARTIST)]
@@ -317,7 +368,6 @@ def populate_deep_release_mb(release_group,release_mbid):
             if remasters:
                 release['remasters'] = remasters
 
-            release = populate_cover_url(release) # TODO: move level up, after/if advanced cover lookup is added (lolwut)
 
             release['cache_state']['mb'] = [2,datetime.utcnow()]
             release_group.save()
@@ -366,9 +416,9 @@ def populate_cover_url(release):
                 asin = links[0].split('/')[-1]
                 cover_url = "http://images.amazon.com/images/P/%s.01.MZZZZZZZ.jpg" % asin
     # TODO: additional/fallback cover lookoop here
-    if not cover_url:
-        # TODO: make it smart
-        release['cover'] = 'http://www.cornielyrics.org.nyud.net/images/jewelcase.png'
+    #if not cover_url:
+    #    # TODO: make it smart
+    #    release['cover'] = 'http://www.cornielyrics.org.nyud.net/images/jewelcase.png'
     if cover_url:
         release['cover'] = cover_url
     return release
@@ -445,6 +495,8 @@ def populate_artist_mb(artist, mb_artist):
 def populate_abstract(artist_or_releasegroup):
     """
     Populate CachedArtist or CachedRleaseGroup with short abstract.
+
+    High-level API aimed to replace populate_*_lastfm
     """
     if 'abstract' not in artist_or_releasegroup:
         abstract = get_abstract_from_dbpedia(artist_or_releasegroup)
