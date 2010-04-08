@@ -128,7 +128,7 @@ def populate_artist_lastfm(artist):
             lastfm_similar  = lastfm_get_similar_optimized(lastfm_artist,limit=10)
             mmda_logger('last','result','similar',artist._id)
             mmda_logger('last','request','tags',artist._id)
-            lastfm_tags     = [(t.item.name.lower(), int(t.weight)) for t in lastfm_artist.get_top_tags(limit=10)]
+            lastfm_tags     = [(t.item.name.lower(), int( float(t.weight)/(float(100)/float(4)) ) ) for t in lastfm_artist.get_top_tags(limit=10)]
             mmda_logger('last','result','tags',artist._id)
         except Exception, e:
             print 'Error pylast:', e

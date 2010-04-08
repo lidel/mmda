@@ -22,9 +22,6 @@ class UniversalAbstractNode(template.Node):
 
 @register.tag
 def abstract_for(parser, token):
-    try:
-        tag_name, entity = token.split_contents()
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+    entity = token.split_contents()[1]
     return UniversalAbstractNode(entity)
 

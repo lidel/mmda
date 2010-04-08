@@ -21,9 +21,6 @@ class RelatedWebsitesNode(template.Node):
 
 @register.tag
 def urls_for(parser, token):
-    try:
-        tag_name, entity, mbid = token.split_contents()
-    except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires two arguments" % token.contents.split()[0]
+    entity, mbid = token.split_contents()[1:]
     return RelatedWebsitesNode(entity, mbid)
 

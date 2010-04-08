@@ -1,0 +1,7 @@
+<div class="tag-cloud">
+    {% for tag,size in tags %}
+    <a class="tag-{{ size }}">{{ tag }}</a>
+    {% empty %}
+    no tags :-(
+    {% endfor %}
+</div>
