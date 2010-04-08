@@ -100,3 +100,13 @@ def dict_get(dict, key):
 
 
 # TODO: coralize (adds .nyud.net to links)
+@register.filter
+def coralize(value):
+    """
+    Append .nyud.net to domain in URL
+    """
+    url = value.split('/')
+    url[2] = url[2]+'.nyud.net'
+    return '/'.join(url)
+coralize.is_safe = True
+

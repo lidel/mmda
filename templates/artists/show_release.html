@@ -5,7 +5,7 @@
 {% block title %}“{{ release.title }}” release page at mmda{% endblock %}
 {% block header %}
 
-{% if release.cover %}<img src="{{ release.cover }}" alt="artwork" width="160" height="160" style="float:right" />{% endif %}
+{% if release.cover %}<img src="{{ release.cover|coralize }}" alt="artwork" width="160" height="160" style="float:right" />{% endif %}
 <h1>motherfuckin' release</h1>
 <h2>“{{ release.title }}”</h2>
 <h3>by <big><a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ artist.name }}</a></big></h3>
@@ -13,8 +13,8 @@
 {% endblock %}
 {% block content %}
 
-<h5>Relations with other releases:</h5>
 {% if release.remaster_of or release.remasters or release.set_prev or release.set_next %}
+<h5>Relations with other releases:</h5>
 
 {% if release.set_prev %}previous in set: <a href="{% url show-release uri_artist release.set_prev.title|slugify2 release.set_prev.mbid %}">{{ release.set_prev.title }}</a> {% endif %}
 {% if release.set_next %}next in set: <a href="{% url show-release uri_artist release.set_next.title|slugify2 release.set_next.mbid %}">{{ release.set_next.title }}</a> {% endif %}
@@ -33,8 +33,6 @@ This is a remastered version of
 <a href="{% url show-release uri_artist release.remaster_of.title|slugify2 release.remaster_of.mbid %}">{{ release.remaster_of.title }}</a>
 {% endif %}
 
-{% else %}
-none
 {% endif %}
 
 
@@ -49,12 +47,14 @@ none
     {% endfor %}
 </ol>
 
+{% if release.release_events  %}
 <h5>Release events:</h5>
 <ul>
     {% for event in release.release_events %}
     <li>{{ event.date }} {{ event.country }} {{ event.format }}</li>
     {% endfor %}
 </ul>
+{% endif %}
 
 {% if release.credits %}
 <h5>Credits:</h5>
@@ -71,7 +71,7 @@ none
 {% endif %}
 
 
-
+{% if not release_group.releases.items|length_is:"1" %}
 <h5>Alternative track listings</h5>
 <ul>
 {% for alt_mbid,alt_release in release_group.releases.items %}
@@ -81,5 +81,6 @@ none
 {% endfor %}
 
 </ul>
+{% endif %}
 
 {% endblock %}

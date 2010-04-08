@@ -177,22 +177,22 @@ def populate_release_lastfm(release_group, release_mbid):
 
             lastfm_abstract = None
             lastfm_cover    = None
-            lastfm_url      = None
+            lastfm_url      = lastfm_album.get_url()
 
             if 'abstract' not in release_group:
                 lastfm_abstract = lastfm_album.get_wiki_summary()
             if 'cover' not in release:
                 lastfm_cover = lastfm_album.get_cover_image()
-            if 'Last.fm' not in release['urls']:
-                lastfm_url = lastfm_album.get_url()
 
             mmda_logger('last','result','release-data',release_mbid)
         except Exception, e:
-            print '->\t%s %s:' (e.__class__, e)
+            print '->\t Error pylast: ', e
         else:
+                if 'urls' not in release:
+                    release['urls'] = {}
                 release['urls']['Last.fm'] = [lastfm_url]
                 if lastfm_abstract:
-                    lastfm_abstract = {'content':strip_tags(lastfm_abstract), 'lang':'en', 'provider':'Last.fm', 'url':lastfm_url}
+                    release_group.abstract = {'content':strip_tags(lastfm_abstract), 'lang':'en', 'provider':'Last.fm', 'url':lastfm_url}
                 if lastfm_cover:
                     release['cover'] = lastfm_cover
         # TODO: when to save? when failed do we retry?

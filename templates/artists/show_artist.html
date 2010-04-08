@@ -21,12 +21,12 @@
 <p>
 {% for image in artist.images.lastfm|slice:":5" %}
     {% if forloop.first %}
-    <a href="{{ image.url }}"><img src="{{ image.big}}" width="252" alt="{{ image.title }}" style="float:right" /></a><br>
+    <a href="{{ image.url }}"><img src="{{ image.big|coralize }}" width="252" alt="{{ image.title }}" style="float:right" /></a><br>
 
     {% tag_cloud_for artist.tags %}
 
     {% else %}
-    <a href="{{ image.url }}"><img src="{{ image.square}}" width=126" height=126" alt="{{ image.title }}" style="float:right" /></a>
+    <a href="{{ image.url }}"><img src="{{ image.square|coralize }}" width=126" height=126" alt="{{ image.title }}" style="float:right" /></a>
     {% endif %}
 {% endfor %}
 </p>
