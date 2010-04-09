@@ -30,11 +30,17 @@ if settings.DEBUG:
     t1 = time.time()
 
 def index(request):
+    #TODO: ee?
     return render_to_response('artists/index.html', locals())
 
 def show_artist(request, uri_artist, mbid):
     """
     Show page of an artist specified by mbid.
+
+    @param mbid:        a string containing a MusicBrainz ID of an artist
+    @param uri_artist:  a string containing SEO-friendly artist name
+
+    @return: a rendered artist page or redirection to a proper URL
     """
 
     artist = initiate_artist(mbid)
@@ -57,6 +63,12 @@ def show_artist(request, uri_artist, mbid):
 def show_release(request, uri_artist, uri_release, mbid):
     """
     Show page of a release specified by mbid.
+
+    @param mbid:        a string containing a MusicBrainz ID of an artist
+    @param uri_artist:  a string containing SEO-friendly artist name
+    @param uri_release: a string containing SEO-friendly release title
+
+    @return: a rendered release page or redirection to a proper URL
     """
     release_group   = initiate_release(mbid)
     artist          = initiate_artist(release_group.artist_mbid)
@@ -64,7 +76,6 @@ def show_release(request, uri_artist, uri_release, mbid):
     release         = release_group.releases[mbid]
 
     # used only by show_release.html
-    release         = populate_cover_url(release) # TODO: move level up, after/if advanced cover lookup is added (lolwut)
     release_group   = populate_abstract(release_group)
     release_group   = populate_release_lastfm(release_group, mbid)
     #
@@ -83,8 +94,11 @@ def initiate_artist(mbid):
     """
     Make sure artist document is present and contains required data.
 
-    Return CachedArtist
+    @param mbid:    a string containing a MusicBrainz ID of an artist
+
+    @return: a CachedArtist object containing required minimal data set
     """
+    #TODO: handle Various Artists' artist (m.VARIOUS_ARTISTS_ID)
     try:
         artist = CachedArtist.get(mbid)
     except ResourceNotFound:
@@ -93,12 +107,13 @@ def initiate_artist(mbid):
 
 def initiate_release(mbid):
     """
-    Make sure release document is present and contains required data.
+    Make sure release and its dependencies are present and contain required data.
 
-    Return CachedReleaseGroup
+    @param mbid: a string containing a MusicBrainz ID of an artist
+
+    @return:  a CachedReleaseGroup object containing required minimal data set
     """
     release_group   = CachedReleaseGroup.view('artists/releases',include_docs=True, key=mbid).one()
-    #if True:
     if not release_group:
         # TODO: optimize? its just one additional request on rare ocassions tho..
         q = ws.Query(mb_webservice)
@@ -117,7 +132,11 @@ def initiate_release(mbid):
 
 def populate_artist_lastfm(artist):
     """
-    Fetch last.fm data and append to CachedArtist document.
+    Make sure all required and avaiable last.fm data is present in a CachedArtist document.
+
+    @param artist: a CachedArtist object
+
+    @return: a validated/updated CachedArtist object
     """
     if 'lastfm' not in artist.cache_state:
         lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
@@ -161,9 +180,12 @@ def populate_artist_lastfm(artist):
 
 def populate_release_lastfm(release_group, release_mbid):
     """
-    Fetch last.fm data and append to CachedReleaseGroup document.
+    Make sure all required and avaiable last.fm data is present in a CachedReleaseGroup document.
 
-    Data: abstract and cover artwork.
+    @param release_group: a CachedReleaseGroup object
+    @param release_mbid:  a string containing a MusicBrainz ID of a release
+
+    @return: a validated/updated CachedReleaseGroup object
     """
     #if release_group.cache_state['lastfm'][0] == 0:
     release = release_group.releases[release_mbid]
@@ -191,10 +213,13 @@ def populate_release_lastfm(release_group, release_mbid):
                 if 'urls' not in release:
                     release['urls'] = {}
                 release['urls']['Last.fm'] = [lastfm_url]
+
                 if lastfm_abstract:
                     release_group.abstract = {'content':strip_tags(lastfm_abstract), 'lang':'en', 'provider':'Last.fm', 'url':lastfm_url}
+
                 if lastfm_cover:
                     release['cover'] = lastfm_cover
+
         # TODO: when to save? when failed do we retry?
         release_group.cache_state['lastfm']    = [1,datetime.utcnow()]
         release_group.save()
@@ -202,7 +227,11 @@ def populate_release_lastfm(release_group, release_mbid):
 
 def create_mb_artist(mbid):
     """
-    Fetch basic metadata and store as a CachedArtist document.
+    Fetch basic metadata and store it as a CachedArtist document.
+
+    @param mbid: a string containing a MusicBrainz ID of an artist
+
+    @return: a CachedArtist object with basic MusicBrainz data
     """
     q = ws.Query(mb_webservice)
     try:
@@ -229,7 +258,10 @@ def create_mb_artist(mbid):
 
 def create_shallow_releases_mb(artist_mbid, mb_releases):
     """
-    Create CachedReleaseGroup documents with basic release information.
+    Create CachedReleaseGroup documents using basic MusicBrainz data fetched with artist.
+
+    @param artist_mbid: a string containing a MusicBrainz ID of an artist
+    @param mb_releases: a list of musicbrainz2.model.Release objects
     """
 
     # magical place where all data is cached/processed before database commit
@@ -291,16 +323,13 @@ def create_shallow_releases_mb(artist_mbid, mb_releases):
 
 def populate_deep_release_mb(release_group,release_mbid):
     """
-    Fill ReleaseGroup.releases[release_mbid] with MusicBrainz details such as track listing and release relationships.
-    """
-    #release_group = CachedReleaseGroup.get_or_create(mbid)
+    Make sure ReleaseGroup contains additional, detailed information about specified release.
 
-    # now fetch details of included releases
-    #        counts=True,
-    #        releaseEvents=True,
-    #        releaseGroup=True,
-    #        labels=True
-    #        artist=True,
+    @param release_group: a CachedReleaseGroup object
+    @param release_mbid:  a string containing a MusicBrainz ID of a release
+
+    @return: a verified/updated CachedReleaseGroup object
+    """
     release = release_group.releases[release_mbid]
     if release['cache_state']['mb'][0] == 1:
         q = ws.Query(mb_webservice)
@@ -342,24 +371,25 @@ def populate_deep_release_mb(release_group,release_mbid):
                     urls[relation_type] = []
                 urls[relation_type].append(relation.targetId)
             # urls is used in many places, so its handy to have it ready
-            release['urls']         = urls
+            release['urls'] = urls
 
             # CREDIT relations
             credits = [{'type':decruft_mb(r.type), 'mbid':extractUuid(r.targetId), 'name':r.target.name} for r in mb_release.getRelations(m.Relation.TO_ARTIST)]
             if credits:
-                release['credits']      = credits
+                release['credits'] = credits
 
             # MULTI-DISC-RELEASE information
-            # TODO: add remaster handling
             remasters = []
             for relation in mb_release.getRelations(m.Relation.TO_RELEASE):
                 relation_type = decruft_mb(relation.type)
                 linked_release = {'mbid':extractUuid(relation.targetId), 'title':relation.target.title}
+
                 if relation_type == 'PartOfSet':
                     if relation.direction == 'backward':
                         release['set_prev'] = linked_release
                     else:
                         release['set_next'] = linked_release
+
                 elif relation_type == 'Remaster':
                     if relation.direction == 'backward':
                         remasters.append(linked_release)
@@ -368,8 +398,8 @@ def populate_deep_release_mb(release_group,release_mbid):
             if remasters:
                 release['remasters'] = remasters
 
-
             release['cache_state']['mb'] = [2,datetime.utcnow()]
+            release_group = perform_cover_lookup_on_mb_data(release_group, release_mbid)
             release_group.save()
             mmda_logger('db','store','release',release['title'])
     else:
@@ -377,10 +407,13 @@ def populate_deep_release_mb(release_group,release_mbid):
 
     return release_group
 
-# TODO: remove legacy cruft_type
-def decruft_mb(string,cruft_type=0):
+def decruft_mb(string):
     """
     Remove overhead from MusicBrainz data.
+
+    @param string: a string containing MusicBrainz namespace prefix
+
+    @return: a string without MusicBrainz namespace prefix
     """
     if string:
         return string.split('#')[-1]
@@ -390,6 +423,10 @@ def decruft_mb(string,cruft_type=0):
 def humanize_duration(millis):
     """
     Convert miliseconds to human-readable format.
+
+    @param miliseconds: a duration value in miliseconds
+
+    @return: a string with human-readable format.
     """
     hours = millis / 3600000
     mins  = (millis - hours * 3600000) / 60000
@@ -399,33 +436,45 @@ def humanize_duration(millis):
     else:
         return "%(mins)d:%(secs)02d" % locals()
 
-def populate_cover_url(release):
+def perform_cover_lookup_on_mb_data(release_group, release_mbid):
     """
-    Find cover artwork using Amazon or (preffered) CoverArt relationship and store URL in 'cover' field.
+    Look for an Amazon or (a preffered) CoverArt relationship and store URL in 'cover' field.
 
-    CoverArtLink relation is removed, but AmazonASIN stays since it may serve other purpose.
+    'CoverArtLink' relation is removed, but 'AmazonASIN' stays since it may serve other purpose.
+
+    @param release_group: a CachedReleaseGroup object
+    @param release_mbid:  a string containing a MusicBrainz ID of a release
+
+    @return: a verified/updated CachedReleaseGroup object
     """
+    release = release_group.releases[release_mbid]
     cover_url = False
+
     if 'cover' not in release and 'urls' in release:
         for link_type,links in release['urls'].iteritems():
+
             if link_type == 'CoverArtLink':
                 cover_url = links[0]
                 del release['urls']['CoverArtLink']
                 break
+
             elif link_type == 'AmazonAsin':
                 asin = links[0].split('/')[-1]
                 cover_url = "http://images.amazon.com/images/P/%s.01.MZZZZZZZ.jpg" % asin
-    # TODO: additional/fallback cover lookoop here
-    #if not cover_url:
-    #    # TODO: make it smart
-    #    release['cover'] = 'http://www.cornielyrics.org.nyud.net/images/jewelcase.png'
+
     if cover_url:
         release['cover'] = cover_url
-    return release
+
+    return release_group
 
 def populate_artist_mb(artist, mb_artist):
     """
     Process data from MusicBrainz and store it in dedicated structures of CachedArtist.
+
+    @param artist: a CachedArtist object
+    @param mb_artist: a musicbrainz2.model.Artist object
+
+    @return: a populated CachedArtist object
     """
     artist.artist_type          = decruft_mb(mb_artist.type)
     artist.name                 = mb_artist.name
@@ -497,6 +546,9 @@ def populate_abstract(artist_or_releasegroup):
     Populate CachedArtist or CachedRleaseGroup with short abstract.
 
     High-level API aimed to replace populate_*_lastfm
+
+    @param artist_or_releasegroup: a CachedArtist or CachedReleaseGroup object
+    @return: a CachedArtist or CachedReleaseGroup object
     """
     if 'abstract' not in artist_or_releasegroup:
         abstract = get_abstract_from_dbpedia(artist_or_releasegroup)
@@ -510,6 +562,10 @@ def populate_abstract(artist_or_releasegroup):
 def get_abstract_from_dbpedia(artist_or_releasegroup):
     """
     Populate CachedArtist or CachedRleaseGroup with short abstract.
+
+    @param artist_or_releasegroup: a CachedArtist or CachedReleaseGroup object
+
+    @return: a dictionary with an abstract structure
     """
     abstract = {}
     # if artist_or_releasegroup is ReleaseGroup, we look for release with wikipedia URL
@@ -546,7 +602,11 @@ def get_abstract_from_dbpedia(artist_or_releasegroup):
 
 def find_best_wikipedia_resource(wikipedia_urls):
     """
-    Return wikipedia resource parameters. Prefer english one, if present.
+    Find wikipedia resource parameters. Prefer english one, if present.
+
+    @param wikipedia_urls: a list of URL strings
+
+    @return: a tuple with resource name, its language and URL
     """
     for url in wikipedia_urls:
         raped_url     = url.split('/')
@@ -555,7 +615,7 @@ def find_best_wikipedia_resource(wikipedia_urls):
         wiki_url      = url
         if wiki_lang == 'en':
             break
-    return [wiki_resource, wiki_lang, wiki_url]
+    return (wiki_resource, wiki_lang, wiki_url)
 
 def lastfm_get_similar_optimized(lastfm_artist,limit=10):
     """
@@ -564,7 +624,12 @@ def lastfm_get_similar_optimized(lastfm_artist,limit=10):
     Currently the only way to get mbids of such artists in pylast is item.get_mbid() method,
     which invokes 'artist.getInfo()' API method -- this is an overhead of one additional http request for each similar artist.
     It is redundant, since mbids are already in obtained XML, but pylast architecture ignores it atm.
-    This method is a necessary workaround (very easy thanks to Pythons architecture ;-) ).
+    This method is a necessary workaround.
+
+    @param lastfm_artist: a pylast.Artist object
+    @param limit: number of similar artist to get
+
+    @return:  a dictionary with artist name, score and mbid
     """
     params = lastfm_artist._get_params()
     params['limit'] = pylast._unicode(limit)
@@ -592,6 +657,7 @@ class ExtendedArtistIncludes(ws.IIncludes):
 def mmda_logger(entity, action, object_type, object_id):
     """
     Simple stdout printer that makes debugging easier.
+
     """
     if settings.DEBUG:
         global t1
