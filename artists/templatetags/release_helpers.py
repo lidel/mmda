@@ -14,6 +14,11 @@ def inclusivedictsort(value, arg):
 
     Put the ones without such field at the end. (generic dictsort removed such from sorted list)
     The main use is to have releases sorted descending by year.
+
+    @param value: a list of dicts
+    @param arg: a dict key to sort the list by
+
+    @return: a sorted list of dicts
     """
     decorated = [(i[arg] if arg in i else '', i) for i in value]
     decorated.sort()
@@ -47,6 +52,10 @@ def slugify2(value):
 
     When generic slugify removes all characters in process, we decide to pass
     original value in lowercase with '-' separator in such cases.
+
+    @param value: a string
+
+    @return: a SEO-friendly URL-ish string
     """
     slugified = slugify(value)
     if len(slugified):
@@ -59,6 +68,10 @@ slugify2.is_safe = True
 def spacecamel(value):
     """
     Add spaces to a camel case string.
+
+    @param value: a string
+
+    @return: an updated string
     """
     # TODO: make it smart
     if value != 'IMDb':
@@ -69,22 +82,19 @@ spacecamel.is_safe = True
 
 @register.filter
 def percentage(fraction, population=1):
+    """
+    Return 'fraction' represented as percentage of 'population'
+
+    @param fraction: a numerical value
+    @param population: a numerical value representing 100%
+
+    @return: a string with percentage representation
+    """
     try:
         return "%.0f%%" % ((float(fraction) / float(population)) * 100)
     except ValueError:
         return ''
 percentage.is_safe = True
-
-@register.filter
-def gettagsize(value, top=100):
-    """
-    Convert any number to one of 5 predefined tag sizes.
-    """
-    try:
-        return "%.0d" % ( value / (top/4) )
-    except ValueError:
-        return '0'
-gettagsize.is_safe = True
 
 @register.filter
 def dict_get(dict, key):

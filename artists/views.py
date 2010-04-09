@@ -461,7 +461,7 @@ def perform_cover_lookup_on_mb_data(release_group, release_mbid):
             elif link_type == 'AmazonAsin':
                 asin = links[0].split('/')[-1]
                 cover_url = "http://images.amazon.com/images/P/%s.01.MZZZZZZZ.jpg" % asin
-
+    # TODO: handle jamendo (example: /artist/pornophonique/release/8-bit-lagerfeuer/77baaaf6-8128-400e-aee7-0e9a6ca79692/ )
     if cover_url:
         release['cover'] = cover_url
 

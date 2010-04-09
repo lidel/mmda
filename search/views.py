@@ -22,6 +22,11 @@ def create_search_result(request, query_type=None, query_string=None):
 
     Each query has its own ID and results page has permanent URL.
     (eg. one can copy URL it and show to someone else)
+
+    @param query_type: an optional string containing query type
+    @param query_string: an optional string containing query
+
+    @return: a HttpResponseRedirect object
     """
     if request.POST:
         query_string    = request.POST.get('query', '').strip().lower()
@@ -32,13 +37,19 @@ def create_search_result(request, query_type=None, query_string=None):
 
     # TODO: escape fix all possible problems?
     query_id = initialize_cached_search_result(query_type, query_string)
-    return HttpResponseRedirect(reverse('show-search-result', args=(slugify2(query_type),slugify2(query_string),query_id))) #TODO: HttpResponsePermanentRedirect when url-schema is mature
+    return HttpResponseRedirect(reverse('show-search-result', args=(slugify2(query_type),slugify2(query_string),query_id)))
 
 def show_search_result(request, query_type, query_string, query_id):
     """
     Display CachedSearchResult.
 
     If document is missing create new one using RESTful query redirect.
+
+    @param query_type: a string containing query type
+    @param query_string: a string containing query
+    @param query_id: a string containing an ID of a CachedSearchResult document
+
+    @return: a HttpResponseRedirect object or rendered search result page
     """
     # TODO: add meta-header for robots: nocahe, norobots etc
     try:
@@ -65,6 +76,11 @@ def initialize_cached_search_result(query_type, query_string):
     Make sure proper CachedSearchResult is present and return its id.
 
     Method performs local, then optional remote (MusicBrainz) lookup of query result
+
+    @param query_type: a string containing query type
+    @param query_string: a string containing query
+
+    @return: a string containing SHA1 hash of a query string (the ID of a CachedSearchResult document)
     """
     query_id        = hashlib.sha1((query_type+query_string).encode('utf-8')).hexdigest()
     search_result   = CachedSearchResult.get_or_create(query_id)
