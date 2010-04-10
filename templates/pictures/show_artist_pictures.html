@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load release_helpers %}
+{% block title %}{{ artist_pictures.artist_name }} - artist pictures page at music.aergia.eu{% endblock %}
+{% block header %}
+<h1>motherfuckin' artist pictures</h1>
+<h2><a href="{% url show-artist uri_artist mbid %}">{{artist_pictures.artist_name}}</a></h2>
+
+{% endblock %}
+{% block content %}
+
+<h5>Last.fm</h5>
+<p>
+{% for image in artist_pictures.lastfm %}
+    <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"  /></a>
+{% endfor %}
+</p>
+
+<h5>Flickr top results for “{{ artist_pictures.artist_name }}” </h5>
+<p>
+{% for image in artist_pictures.flickr %}
+    <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="75" height="75" alt="{{ image.title }}"  /></a>
+{% endfor %}
+</p>
+
+{% endblock %}

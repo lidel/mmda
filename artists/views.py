@@ -1,27 +1,28 @@
 # -*- coding: utf-8
-from django.shortcuts import render_to_response
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
-from mmda.artists.models import CachedArtist, CachedReleaseGroup
-from couchdbkit.ext.django.loading import get_db
-from couchdbkit.resource import ResourceNotFound
-import musicbrainz2.webservice as ws
-import musicbrainz2.model as m
-from musicbrainz2.utils import extractUuid, extractFragment
-from datetime import datetime
 import re
 import pylast
 import surf
-from django.utils.html import strip_tags
-#
+import musicbrainz2.webservice as ws
+import musicbrainz2.model as m
 import time
+
+from django.shortcuts import render_to_response
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.utils.html import strip_tags
+from django.core.urlresolvers import reverse
+from couchdbkit.ext.django.loading import get_db
+from couchdbkit.resource import ResourceNotFound
+from musicbrainz2.utils import extractUuid, extractFragment
+from datetime import datetime
 from django.conf import settings
 
-
-#from django.template.defaultfilters import slugify
 from mmda.artists.templatetags.release_helpers import slugify2
-from django.core.urlresolvers import reverse
+from mmda.artists.models import CachedArtist, CachedReleaseGroup
+from mmda.pictures.models import CachedArtistPictures
 
-    #return HttpResponse("%s" % (results,))
+# TODO: remove/replace by a view
+from mmda.pictures.views import initiate_artist_pictures
+
 
 # TODO: check if safe as global
 db = get_db('artists')
@@ -49,9 +50,11 @@ def show_artist(request, uri_artist, mbid):
     artist = populate_abstract(artist)
     artist = populate_artist_lastfm(artist)
 
-    unsorted_release_groups = db.view('artists/release_groups', key=mbid)
+    release_groups_view = db.view('artists/release_groups', key=mbid)
+    release_groups = [group['value'] for group in release_groups_view.all()]
 
-    release_groups = [rg['value'] for rg in unsorted_release_groups.all()]
+    # TODO: make/move to  a dedicated view with required number of pics?
+    artist_pictures = initiate_artist_pictures(mbid)
 
     # basic SEO check
     artist_seo_name = slugify2(artist.name)
@@ -170,7 +173,16 @@ def populate_artist_lastfm(artist):
             artist.tags                     = [(t.item.name.lower(), int( float(t.weight)/(float(100)/float(4)) ) ) for t in lastfm_tags]
             artist.similar                  = lastfm_similar
             artist.urls['Last.fm']          = [lastfm_url]
-            artist.images['lastfm']         = [ {'square':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images]
+
+            # TODO: optimize
+            if lastfm_images:
+                artist_pictures = CachedArtistPictures.get_or_create(artist._id)
+                if 'lastfm' not in artist_pictures:
+                    artist_pictures.artist_name = artist.name
+                    artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images]
+                    artist_pictures.cache_state['lastfm'] = [1,datetime.utcnow()]
+                    artist_pictures.save()
+                    mmda_logger('db','store','[last.fm] artist pictures',artist._id)
 
             mmda_logger('db','store','[last.fm data] artist',artist._id)
         # if fail, store state too -- to avoid future attempts

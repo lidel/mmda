@@ -4,7 +4,10 @@ LASTFM_API_KEY = '' # key that is used with last.fm database queries
                                                     # if you use this software please replace it with your own key(!)
                                                     # it can be obtained for free at http://www.last.fm/api/account
 
-#MB_WEBSERVICE_HOST  = 'musicbrainz.aergia.eu'             # mmda is efficient, but with many concurrent users it can
+FLICKR_API_KEY = '' # flickr key
+                                                    # if you use this software please replace it with your own key(!)
+                                                    # it can be obtained for free at http://www.flickr.com/services/api
+
 MB_WEBSERVICE_HOST  = 'musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
                                                     # make more than 1 req/s, so it should use mirror server
                                                     # when deployed
@@ -22,6 +25,7 @@ MANAGERS = ADMINS
 
 COUCHDB_DATABASES = (
     ('mmda.artists', 'http://127.0.0.1:5984/mmda'),
+    ('mmda.pictures', 'http://127.0.0.1:5984/mmda-pictures'),
     ('mmda.search', 'http://127.0.0.1:5984/mmda-search'),
 )
 
@@ -89,6 +93,7 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     'couchdbkit.ext.django',
     'mmda.artists',
+    'mmda.pictures',
     'mmda.search',
     # 'django.contrib.auth',
     # 'django.contrib.contenttypes',

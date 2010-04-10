@@ -12,21 +12,24 @@
 {% if artist.aliases %}also known as: <em>{{ artist.aliases|join:", " }}</em>{% endif %}
 {% if artist.dates %}<p><em>{{artist.dates|pprint}}</em><br/></p>{% endif %}
 
-
+<h5>Subpages</h5>
+<ul>
+    <li><a href="{% url show-artist-pictures uri_artist mbid %}">Pictures</a></li>
+</ul>
 {% endblock %}
 {% block content %}
 
 
 <div style="float:right;width:252px;border:1px solid #888">
 <p>
-{% for image in artist.images.lastfm|slice:":5" %}
+{% for image in artist_pictures.lastfm|slice:":5" %}
     {% if forloop.first %}
     <a href="{{ image.url }}"><img src="{{ image.big|coralize }}" width="252" alt="{{ image.title }}" style="float:right" /></a><br>
 
     {% tag_cloud_for artist.tags %}
 
     {% else %}
-    <a href="{{ image.url }}"><img src="{{ image.square|coralize }}" width=126" height=126" alt="{{ image.title }}" style="float:right" /></a>
+    <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}" style="float:right" /></a>
     {% endif %}
 {% endfor %}
 </p>

@@ -1,9 +1,12 @@
 # -*- coding: utf-8
-from django import template
-from musicbrainz2.utils import extractUuid
-from django.template.defaultfilters import slugify, urlencode, escape
 import re
 import random
+
+from django import template
+from django.conf import settings
+from django.template.defaultfilters import slugify, urlencode, escape
+
+from musicbrainz2.utils import extractUuid
 
 register = template.Library()
 
@@ -113,10 +116,13 @@ def dict_get(dict, key):
 @register.filter
 def coralize(value):
     """
-    Append .nyud.net to domain in URL
+    Append .nyud.net to domain in URL when in production mode
     """
-    url = value.split('/')
-    url[2] = url[2]+'.nyud.net'
-    return '/'.join(url)
+    if settings.DEBUG:
+        return value
+    else:
+        url = value.split('/')
+        url[2] = url[2]+'.nyud.net'
+        return '/'.join(url)
 coralize.is_safe = True
 
