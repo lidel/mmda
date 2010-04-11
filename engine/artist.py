@@ -225,9 +225,9 @@ def _create_shallow_releases_mb(mb_artist):
         CachedReleaseGroup.get(group['id']).delete()
 
     for release_group in there_will_be_dragons.itervalues():
-        cached_release_group = CachedReleaseGroup.wrap(release_group)
+        cached_release_group = CachedReleaseGroup.wrap(release_group) # TODO: think if wrap is the best way of dealing with this
         cached_release_group.cache_state['mb'] = [1,datetime.utcnow()]
-        cached_release_group.save()
+        cached_release_group.save() # TODO: add try in case of ResourceConflict? 
         mmda_logger('db','store','release_group',cached_release_group.title)
 
 class ExtendedArtistIncludes(ws.IIncludes):
