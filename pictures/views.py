@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 
 #from mmda.pictures.models import CachedArtistPictures
 from mmda.artists.templatetags.release_helpers import slugify2
-from mmda.commons.pictures import get_populated_artist_pictures
+from mmda.engine.pictures import get_populated_artist_pictures
 
 def show_artist_pictures(request, uri_artist, mbid):
     """

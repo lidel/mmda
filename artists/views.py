@@ -15,11 +15,11 @@ from django.core.urlresolvers import reverse
 from mmda.artists.templatetags.release_helpers import slugify2
 #from mmda.artists.models import CachedArtist, CachedReleaseGroup
 
-from mmda.commons.artist import get_populated_artist, get_artist_primary_releases
-from mmda.commons.release import get_populated_releasegroup_with_release
+from mmda.engine.artist import get_populated_artist, get_artist_primary_releases
+from mmda.engine.release import get_populated_releasegroup_with_release
 
 # TODO: remove/replace by a view
-from mmda.commons.pictures import get_basic_artist_pictures
+from mmda.engine.pictures import get_basic_artist_pictures
 
 
 # TODO: check if safe as global

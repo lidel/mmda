@@ -9,9 +9,9 @@ from couchdbkit.resource import ResourceNotFound
 from couchdbkit.ext.django.loading import get_db
 from musicbrainz2.utils import extractUuid
 from mmda.artists.models import CachedArtist, CachedReleaseGroup
-from mmda.commons.utils import mmda_logger, decruft_mb
-from mmda.commons.abstract import populate_abstract
-from mmda.commons.api.lastfm import populate_artist_lastfm
+from mmda.engine.utils import mmda_logger, decruft_mb
+from mmda.engine.abstract import populate_abstract
+from mmda.engine.api.lastfm import populate_artist_lastfm
 
 # TODO: DRY -> move to settings?
 mb_webservice = ws.WebService(host=settings.MB_WEBSERVICE_HOST)

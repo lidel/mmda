@@ -1,7 +1,7 @@
 # -*- coding: utf-8
 import surf
 from datetime import datetime
-from mmda.commons.utils import mmda_logger
+from mmda.engine.utils import mmda_logger
 
 def populate_abstract(artist_or_releasegroup):
     """

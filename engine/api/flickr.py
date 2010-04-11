@@ -4,7 +4,7 @@ import flickrapi
 from datetime import datetime
 from django.conf import settings
 from django.core.cache import cache
-from mmda.commons.utils import mmda_logger
+from mmda.engine.utils import mmda_logger
 
 FLICKR_LIMIT=50
 

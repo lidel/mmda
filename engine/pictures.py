@@ -2,14 +2,14 @@
 
 from datetime import datetime
 from django.conf import settings
-from mmda.commons.utils import mmda_logger
+from mmda.engine.utils import mmda_logger
 from mmda.pictures.models import CachedArtistPictures
 from couchdbkit.resource import ResourceNotFound
 
-from mmda.commons.artist import get_basic_artist
+from mmda.engine.artist import get_basic_artist
 
-from mmda.commons.api.lastfm import populate_artist_pictures_lastfm
-from mmda.commons.api.flickr import populate_artist_pictures_flickr
+from mmda.engine.api.lastfm import populate_artist_pictures_lastfm
+from mmda.engine.api.flickr import populate_artist_pictures_flickr
 
 
 def get_populated_artist_pictures(mbid):

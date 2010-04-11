@@ -3,7 +3,7 @@ import pylast
 
 from datetime import datetime
 from django.conf import settings
-from mmda.commons.utils import mmda_logger
+from mmda.engine.utils import mmda_logger
 from django.utils.html import strip_tags
 from mmda.pictures.models import CachedArtistPictures
 
