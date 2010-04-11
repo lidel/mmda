@@ -8,7 +8,7 @@
 {% if release.cover %}<img src="{{ release.cover|coralize }}" alt="artwork" width="160" height="160" style="float:right" />{% endif %}
 <h1>motherfuckin' release</h1>
 <h2>“{{ release.title }}”</h2>
-<h3>by <big><a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ artist.name }}</a></big></h3>
+<h3>by <big><a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ release_group.artist_name }}</a></big></h3>
 
 {% endblock %}
 {% block content %}

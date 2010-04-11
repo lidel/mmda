@@ -89,7 +89,7 @@
 {% endif %}
 
 <h5>Release groups:</h5>
-    {% regroup release_groups|dictsort:"release_type" by release_type as releases_by_type %}
+    {% regroup primary_releases|dictsort:"release_type" by release_type as releases_by_type %}
     {% for type in releases_by_type %}
     <h6>{{ type.grouper }}</h6>
         <ul>
