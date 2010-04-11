@@ -24,8 +24,9 @@ ADMINS = (
 MANAGERS = ADMINS
 
 COUCHDB_DATABASES = (
-    ('mmda.artists', 'http://127.0.0.1:5984/mmda'),
+    ('mmda.artists', 'http://127.0.0.1:5984/mmda-artists'),
     ('mmda.pictures', 'http://127.0.0.1:5984/mmda-pictures'),
+    ('mmda.videos', 'http://127.0.0.1:5984/mmda-videos'),
     ('mmda.search', 'http://127.0.0.1:5984/mmda-search'),
 )
 
@@ -94,6 +95,7 @@ INSTALLED_APPS = (
     'couchdbkit.ext.django',
     'mmda.artists',
     'mmda.pictures',
+    'mmda.videos',
     'mmda.search',
     # 'django.contrib.auth',
     # 'django.contrib.contenttypes',
