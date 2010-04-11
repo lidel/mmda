@@ -19,7 +19,7 @@ def show_artist_videos(request, uri_artist, mbid):
 
     @return: a rendered videos page or a redirection to a proper URL
     """
-    artist_videos = initiate_artist_videos(mbid)
+    artist_videos = get_basic_artist_videos(mbid)
     #artist_videos = populate_artist_videos_flickr(artist_videos)
 
     # basic SEO check
@@ -29,7 +29,7 @@ def show_artist_videos(request, uri_artist, mbid):
     else:
         return HttpResponsePermanentRedirect(reverse('show-artist-videos', args=(artist_seo_name, mbid)))
 
-def initiate_artist_videos(mbid):
+def get_basic_artist_videos(mbid):
     """
     Make sure document and its dependencies are present and contain required data.
 
@@ -44,8 +44,8 @@ def initiate_artist_videos(mbid):
     except ResourceNotFound:
         # overhead, but in most cases artist page
         # is a place where user will go next anyway
-        from mmda.artists.views import initiate_artist
-        artist = initiate_artist(mbid)
+        from mmda.artists.views import get_basic_artist
+        artist = get_basic_artist(mbid)
         artist_videos = CachedArtistVideos.get_or_create(mbid)
         artist_videos.artist_name = artist.name
         if 'aliases' in artist:

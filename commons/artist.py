@@ -11,7 +11,7 @@ from musicbrainz2.utils import extractUuid
 from mmda.artists.models import CachedArtist, CachedReleaseGroup
 from mmda.commons.utils import mmda_logger, decruft_mb
 from mmda.commons.abstract import populate_abstract
-from mmda.commons.lastfm import populate_artist_lastfm
+from mmda.commons.api.lastfm import populate_artist_lastfm
 
 # TODO: DRY -> move to settings?
 mb_webservice = ws.WebService(host=settings.MB_WEBSERVICE_HOST)
@@ -24,7 +24,7 @@ def get_populated_artist(mbid):
 
     @return: a CachedArtist object containing required minimal data set
     """
-    artist = initiate_artist(mbid)
+    artist = get_basic_artist(mbid)
 
     artist = populate_abstract(artist)
     artist = populate_artist_lastfm(artist)
@@ -44,7 +44,7 @@ def get_artist_primary_releases(mbid):
 
     return primary_releases
 
-def initiate_artist(mbid):
+def get_basic_artist(mbid):
     """
     Make sure basic artist document is present and contains required data.
 

@@ -7,6 +7,8 @@ from mmda.commons.utils import mmda_logger
 from django.utils.html import strip_tags
 from mmda.pictures.models import CachedArtistPictures
 
+LASTFM_LIMIT=20
+
 def populate_artist_lastfm(artist):
     """
     Make sure all required and avaiable last.fm data is present in a CachedArtist document.
@@ -137,4 +139,33 @@ def lastfm_get_similar_optimized(lastfm_artist,limit=10):
             similar_artists.append({'name':names[i], 'score':int(float(matches[i])*100), 'mbid':mbids[i]})
     # TODO: catch and store images?
     return similar_artists
+
+def populate_artist_pictures_lastfm(artist_pictures):
+    """
+    Make sure all avaiable last.fm data is present in a CachedArtistPictures document.
+
+    @param artist_pictures: a CachedArtistPictures object
+
+    @return: a validated/updated CachedArtistPictures object
+    """
+    if 'lastfm' not in artist_pictures.cache_state or artist_pictures.cache_state['lastfm'][0] == 1:
+        lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
+        lastfm.enable_caching()
+        try:
+            mmda_logger('last','request','artist-pictures',artist_pictures._id)
+            lastfm_artist = lastfm.get_artist_by_mbid(artist_pictures._id)
+            lastfm_images = lastfm_artist.get_images(limit=LASTFM_LIMIT) #TODO: make 50?
+            # TODO: add lastfm event info, that can be used as a tag in flickr search
+            mmda_logger('last','result','artist-pictures',artist_pictures._id)
+        except Exception, e:
+            print 'Error pylast:', e
+        else:
+            if lastfm_images:
+                artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images]
+            artist_pictures.cache_state['lastfm'] = [2,datetime.utcnow()]
+            artist_pictures.save()
+            mmda_logger('db','store','[last.fm] artist pictures',artist_pictures._id)
+
+    return artist_pictures
+
 

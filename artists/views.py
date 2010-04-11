@@ -4,7 +4,7 @@
 #import musicbrainz2.model as m
 
 from django.shortcuts import render_to_response
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
 #from couchdbkit.ext.django.loading import get_db
 #from couchdbkit.resource import ResourceNotFound
@@ -19,7 +19,7 @@ from mmda.commons.artist import get_populated_artist, get_artist_primary_release
 from mmda.commons.release import get_populated_releasegroup_with_release
 
 # TODO: remove/replace by a view
-from mmda.pictures.views import initiate_artist_pictures
+from mmda.commons.pictures import get_basic_artist_pictures
 
 
 # TODO: check if safe as global
@@ -44,7 +44,7 @@ def show_artist(request, uri_artist, mbid):
     primary_releases = get_artist_primary_releases(mbid)
 
     # TODO: make/move to  a dedicated view with required number of pics?
-    artist_pictures = initiate_artist_pictures(mbid)
+    artist_pictures = get_basic_artist_pictures(mbid)
 
     # basic SEO check
     artist_seo_name = slugify2(artist.name)

@@ -13,7 +13,7 @@ from musicbrainz2.utils import extractUuid
 from mmda.artists.models import CachedReleaseGroup
 from mmda.commons.abstract import populate_abstract
 from mmda.commons.utils import mmda_logger, decruft_mb, humanize_duration
-from mmda.commons.lastfm import populate_release_lastfm
+from mmda.commons.api.lastfm import populate_release_lastfm
 
 # TODO: DRY -> move to settings?
 mb_webservice = ws.WebService(host=settings.MB_WEBSERVICE_HOST)
@@ -28,7 +28,7 @@ def get_populated_releasegroup_with_release(mbid):
     @return:  a tuple: (release group, release)
     """
 
-    release_group   = initiate_release(mbid)
+    release_group   = get_basic_release(mbid)
     release_group   = populate_deep_release_mb(release_group, mbid)
 
     # used only by mmda.artists.show_release
@@ -37,7 +37,7 @@ def get_populated_releasegroup_with_release(mbid):
 
     return (release_group, release_group.releases[mbid])
 
-def initiate_release(mbid):
+def get_basic_release(mbid):
     """
     Make sure release and its dependencies are present and contain required data.
 
@@ -58,7 +58,7 @@ def initiate_release(mbid):
             # TODO: add error handling here
             print '[!] ->\tMusicBrainz release (special) ERROR:', e
         else:
-            initiate_artist(artist_mbid)
+            get_basic_artist(artist_mbid)
             release_group = CachedReleaseGroup.view('artists/releases',include_docs=True, key=mbid).one()
     return release_group
 
