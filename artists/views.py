@@ -4,7 +4,6 @@ import pylast
 import surf
 import musicbrainz2.webservice as ws
 import musicbrainz2.model as m
-import time
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
@@ -20,6 +19,8 @@ from mmda.artists.templatetags.release_helpers import slugify2
 from mmda.artists.models import CachedArtist, CachedReleaseGroup
 from mmda.pictures.models import CachedArtistPictures
 
+from mmda.commons.utils import mmda_logger
+
 # TODO: remove/replace by a view
 from mmda.pictures.views import initiate_artist_pictures
 
@@ -27,8 +28,6 @@ from mmda.pictures.views import initiate_artist_pictures
 # TODO: check if safe as global
 db = get_db('artists')
 mb_webservice = ws.WebService(host=settings.MB_WEBSERVICE_HOST)
-if settings.DEBUG:
-    t1 = time.time()
 
 def index(request):
     #TODO: ee?
@@ -666,17 +665,3 @@ class ExtendedArtistIncludes(ws.IIncludes):
     def createIncludeTags(self):
         return ['url-rels', 'sa-Official', 'artist-rels', 'release-groups', 'aliases', 'release-events','counts']
 
-def mmda_logger(entity, action, object_type, object_id):
-    """
-    Simple stdout printer that makes debugging easier.
-
-    """
-    if settings.DEBUG:
-        global t1
-        arrows = {'store':'=>','present':'<=','request':'->', 'result':'<-'}
-        if action == 'request':
-            t1 = time.time()
-        if action == 'result':
-            print "\t(%s-%s)\t%s   %.2fs %s:\t\t'%s'" % (entity, action, arrows[action], (time.time()-t1) ,object_type, object_id)
-        else:
-            print "\t(%s-%s)\t%s         %s:\t\t'%s'" % (entity, action, arrows[action], object_type, object_id)

@@ -7,10 +7,12 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.core.cache import cache
 from couchdbkit.resource import ResourceNotFound
 
 from mmda.pictures.models import CachedArtistPictures
 from mmda.artists.templatetags.release_helpers import slugify2
+from mmda.commons.utils import mmda_logger
 
 LASTFM_LIMIT=20
 FLICKR_LIMIT=50
@@ -67,7 +69,6 @@ def populate_artist_pictures_lastfm(artist_pictures):
 
     @return: a validated/updated CachedArtistPictures object
     """
-    from mmda.artists.views import mmda_logger # TODO: cleanup
     if 'lastfm' not in artist_pictures.cache_state or artist_pictures.cache_state['lastfm'][0] == 1:
         lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
         lastfm.enable_caching()
@@ -99,8 +100,6 @@ def populate_artist_pictures_flickr(artist_pictures):
     """
     # TODO: cache flickr only for a day?
     if 'flickr' not in artist_pictures.cache_state:
-        from mmda.artists.views import mmda_logger # TODO: cleanup
-        from django.core.cache import cache
         flickr = flickrapi.FlickrAPI(settings.FLICKR_API_KEY, cache=True)
         flickr.cache = cache
 
