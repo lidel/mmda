@@ -23,7 +23,7 @@
 
 <div style="float:right;width:252px;border:1px solid #888">
 <p>
-{% for image in artist_pictures.lastfm|slice:":5" %}
+{% for image in artist_pictures %}
     {% if forloop.first %}
     <a href="{{ image.url }}"><img src="{{ image.big|coralize }}" width="252" alt="{{ image.title }}" style="float:right" /></a><br>
 

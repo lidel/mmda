@@ -1,30 +1,13 @@
 # -*- coding: utf-8
-#import re
-#import musicbrainz2.webservice as ws
-#import musicbrainz2.model as m
 
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
-#from couchdbkit.ext.django.loading import get_db
-#from couchdbkit.resource import ResourceNotFound
-#from musicbrainz2.utils import extractUuid, extractFragment
-#from datetime import datetime
-#from django.conf import settings
 
 from mmda.artists.templatetags.release_helpers import slugify2
-#from mmda.artists.models import CachedArtist, CachedReleaseGroup
 
-from mmda.engine.artist import get_populated_artist, get_artist_primary_releases
+from mmda.engine.artist import get_populated_artist, get_artist_primary_releases, get_artist_best_pictures
 from mmda.engine.release import get_populated_releasegroup_with_release
-
-# TODO: remove/replace by a view
-from mmda.engine.pictures import get_basic_artist_pictures
-
-
-# TODO: check if safe as global
-#db = get_db('artists')
-#mb_webservice = ws.WebService(host=settings.MB_WEBSERVICE_HOST)
 
 def index(request):
     #TODO: ee?
@@ -39,12 +22,9 @@ def show_artist(request, uri_artist, mbid):
 
     @return: a rendered artist page or redirection to a proper URL
     """
-
-    artist = get_populated_artist(mbid)
-    primary_releases = get_artist_primary_releases(mbid)
-
-    # TODO: make/move to  a dedicated view with required number of pics?
-    artist_pictures = get_basic_artist_pictures(mbid)
+    artist              = get_populated_artist(mbid)
+    primary_releases    = get_artist_primary_releases(mbid)
+    artist_pictures     = get_artist_best_pictures(mbid)
 
     # basic SEO check
     artist_seo_name = slugify2(artist.name)

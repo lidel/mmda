@@ -44,6 +44,20 @@ def get_artist_primary_releases(mbid):
 
     return primary_releases
 
+def get_artist_best_pictures(mbid):
+    """
+    Get artist pictures required by mmda.artists.show_artist
+
+    @param mbid:    a string containing a MusicBrainz ID of an artist
+
+    @return: a list of dicts with artist picture meta-data
+    """
+    view = get_db('pictures').view('pictures/best_pictures', key=mbid)
+    best_pictures = [group['value'] for group in view.all()]
+
+    return best_pictures
+
+
 def get_basic_artist(mbid):
     """
     Make sure basic artist document is present and contains required data.
