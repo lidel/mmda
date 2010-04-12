@@ -75,6 +75,7 @@ def _create_mb_artist(mbid):
     except ws.WebServiceError, e:
         # TODO: hard error page here
         # TODO: 404 not found redirect to different page? conditional?
+        # TODO:  HTTP Error 503: Service Temporarily Unavailable -> special case:  please wait few seconds and hit F5
         print '[!] ->\tMusicBrainz artist ERROR:', e
     else:
         artist                      = CachedArtist.get_or_create(mbid)
