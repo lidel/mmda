@@ -56,7 +56,8 @@ def get_basic_release(mbid):
             mmda_logger('mb','result','artist mbid',artist_mbid)
         except ws.WebServiceError, e:
             # TODO: add error handling here
-            print '[!] ->\tMusicBrainz release (special) ERROR:', e
+            mmda_logger('mb-release','ERROR',e)
+            raise Http500
         else:
             get_basic_artist(artist_mbid)
             release_group = CachedReleaseGroup.view('artists/releases',include_docs=True, key=mbid).one()
@@ -88,7 +89,8 @@ def populate_deep_release_mb(release_group,release_mbid):
             mmda_logger('mb','result','release',mb_release.title)
         except ws.WebServiceError, e:
             # TODO: hard error here
-            print '[!] ->\tMusicBrainz release ERROR:', e
+            mmda_logger('mb-release','ERROR',e)
+            raise Http500
         else:
             # make sure mbid of an artist is present
             if 'artist_mbid' not in release_group:

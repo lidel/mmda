@@ -60,64 +60,69 @@ def populate_artist_videos_youtube(artist_videos):
 
     @return: a validated/updated CachedArtistVideos object
     """
-    # TODO : add try and except
     # TODO: expire in one week?
     if 'youtube' not in artist_videos.cache_state:
-    #if True: # TODO : disable after debug
 
         youtube_videos = []
         yt_service = yts.YouTubeService()
         artist = get_basic_artist(artist_videos._id)
 
-        mmda_logger('yt','request','artist-videos',artist_videos.artist_name)
-        # check if artist has dedicated Youtube channel
-        if 'urls' in artist and 'Youtube' in artist.urls:
-            artist_videos.youtube_channel = artist.urls['Youtube'][0]
-            youtube_id = _get_youtube_id(artist)
+        try:
+            mmda_logger('yt','request','artist-videos',artist_videos.artist_name)
 
-            feed = yt_service.GetYouTubeVideoFeed("http://gdata.youtube.com/feeds/api/users/%s/uploads" % youtube_id)
+            # check if artist has dedicated Youtube channel
+            if 'urls' in artist and 'Youtube' in artist.urls:
+                artist_videos.youtube_channel = artist.urls['Youtube'][0]
+                youtube_id = _get_youtube_id(artist)
 
-        # if there is no official channel, make a search query
-        else:
-            query = yts.YouTubeVideoQuery()
+                feed = yt_service.GetYouTubeVideoFeed("http://gdata.youtube.com/feeds/api/users/%s/uploads" % youtube_id)
 
-            query.orderby = 'relevance'
-            query.racy = 'exclude'
-            query.max_results = YOUTUBE_MAX_RESULTS
-            query.categories.append('Music')
-
-            # 'bug' workaround (http://bugs.python.org/issue1712522)
-            query.vq = artist_videos.artist_name.encode('utf-8', '/')
-
-            # TODO: aliases? atm they seems to lower the result quality
-            #query.vq = u"Múm OR MÃºm OR mum OR múm".encode('utf-8', '/')
-
-            feed = yt_service.YouTubeQuery(query)
-
-        mmda_logger('yt','result','artist-videos',len(feed.entry))
-
-        for entry in feed.entry:
-            try:
-                video = {
-                        'title':    entry.media.title.text,
-                        'duration': entry.media.duration.seconds,
-                        'url':      entry.media.player.url,
-                        'player':   entry.GetSwfUrl(),
-                        'thumb':    entry.media.thumbnail[0].url
-                        }
-            # sometimes objects we have are wicked -- we reject them
-            # eg. when official channel contains blocked in some regions videos
-            # example: http://www.youtube.com/user/dreamtheater
-            except (NameError, AttributeError):
-                continue
+            # if there is no official channel, make a search query
             else:
-                youtube_videos.append(video)
+                query = yts.YouTubeVideoQuery()
 
-        if youtube_videos:
-            artist_videos.youtube = youtube_videos
-        artist_videos.cache_state['youtube'] = [1,datetime.utcnow()]
-        artist_videos.save()
-        mmda_logger('db','store','artist-videos',artist_videos.artist_name)
+                query.orderby = 'relevance'
+                query.racy = 'exclude'
+                query.max_results = YOUTUBE_MAX_RESULTS
+                query.categories.append('Music')
+
+                # 'bug' workaround (http://bugs.python.org/issue1712522)
+                query.vq = artist_videos.artist_name.encode('utf-8', '/')
+
+                # TODO: aliases? atm they seems to lower the result quality
+                #query.vq = u"Múm OR MÃºm OR mum OR múm".encode('utf-8', '/')
+
+                feed = yt_service.YouTubeQuery(query)
+
+        except Exception, e:
+            mmda_logger('yt-search','ERROR',e)
+            #raise Http500
+        else:
+            mmda_logger('yt','result','artist-videos',len(feed.entry))
+
+            for entry in feed.entry:
+                try:
+                    video = {
+                            'title':    entry.media.title.text,
+                            'duration': entry.media.duration.seconds,
+                            'url':      entry.media.player.url,
+                            'player':   entry.GetSwfUrl(),
+                            'thumb':    entry.media.thumbnail[0].url
+                            }
+                # sometimes objects we have are wicked -- we reject them
+                # eg. when official channel contains blocked in some regions videos
+                # example: http://www.youtube.com/user/dreamtheater
+                except (NameError, AttributeError):
+                    continue
+                else:
+                    youtube_videos.append(video)
+
+            if youtube_videos:
+                artist_videos.youtube = youtube_videos
+            artist_videos.cache_state['youtube'] = [1,datetime.utcnow()]
+            artist_videos.save()
+            mmda_logger('db','store','artist-videos',artist_videos.artist_name)
+
     return artist_videos
 
 def _get_youtube_id(artist):

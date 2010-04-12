@@ -10,7 +10,13 @@
 {% ifnotequal artist.artist_type 'Unknown' %}{{ artist.artist_type|lower }}{% endifnotequal %}
 {% if artist.disambiguation %}<h4>{{artist.disambiguation}}</h4>{% endif %}
 {% if artist.aliases %}also known as: <em>{{ artist.aliases|join:", " }}</em>{% endif %}
-{% if artist.dates %}<p><em>{{artist.dates|pprint}}</em><br/></p>{% endif %}
+{% if artist.dates %}
+<p>
+{% ifnotequal artist.artist_type 'Person' %}active{% endifnotequal %}
+{% if artist.dates.from %}{% ifequal artist.artist_type 'Person' %}born {% else %}from {% endifequal %} <em>{{ artist.dates.from }}</em>{% endif %}
+{% if artist.dates.to %}{% ifequal artist.artist_type 'Person' %}died {% else %}to {% endifequal %} <em>{{ artist.dates.to }}</em>{% endif %}
+</p>
+{% endif %}
 
 <h5>Subpages</h5>
 <ul>

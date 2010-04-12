@@ -55,9 +55,8 @@ def get_abstract_from_dbpedia(artist_or_releasegroup):
                     abstract = {'content':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang, 'provider':'Wikipedia'}
                     # TODO: add cache_status dbpedia
             except Exception:
-                #artist_or_releasegroup.wikipedia = {'abstract':'fail dawg'}
                 # TODO: handle it?
-                print '[!] ->\tDbpedia abstract fetch ERROR:', e
+                mmda_logger('surf-dbpedia','ERROR',e)
     return abstract
 
 def find_best_wikipedia_resource(wikipedia_urls):

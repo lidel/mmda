@@ -31,21 +31,26 @@ def get_basic_cached_search_result(query_type, query_string):
     q = ws.Query(mb_webservice)
     if search_result.cache_state['mb'][0] == 0: #TODO: add 14day window check
 
-        mmda_logger('mb','request','search for',query_string)
+        try:
+            mmda_logger('mb','request','search for',query_string)
 
-        if query_type == 'artist':
-            filter  = ws.ArtistFilter(name=query_string,limit=RESULTS_LIMIT)
-            results = q.getArtists(filter) #TODO: add try, or maybe better in 'create_search' as a global wrapper
-            search_result.results = [ {'name':r.artist.name, 'mbid':extractUuid(r.artist.id), 'score':r.score, 'note':r.artist.disambiguation } for r in results ]
+            if query_type == 'artist':
+                filter  = ws.ArtistFilter(name=query_string,limit=RESULTS_LIMIT)
+                results = q.getArtists(filter) #TODO: add try, or maybe better in 'create_search' as a global wrapper
+                search_result.results = [ {'name':r.artist.name, 'mbid':extractUuid(r.artist.id), 'score':r.score, 'note':r.artist.disambiguation } for r in results ]
 
-        elif query_type == 'release':
-            filter  = ws.ReleaseFilter(title=query_string,limit=RESULTS_LIMIT)
-            results = q.getReleases(filter) #TODO: add try, or maybe better in 'create_search' as a global wrapper
-            search_result.results = [ {'artist':r.release.artist.name, 'title':r.release.title, 'mbid':extractUuid(r.release.id), 'artist_mbid':extractUuid(r.release.artist.id), 'score':r.score, 'tracks_count':r.release.tracksCount, 'year':r.release.getEarliestReleaseEvent().getDate() if r.release.getEarliestReleaseEvent() else None} for r in results ]
+            elif query_type == 'release':
+                filter  = ws.ReleaseFilter(title=query_string,limit=RESULTS_LIMIT)
+                results = q.getReleases(filter) #TODO: add try, or maybe better in 'create_search' as a global wrapper
+                search_result.results = [ {'artist':r.release.artist.name, 'title':r.release.title, 'mbid':extractUuid(r.release.id), 'artist_mbid':extractUuid(r.release.artist.id), 'score':r.score, 'tracks_count':r.release.tracksCount, 'year':r.release.getEarliestReleaseEvent().getDate() if r.release.getEarliestReleaseEvent() else None} for r in results ]
 
-        mmda_logger('mb','result','results',len(search_result.results))
-
-        search_result.cache_state['mb'] = [1,datetime.utcnow()]
-        search_result.save()
+        except ws.WebServiceError, e:
+            # TODO: hard error here
+            mmda_logger('mb-search','ERROR',e)
+            raise Http500
+        else:
+            mmda_logger('mb','result','results',len(search_result.results))
+            search_result.cache_state['mb'] = [1,datetime.utcnow()]
+            search_result.save()
     return query_id
 

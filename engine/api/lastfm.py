@@ -35,7 +35,7 @@ def populate_artist_lastfm(artist):
                 lastfm_abstract = lastfm_artist.get_bio_summary()
             mmda_logger('last','result','artist-data',artist._id)
         except Exception, e:
-            print 'Error pylast:', e
+            mmda_logger('pylast','ERROR',e)
         else:
             # TODO: make it compatible with tags imported from mb (TODO2: add tags from MusicBrainz)
 
@@ -96,7 +96,7 @@ def populate_release_lastfm(release_group, release_mbid):
 
             mmda_logger('last','result','release-data',release_mbid)
         except Exception, e:
-            print '->\t Error pylast: ', e
+            mmda_logger('pylast','ERROR',e)
         else:
                 if 'urls' not in release:
                     release['urls'] = {}
@@ -152,13 +152,13 @@ def populate_artist_pictures_lastfm(artist_pictures):
         lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
         lastfm.enable_caching()
         try:
-            mmda_logger('last','request','artist-pictures',artist_pictures._id)
+            mmda_logger('last','request','artist pictures',artist_pictures._id)
             lastfm_artist = lastfm.get_artist_by_mbid(artist_pictures._id)
             lastfm_images = lastfm_artist.get_images(limit=LASTFM_LIMIT) #TODO: make 50?
             # TODO: add lastfm event info, that can be used as a tag in flickr search
-            mmda_logger('last','result','artist-pictures',artist_pictures._id)
+            mmda_logger('last','result','found pictures',len(lastfm_images))
         except Exception, e:
-            print 'Error pylast:', e
+            mmda_logger('pylast','ERROR',e)
         else:
             if lastfm_images:
                 artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images]
