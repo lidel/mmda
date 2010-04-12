@@ -97,14 +97,22 @@ def populate_artist_videos_youtube(artist_videos):
         mmda_logger('yt','result','artist-videos',len(feed.entry))
 
         for entry in feed.entry:
-            video = {
-                    'title':    entry.media.title.text,
-                    'duration': entry.media.duration.seconds,
-                    'url':      entry.media.player.url,
-                    'player':   entry.GetSwfUrl(),
-                    'thumb':    entry.media.thumbnail[0].url
-                    }
-            youtube_videos.append(video)
+            try:
+                video = {
+                        'title':    entry.media.title.text,
+                        'duration': entry.media.duration.seconds,
+                        'url':      entry.media.player.url,
+                        'player':   entry.GetSwfUrl(),
+                        'thumb':    entry.media.thumbnail[0].url
+                        }
+            # sometimes objects we have are wicked -- we reject them
+            # eg. when official channel contains blocked in some regions videos
+            # example: http://www.youtube.com/user/dreamtheater
+            except (NameError, AttributeError):
+                continue
+            else:
+                youtube_videos.append(video)
+
         if youtube_videos:
             artist_videos.youtube = youtube_videos
         artist_videos.cache_state['youtube'] = [1,datetime.utcnow()]
