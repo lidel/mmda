@@ -25,6 +25,8 @@ def get_populated_artist_pictures(mbid):
     artist_pictures = populate_artist_pictures_lastfm(artist_pictures)
     artist_pictures = populate_artist_pictures_flickr(artist_pictures)
 
+    save_any_document_changes(artist_pictures)
+
     return artist_pictures
 
 def get_basic_artist_pictures(mbid):

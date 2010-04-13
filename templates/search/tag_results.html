@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load release_helpers %}
+{% block title %}“{{ search_result.query_string|escape }}” – tag search results{% endblock %}
+{% block header %}
+<h1>Tag search results</h1>
+for query: <big>“{{ search_result.query_string|escape }}”</big>
+
+{% endblock %}
+{% block content %}
+
+<ul>
+{% for tag in search_result.results %}
+<li><a href="{% url show-tag tag %}">{{ tag }}</a><br>
+{% empty %}
+<p>Sorry, no tags matched your query <big>:'-(</big></p>
+{% endfor %}
+</ul>
+
+{% endblock %}

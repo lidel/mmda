@@ -44,9 +44,16 @@ def get_basic_cached_search_result(query_type, query_string):
                 results = q.getReleases(filter) #TODO: add try, or maybe better in 'create_search' as a global wrapper
                 search_result.results = [ {'artist':r.release.artist.name, 'title':r.release.title, 'mbid':extractUuid(r.release.id), 'artist_mbid':extractUuid(r.release.artist.id), 'score':r.score, 'tracks_count':r.release.tracksCount, 'year':r.release.getEarliestReleaseEvent().getDate() if r.release.getEarliestReleaseEvent() else None} for r in results ]
 
+            elif query_type == 'tag':
+                # TODO: refactor to other packages
+                import pylast
+                lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
+                lastfm_similar_tags = lastfm.search_for_tag(query_string).get_next_page()
+                search_result.results = [ t.name for t in lastfm_similar_tags ]
+
         except ws.WebServiceError, e:
             # TODO: hard error here
-            mmda_logger('mb-search','ERROR',e)
+            mmda_logger('search','ERROR',e)
             raise Http500
         else:
             mmda_logger('mb','result','results',len(search_result.results))

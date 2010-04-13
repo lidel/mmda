@@ -54,8 +54,4 @@ def show_search_result(request, query_type, query_string, query_id):
     if query_type != seo_query_type or query_string != seo_query_string:
         return HttpResponseRedirect(reverse('show-search-result', args=(seo_query_type,seo_query_string,query_id))) #TODO: HttpResponsePermanentRedirect when url-schema is mature
 
-    if search_result.query_type == 'artist':
-        return render_to_response('search/artist_results.html', locals())
-    elif search_result.query_type == 'release':
-        return render_to_response('search/release_results.html', locals())
-
+    return render_to_response("search/%s_results.html" % search_result.query_type, locals())
