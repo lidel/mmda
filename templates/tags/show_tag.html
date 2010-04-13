@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load release_helpers %}
+{% block title %}{{ tag.get_id|escape }} - tag page at music.aergia.eu{% endblock %}
+{% block header %}
+<h1>motherfuckin' tag</h1>
+<h2>“{{ tag.get_id|escape }}”</a></h2>
+
+{% endblock %}
+{% block content %}
+{% if tag.cache_state %}
+
+<h5>Top Artists</h5>
+<ul>
+    {% for artist in tag.artists %}
+    <li><a href="{% url show-artist artist.name|slugify2 artist.mbid %}">{{ artist.name }}</a></li>
+    {% endfor %}
+</ul>
+
+{% else %}
+Sorry, no data about this tag is avaiable at the moment..  <big> :'-( </big>
+{% endif %}
+{% endblock %}

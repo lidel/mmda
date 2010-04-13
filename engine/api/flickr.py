@@ -46,8 +46,7 @@ def populate_artist_pictures_flickr(artist_pictures):
         if flickr_photos:
             artist_pictures.flickr = flickr_photos
             artist_pictures.cache_state['flickr'] = [2,datetime.utcnow()]
-            artist_pictures.save()
-            mmda_logger('db','store','[flickr] artist pictures',artist_pictures._id)
+            artist_pictures.changes_present = True
 
     return artist_pictures
 

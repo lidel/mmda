@@ -7,6 +7,7 @@ class CachedArtist(Document):
     """
     images      = DictProperty(default={})
     urls        = DictProperty(default={})
+    # TODO: remove datetime from model (all models)
     cache_state = DictProperty(default={"mb":[0,datetime.utcnow()]})
 
 class CachedReleaseGroup(Document):

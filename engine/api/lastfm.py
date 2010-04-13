@@ -28,7 +28,7 @@ def populate_artist_lastfm(artist):
             lastfm_url    = lastfm_artist.get_url()
             # we get similar artists from lastfm database, but only those with mbid (omg, omg)
             # TODO: think about numbers of fetched things
-            lastfm_similar  = lastfm_get_similar_optimized(lastfm_artist,limit=10)
+            lastfm_similar  = _lastfm_get_similar_optimized(lastfm_artist,limit=10)
             lastfm_tags     = lastfm_artist.get_top_tags(limit=10)
             lastfm_abstract = None
             if 'abstract' not in artist:
@@ -58,12 +58,11 @@ def populate_artist_lastfm(artist):
                     artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images]
                     artist_pictures.cache_state['lastfm'] = [1,datetime.utcnow()]
                     artist_pictures.save()
-                    mmda_logger('db','store','[last.fm] artist pictures',artist._id)
+                    mmda_logger('db','store',artist_pictures)
 
-            mmda_logger('db','store','[last.fm data] artist',artist._id)
         # if fail, store state too -- to avoid future attempts
         artist.cache_state['lastfm']    = [1,datetime.utcnow()]
-        artist.save()
+        artist.changes_present = True
     return artist
 
 def populate_release_lastfm(release_group, release_mbid):
@@ -110,10 +109,10 @@ def populate_release_lastfm(release_group, release_mbid):
 
         # TODO: when to save? when failed do we retry?
         release_group.cache_state['lastfm']    = [1,datetime.utcnow()]
-        release_group.save()
+        release_group.changes_present = True
     return release_group
 
-def lastfm_get_similar_optimized(lastfm_artist,limit=10):
+def _lastfm_get_similar_optimized(lastfm_artist,limit=10):
     """
     Get similar artists from last.fm API in optimized way.
 
@@ -163,9 +162,61 @@ def populate_artist_pictures_lastfm(artist_pictures):
             if lastfm_images:
                 artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images]
             artist_pictures.cache_state['lastfm'] = [2,datetime.utcnow()]
-            artist_pictures.save()
-            mmda_logger('db','store','[last.fm] artist pictures',artist_pictures._id)
+            artist_pictures.changes_present = True
 
     return artist_pictures
 
 
+def populate_tag_lastfm(tag):
+    """
+    Make sure all avaiable last.fm data is present in a CachedTag document.
+
+    @param tag: a CachedTag object
+
+    @return: a validated/updated CachedTag object
+    """
+    # TODO: when expire?
+    if 'lastfm' not in tag.cache_state:
+        lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
+        lastfm.enable_caching()
+        try:
+            mmda_logger('last','request','tag-artists',tag.get_id)
+            lastfm_tag = lastfm.get_tag(tag.get_id)
+            lastfm_artists = _lastfm_get_tag_artists_optimized(lastfm_tag)
+            #dir(lastfm_artists)
+            mmda_logger('last','result','found',len(lastfm_artists))
+        except Exception, e:
+            mmda_logger('pylast','ERROR',e)
+        else:
+            if lastfm_artists:
+                tag.artists = lastfm_artists
+            tag.cache_state['lastfm'] = [1,datetime.utcnow()]
+            tag.changes_present = True
+
+    return tag
+
+def _lastfm_get_tag_artists_optimized(lastfm_tag):
+    """
+    Get tag artists from last.fm API in optimized way.
+
+    Currently the only way to get mbids of such artists in pylast is item.get_mbid() method,
+    which invokes 'artist.getInfo()' API method -- this is an overhead of one additional http request for each artist.
+    It is redundant, since mbids are already in obtained XML, but pylast architecture ignores it atm.
+    This method is a necessary workaround.
+
+    @param lastfm_tag: a pylast.Tag object
+
+    @return:  a dictionary with artist name and mbid
+    """
+    params = lastfm_tag._get_params()
+    #params['limit'] = pylast._unicode(limit)
+    doc = lastfm_tag._request('tag.getTopArtists', True, params)
+    names = pylast._extract_all(doc, "name")
+    mbids = pylast._extract_all(doc, "mbid")
+    #matches = pylast._extract_all(doc, "match")
+    tag_artists = []
+    for i in xrange(0, len(names)):
+        if mbids[i]:
+            tag_artists.append({'name':names[i], 'mbid':mbids[i]})
+    # TODO: catch and store images?
+    return tag_artists

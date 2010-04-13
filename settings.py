@@ -27,6 +27,7 @@ COUCHDB_DATABASES = (
     ('mmda.artists', 'http://127.0.0.1:5984/mmda-artists'),
     ('mmda.pictures', 'http://127.0.0.1:5984/mmda-pictures'),
     ('mmda.videos', 'http://127.0.0.1:5984/mmda-videos'),
+    ('mmda.tags', 'http://127.0.0.1:5984/mmda-tags'),
     ('mmda.search', 'http://127.0.0.1:5984/mmda-search'),
 )
 
@@ -94,6 +95,7 @@ TEMPLATE_DIRS = (
 INSTALLED_APPS = (
     'couchdbkit.ext.django',
     'mmda.artists',
+    'mmda.tags',
     'mmda.pictures',
     'mmda.videos',
     'mmda.search',

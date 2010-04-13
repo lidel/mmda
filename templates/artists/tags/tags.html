@@ -1,6 +1,6 @@
 <div class="tag-cloud">
     {% for tag,size in tags %}
-    <a class="tag-{{ size }}">{{ tag }}</a>
+    <a class="tag-{{ size }}" href="{% url show-tag tag %}">{{ tag }}</a>
     {% empty %}
     no tags :-(
     {% endfor %}

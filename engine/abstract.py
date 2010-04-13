@@ -3,6 +3,7 @@ import surf
 from datetime import datetime
 from mmda.engine.utils import mmda_logger
 
+
 def populate_abstract(artist_or_releasegroup):
     """
     Populate CachedArtist or CachedRleaseGroup with short abstract.
@@ -15,10 +16,12 @@ def populate_abstract(artist_or_releasegroup):
     if 'abstract' not in artist_or_releasegroup:
         abstract = get_abstract_from_dbpedia(artist_or_releasegroup)
         # TODO: add other abstract sources here
+
         if abstract:
             artist_or_releasegroup.abstract = abstract
             artist_or_releasegroup.cache_state[abstract['provider']]  = [1,datetime.utcnow()]
-            artist_or_releasegroup.save()
+            artist_or_releasegroup.changes_present = True
+
     return artist_or_releasegroup
 
 def get_abstract_from_dbpedia(artist_or_releasegroup):

@@ -9,7 +9,7 @@ from couchdbkit.resource import ResourceNotFound
 from couchdbkit.ext.django.loading import get_db
 from musicbrainz2.utils import extractUuid
 from mmda.artists.models import CachedArtist, CachedReleaseGroup
-from mmda.engine.utils import mmda_logger, decruft_mb
+from mmda.engine.utils import mmda_logger, decruft_mb, save_any_document_changes
 from mmda.engine.abstract import populate_abstract
 from mmda.engine.api.lastfm import populate_artist_lastfm
 
@@ -28,6 +28,8 @@ def get_populated_artist(mbid):
 
     artist = populate_abstract(artist)
     artist = populate_artist_lastfm(artist)
+
+    save_any_document_changes(artist)
 
     return artist
 
@@ -96,7 +98,7 @@ def _create_mb_artist(mbid):
         artist                      = _populate_artist_mb(artist, mb_artist)
         artist.cache_state['mb']    = [1,datetime.utcnow()]
         artist.save()
-        mmda_logger('db','store','artist',artist.name)
+        mmda_logger('db','store',artist)
 
         # since we have some basic release data fetched with artist, store it
         _create_shallow_releases_mb(mb_artist)
@@ -243,7 +245,7 @@ def _create_shallow_releases_mb(mb_artist):
         cached_release_group = CachedReleaseGroup.wrap(release_group) # TODO: think if wrap is the best way of dealing with this
         cached_release_group.cache_state['mb'] = [1,datetime.utcnow()]
         cached_release_group.save() # TODO: add try in case of ResourceConflict? 
-        mmda_logger('db','store','release_group',cached_release_group.title)
+        mmda_logger('db','store', cached_release_group)
 
 class ExtendedArtistIncludes(ws.IIncludes):
     """

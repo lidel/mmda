@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from django.conf import settings
-from mmda.engine.utils import mmda_logger
+from mmda.engine.utils import mmda_logger, save_any_document_changes
 from mmda.pictures.models import CachedArtistPictures
 from couchdbkit.resource import ResourceNotFound
 
@@ -21,6 +21,7 @@ def get_populated_artist_pictures(mbid):
     @return: a CachedArtistPictures object
     """
     artist_pictures = get_basic_artist_pictures(mbid)
+
     artist_pictures = populate_artist_pictures_lastfm(artist_pictures)
     artist_pictures = populate_artist_pictures_flickr(artist_pictures)
 
@@ -47,5 +48,6 @@ def get_basic_artist_pictures(mbid):
         if 'aliases' in artist:
             artist_pictures.artist_aliases = list(artist.aliases)
         artist_pictures.save()
+        mmda_logger('db','store', artist_pictures)
     return  artist_pictures
 

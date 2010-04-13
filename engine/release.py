@@ -12,7 +12,7 @@ from musicbrainz2.utils import extractUuid
 
 from mmda.artists.models import CachedReleaseGroup
 from mmda.engine.abstract import populate_abstract
-from mmda.engine.utils import mmda_logger, decruft_mb, humanize_duration
+from mmda.engine.utils import mmda_logger, decruft_mb, humanize_duration, save_any_document_changes
 from mmda.engine.api.lastfm import populate_release_lastfm
 
 # TODO: DRY -> move to settings?
@@ -29,11 +29,13 @@ def get_populated_releasegroup_with_release(mbid):
     """
 
     release_group   = get_basic_release(mbid)
-    release_group   = populate_deep_release_mb(release_group, mbid)
+    release_group   = _populate_deep_release_mb(release_group, mbid)
 
     # used only by mmda.artists.show_release
     release_group   = populate_abstract(release_group)
     release_group   = populate_release_lastfm(release_group, mbid)
+
+    save_any_document_changes(release_group)
 
     return (release_group, release_group.releases[mbid])
 
@@ -63,7 +65,7 @@ def get_basic_release(mbid):
             release_group = CachedReleaseGroup.view('artists/releases',include_docs=True, key=mbid).one()
     return release_group
 
-def populate_deep_release_mb(release_group,release_mbid):
+def _populate_deep_release_mb(release_group,release_mbid):
     """
     Make sure ReleaseGroup contains additional, detailed information about specified release.
 
@@ -143,10 +145,7 @@ def populate_deep_release_mb(release_group,release_mbid):
 
             release['cache_state']['mb'] = [2,datetime.utcnow()]
             release_group = _perform_cover_lookup_on_mb_data(release_group, release_mbid)
-            release_group.save()
-            mmda_logger('db','store','release',release['title'])
-    else:
-        mmda_logger('db','present','release',release['title'])
+            release_group.changes_present = True
 
     return release_group
 
