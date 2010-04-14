@@ -1,6 +1,6 @@
 # -*- coding: utf-8
-import musicbrainz2.webservice as ws
-import musicbrainz2.model as m
+from musicbrainz2.webservice import WebServiceError
+from musicbrainz2.model import Relation
 
 from datetime import datetime
 
@@ -14,9 +14,8 @@ from mmda.artists.models import CachedReleaseGroup
 from mmda.engine.abstract import populate_abstract
 from mmda.engine.utils import mmda_logger, decruft_mb, humanize_duration
 from mmda.engine.api.lastfm import populate_release_lastfm
+from mmda.engine.api.musicbrainz import mb_query, MB_RELEASE_INCLUDES
 
-# TODO: DRY -> move to settings?
-mb_webservice = ws.WebService(host=settings.MB_WEBSERVICE_HOST)
 
 
 def get_populated_releasegroup_with_release(mbid):
@@ -50,13 +49,12 @@ def get_basic_release(mbid):
     release_group   = CachedReleaseGroup.view('artists/releases',include_docs=True, key=mbid).one()
     if not release_group:
         # TODO: optimize? its just one additional request on rare ocassions tho..
-        q = ws.Query(mb_webservice)
         try:
             mmda_logger('mb','request','artist mbid of release',mbid)
-            mb_release  = q.getReleaseById(mbid, ws.ReleaseIncludes(artist=True))
+            mb_release  = mb_query.getReleaseById(mbid, ws.ReleaseIncludes(artist=True))
             artist_mbid = extractUuid(mb_release.artist.id)
             mmda_logger('mb','result','artist mbid',artist_mbid)
-        except ws.WebServiceError, e:
+        except WebServiceError, e:
             # TODO: add error handling here
             mmda_logger('mb-release','ERROR',e)
             raise Http500
@@ -76,20 +74,12 @@ def _populate_deep_release_mb(release_group,release_mbid):
     """
     release = release_group.releases[release_mbid]
     if release['cache_state']['mb'][0] == 1:
-        q = ws.Query(mb_webservice)
         # TODO: remove unused includes
-        inc = ws.ReleaseIncludes(
-                tracks=True,
-                trackRelations=True,
-                artistRelations=True,
-                releaseRelations=True,
-                urlRelations=True,
-                )
         try:
             mmda_logger('mb','request','release',release_mbid)
-            mb_release  = q.getReleaseById(release_mbid, inc)
+            mb_release  = mb_query.getReleaseById(release_mbid, MB_RELEASE_INCLUDES)
             mmda_logger('mb','result','release',mb_release.title)
-        except ws.WebServiceError, e:
+        except WebServiceError, e:
             # TODO: hard error here
             mmda_logger('mb-release','ERROR',e)
             raise Http500
@@ -110,7 +100,7 @@ def _populate_deep_release_mb(release_group,release_mbid):
 
             # URL relations
             urls = {}
-            for relation in mb_release.getRelations(m.Relation.TO_URL):
+            for relation in mb_release.getRelations(Relation.TO_URL):
                 relation_type = decruft_mb(relation.type)
                 if relation_type not in urls:
                     urls[relation_type] = []
@@ -119,13 +109,13 @@ def _populate_deep_release_mb(release_group,release_mbid):
             release['urls'] = urls
 
             # CREDIT relations
-            credits = [{'type':decruft_mb(r.type), 'mbid':extractUuid(r.targetId), 'name':r.target.name} for r in mb_release.getRelations(m.Relation.TO_ARTIST)]
+            credits = [{'type':decruft_mb(r.type), 'mbid':extractUuid(r.targetId), 'name':r.target.name} for r in mb_release.getRelations(Relation.TO_ARTIST)]
             if credits:
                 release['credits'] = credits
 
             # MULTI-DISC-RELEASE information
             remasters = []
-            for relation in mb_release.getRelations(m.Relation.TO_RELEASE):
+            for relation in mb_release.getRelations(Relation.TO_RELEASE):
                 relation_type = decruft_mb(relation.type)
                 linked_release = {'mbid':extractUuid(relation.targetId), 'title':relation.target.title}
 

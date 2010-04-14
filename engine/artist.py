@@ -1,20 +1,18 @@
 # -*- coding: utf-8
-import musicbrainz2.webservice as ws
-import musicbrainz2.model as m
+from musicbrainz2.webservice import WebServiceError
+from musicbrainz2.model import Relation
+from musicbrainz2.utils import extractUuid
+from mmda.engine.api.musicbrainz import mb_query, MB_ARTIST_INCLUDES
 
 from datetime import datetime
 
 from django.conf import settings
 from couchdbkit.resource import ResourceNotFound
 from couchdbkit.ext.django.loading import get_db
-from musicbrainz2.utils import extractUuid
 from mmda.artists.models import CachedArtist, CachedReleaseGroup
 from mmda.engine.utils import mmda_logger, decruft_mb
 from mmda.engine.abstract import populate_abstract
 from mmda.engine.api.lastfm import populate_artist_lastfm
-
-# TODO: DRY -> move to settings?
-mb_webservice = ws.WebService(host=settings.MB_WEBSERVICE_HOST)
 
 def get_populated_artist(mbid):
     """
@@ -68,7 +66,7 @@ def get_basic_artist(mbid):
 
     @return: a CachedArtist object containing required minimal data set
     """
-    #TODO: handle Various Artists' artist (m.VARIOUS_ARTISTS_ID)
+    #TODO: handle Various Artists' artist (VARIOUS_ARTISTS_ID)
     try:
         artist = CachedArtist.get(mbid)
     except ResourceNotFound:
@@ -83,12 +81,11 @@ def _create_mb_artist(mbid):
 
     @return: a CachedArtist object with basic MusicBrainz data
     """
-    q = ws.Query(mb_webservice)
     try:
         mmda_logger('mb','request','artist',mbid)
-        mb_artist = q.getArtistById(mbid, ExtendedArtistIncludes())
+        mb_artist = mb_query.getArtistById(mbid, MB_ARTIST_INCLUDES)
         mmda_logger('mb','result', 'artist',mb_artist.name)
-    except ws.WebServiceError, e:
+    except WebServiceError, e:
         # TODO: hard error page here
         # TODO: 404 not found redirect to different page? conditional?
         # TODO:  HTTP Error 503: Service Temporarily Unavailable -> special case:  please wait few seconds and hit F5
@@ -134,7 +131,7 @@ def _populate_artist_mb(artist, mb_artist):
 
     # urls are stored in dict with lists as values (there can be many of the same type)
     urls = {}
-    for relation in mb_artist.getRelations(m.Relation.TO_URL):
+    for relation in mb_artist.getRelations(Relation.TO_URL):
         relation_type = decruft_mb(relation.type)
         if relation_type not in urls:
             urls[relation_type] = []
@@ -148,7 +145,7 @@ def _populate_artist_mb(artist, mb_artist):
     collaborations      = []
     collaboration_of    = []
 
-    for relation in mb_artist.getRelations(m.Relation.TO_ARTIST):
+    for relation in mb_artist.getRelations(Relation.TO_ARTIST):
         relation_type = decruft_mb(relation.type)
         if relation_type == 'MemberOfBand':
             member_info = {
@@ -246,13 +243,4 @@ def _create_shallow_releases_mb(mb_artist):
         cached_release_group.cache_state['mb'] = [1,datetime.utcnow()]
         cached_release_group.save() # TODO: add try in case of ResourceConflict? 
         mmda_logger('db','store', cached_release_group)
-
-class ExtendedArtistIncludes(ws.IIncludes):
-    """
-    Drop-in replacement of musicbrainz2.webservice.ArtistIncludes object.
-
-    ArtistIncludes does not support 'release-events' include parameter. This class is a workaround.
-    """
-    def createIncludeTags(self):
-        return ['url-rels', 'sa-Official', 'artist-rels', 'release-groups', 'aliases', 'release-events','counts']
 
