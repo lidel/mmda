@@ -1,5 +1,4 @@
 from couchdbkit.ext.django.schema import Document, DictProperty
-from datetime import datetime
 
 class CachedArtistVideos(Document):
     """

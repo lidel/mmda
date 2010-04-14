@@ -1,5 +1,4 @@
 from couchdbkit.ext.django.schema import Document, DictProperty
-from datetime import datetime
 
 class CachedArtist(Document):
     """
@@ -7,13 +6,12 @@ class CachedArtist(Document):
     """
     images      = DictProperty(default={})
     urls        = DictProperty(default={})
-    # TODO: remove datetime from model (all models)
-    cache_state = DictProperty(default={"mb":[0,datetime.utcnow()]})
+    cache_state = DictProperty(default={})
 
 class CachedReleaseGroup(Document):
     """
     Contains release group related data fetched from various sources.
     """
     releases    = DictProperty(default={})
-    cache_state = DictProperty(default={"mb":[0,datetime.utcnow()]})
+    cache_state = DictProperty(default={})
 

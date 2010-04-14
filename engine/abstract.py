@@ -57,7 +57,7 @@ def get_abstract_from_dbpedia(artist_or_releasegroup):
                 if sparql_result['results']['bindings']:
                     abstract = {'content':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang, 'provider':'Wikipedia'}
                     # TODO: add cache_status dbpedia
-            except Exception:
+            except Exception, e:
                 # TODO: handle it?
                 mmda_logger('surf-dbpedia','ERROR',e)
     return abstract
