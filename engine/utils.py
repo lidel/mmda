@@ -53,14 +53,3 @@ def humanize_duration(millis):
     else:
         return "%(mins)d:%(secs)02d" % locals()
 
-def save_any_document_changes(doc):
-    """
-    Store document in the database if it is marked as 'not saved'.
-
-    @param doc: a CouchDB Document object
-    """
-    if 'changes_present' in doc:
-        del doc.changes_present
-        doc.save()
-        mmda_logger('db','store',doc)
-

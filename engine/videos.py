@@ -5,7 +5,7 @@ from couchdbkit.resource import ResourceNotFound
 from mmda.videos.models import CachedArtistVideos
 from mmda.engine.artist import get_basic_artist
 from mmda.engine.api.youtube import populate_artist_videos_youtube
-from mmda.engine.utils  import mmda_logger, save_any_document_changes
+from mmda.engine.utils  import mmda_logger
 
 
 def get_populated_artist_videos(mbid):
@@ -19,7 +19,7 @@ def get_populated_artist_videos(mbid):
     artist_videos = get_basic_artist_videos(mbid)
     artist_videos = populate_artist_videos_youtube(artist_videos)
 
-    save_any_document_changes(artist_videos)
+    artist_videos.save_any_changes()
 
     return artist_videos
 

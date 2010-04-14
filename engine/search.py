@@ -29,7 +29,7 @@ def get_basic_cached_search_result(query_type, query_string):
     search_result.query_string  = query_string
     search_result.query_type    = query_type
     q = ws.Query(mb_webservice)
-    if search_result.cache_state['mb'][0] == 0: #TODO: add 14day window check
+    if 'mb' not in search_result.cache_state: #TODO: add 14day window check
 
         try:
             mmda_logger('mb','request','search for',query_string)

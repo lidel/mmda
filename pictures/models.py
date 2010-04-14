@@ -1,7 +1,7 @@
 from couchdbkit.ext.django.schema import Document, DictProperty
-from datetime import datetime
+from mmda.engine.cache import CachedDocument
 
-class CachedArtistPictures(Document):
+class CachedArtistPictures(Document, CachedDocument):
     """
     Contains artist related picture meta-data fetched from various sources.
     """

@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from django.conf import settings
-from mmda.engine.utils import mmda_logger, save_any_document_changes
+from mmda.engine.utils import mmda_logger
 from mmda.tags.models import CachedTag
 from couchdbkit.resource import ResourceNotFound
 
@@ -26,7 +26,7 @@ def get_populated_tag(tag_string):
     tag = populate_tag_lastfm(tag)
     # TODO: abstract from lastfm?
 
-    save_any_document_changes(tag)
+    tag.save_any_changes()
 
     return tag
 

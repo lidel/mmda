@@ -23,9 +23,8 @@ def create_search_result(request, query_type=None, query_string=None):
         query_type      = request.POST.get('type', '')
     # TODO: not sure why, but this code makes me feel ugly
     elif not query_string or not query_type:
-        return HttpResponseRedirect(reverse('welcome-page')) #TODO: HttpResponsePermanentRedirect when url-schema is mature
+        return HttpResponseRedirect(reverse('welcome-page'))
 
-    # TODO: escape fix all possible problems?
     query_id = get_basic_cached_search_result(query_type, query_string)
     return HttpResponseRedirect(reverse('show-search-result', args=(slugify2(query_type),slugify2(query_string),query_id)))
 
@@ -45,13 +44,12 @@ def show_search_result(request, query_type, query_string, query_id):
     try:
         search_result = CachedSearchResult.get(query_id)
     except ResourceNotFound:
-        return HttpResponseRedirect(reverse('redirect-to-search-result', args=(query_type,query_string))) #TODO: HttpResponsePermanentRedirect when url-schema is mature
+        return HttpResponseRedirect(reverse('create-search-result', args=(query_type,query_string)))
 
     # SEO check
-    # TODO: refactor globally?
     seo_query_type   = slugify2(search_result.query_type)
     seo_query_string = slugify2(search_result.query_string)
     if query_type != seo_query_type or query_string != seo_query_string:
-        return HttpResponseRedirect(reverse('show-search-result', args=(seo_query_type,seo_query_string,query_id))) #TODO: HttpResponsePermanentRedirect when url-schema is mature
+        return HttpResponseRedirect(reverse('show-search-result', args=(seo_query_type,seo_query_string,query_id)))
 
     return render_to_response("search/%s_results.html" % search_result.query_type, locals())

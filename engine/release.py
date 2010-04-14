@@ -12,7 +12,7 @@ from musicbrainz2.utils import extractUuid
 
 from mmda.artists.models import CachedReleaseGroup
 from mmda.engine.abstract import populate_abstract
-from mmda.engine.utils import mmda_logger, decruft_mb, humanize_duration, save_any_document_changes
+from mmda.engine.utils import mmda_logger, decruft_mb, humanize_duration
 from mmda.engine.api.lastfm import populate_release_lastfm
 
 # TODO: DRY -> move to settings?
@@ -35,7 +35,7 @@ def get_populated_releasegroup_with_release(mbid):
     release_group   = populate_abstract(release_group)
     release_group   = populate_release_lastfm(release_group, mbid)
 
-    save_any_document_changes(release_group)
+    release_group.save_any_changes()
 
     return (release_group, release_group.releases[mbid])
 

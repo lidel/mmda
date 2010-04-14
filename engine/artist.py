@@ -9,7 +9,7 @@ from couchdbkit.resource import ResourceNotFound
 from couchdbkit.ext.django.loading import get_db
 from musicbrainz2.utils import extractUuid
 from mmda.artists.models import CachedArtist, CachedReleaseGroup
-from mmda.engine.utils import mmda_logger, decruft_mb, save_any_document_changes
+from mmda.engine.utils import mmda_logger, decruft_mb
 from mmda.engine.abstract import populate_abstract
 from mmda.engine.api.lastfm import populate_artist_lastfm
 
@@ -29,7 +29,7 @@ def get_populated_artist(mbid):
     artist = populate_abstract(artist)
     artist = populate_artist_lastfm(artist)
 
-    save_any_document_changes(artist)
+    artist.save_any_changes()
 
     return artist
 
