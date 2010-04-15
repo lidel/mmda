@@ -5,6 +5,7 @@ from musicbrainz2.utils import extractUuid
 from mmda.engine.api.musicbrainz import mb_query, MB_ARTIST_INCLUDES
 
 from datetime import datetime
+from random import shuffle
 
 from django.conf import settings
 from couchdbkit.resource import ResourceNotFound
@@ -55,8 +56,9 @@ def get_artist_best_pictures(mbid):
     view = get_db('pictures').view('pictures/best_pictures', key=mbid)
     best_pictures = [group['value'] for group in view.all()]
 
-    return best_pictures
+    shuffle(best_pictures)
 
+    return best_pictures
 
 def get_basic_artist(mbid):
     """
