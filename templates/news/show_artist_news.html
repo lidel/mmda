@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load release_helpers %}
+{% block title %}{{ artist.name }} - news page at music.aergia.eu{% endblock %}
+{% block header %}
+<h1>motherfuckin' news</h1>
+<h2>about “<a href="{% url show-artist uri_artist mbid %}">{{ artist.name }}</a>”</h2>
+
+{% endblock %}
+{% block content %}
+
+{% if recent_news %}
+<ul>
+{% for news in recent_news %}
+<li>{{ news|pprint }}</li>
+{% endfor %}
+</ul?
+{% else %}
+Sorry, no news about this artist are avaiable at the moment..  <big> :'-( </big>
+{% endif %}
+
+{% endblock %}

@@ -34,13 +34,13 @@ def populate_artist_pictures_flickr(artist_pictures):
 
         flickr_photos = []
         try:
-            mmda_logger('flkr','request','artist pictures',artist_pictures._id)
+            t = mmda_logger('flkr','request','artist pictures',artist_pictures._id)
             for i in xrange(FLICKR_LIMIT):
                 f_photo = data_walker.next()
                 f_photo_url = "http://www.flickr.com/photos/%s/%s" % (f_photo.get('owner'), f_photo.get('id'))
                 photo = {'title':f_photo.get('title'), 'sq':f_photo.get('url_sq'), 'big':f_photo.get('big'), 'url':f_photo_url, 'owner':f_photo.get('ownername')}
                 flickr_photos.append(photo)
-            mmda_logger('flkr','result','found pictures',len(flickr_photos))
+            mmda_logger('flkr','result','found pictures',len(flickr_photos), t)
         except Exception, e:
             mmda_logger('flickrapi','ERROR',e)
         if flickr_photos:

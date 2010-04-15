@@ -28,9 +28,9 @@ COUCHDB_DATABASES = (
     ('mmda.pictures', 'http://127.0.0.1:5984/mmda-pictures'),
     ('mmda.videos', 'http://127.0.0.1:5984/mmda-videos'),
     ('mmda.tags', 'http://127.0.0.1:5984/mmda-tags'),
+    ('mmda.news', 'http://127.0.0.1:5984/mmda-news'),
     ('mmda.search', 'http://127.0.0.1:5984/mmda-search'),
 )
-
 
 DATABASE_ENGINE = 'sqlite3'    # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'mmda'         # Or path to database file if using sqlite3.
@@ -96,6 +96,7 @@ INSTALLED_APPS = (
     'couchdbkit.ext.django',
     'mmda.artists',
     'mmda.tags',
+    'mmda.news',
     'mmda.pictures',
     'mmda.videos',
     'mmda.search',

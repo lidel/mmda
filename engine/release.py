@@ -50,10 +50,10 @@ def get_basic_release(mbid):
     if not release_group:
         # TODO: optimize? its just one additional request on rare ocassions tho..
         try:
-            mmda_logger('mb','request','artist mbid of release',mbid)
+            t = mmda_logger('mb','request','artist mbid of release',mbid)
             mb_release  = mb_query.getReleaseById(mbid, ws.ReleaseIncludes(artist=True))
             artist_mbid = extractUuid(mb_release.artist.id)
-            mmda_logger('mb','result','artist mbid',artist_mbid)
+            mmda_logger('mb','result','artist mbid',artist_mbid,t)
         except WebServiceError, e:
             # TODO: add error handling here
             mmda_logger('mb-release','ERROR',e)
@@ -76,9 +76,9 @@ def _populate_deep_release_mb(release_group,release_mbid):
     if release['cache_state']['mb'][0] == 1:
         # TODO: remove unused includes
         try:
-            mmda_logger('mb','request','release',release_mbid)
+            t = mmda_logger('mb','request','release',release_mbid)
             mb_release  = mb_query.getReleaseById(release_mbid, MB_RELEASE_INCLUDES)
-            mmda_logger('mb','result','release',mb_release.title)
+            mmda_logger('mb','result','release',mb_release.title,t)
         except WebServiceError, e:
             # TODO: hard error here
             mmda_logger('mb-release','ERROR',e)

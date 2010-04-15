@@ -15,6 +15,21 @@ from mmda.engine.utils import mmda_logger, decruft_mb
 from mmda.engine.abstract import populate_abstract
 from mmda.engine.api.lastfm import populate_artist_lastfm
 
+
+"""
+    Short story about decoupled design of mmda.engine
+
+    Why functions clearly connected to Cached* documents
+    are separated from models, eg. mmds.artists.models?
+
+    Two reasons:
+    - Avoiding circural import of Cached* which caused errors (ok, it is a bad design anyway and silly excuse)
+    - Decoupling. Each API has dedicated file which makes future maintenance easier.
+    - Object-oriented approach would make things unnecessarily complicated here, IMO.
+
+    We can always go OOP in future, but this way it is easier to extend atm.
+"""
+
 def get_populated_artist(mbid):
     """
     Make sure artist document is present and contains data required by mmda.artists.show_artist
@@ -84,9 +99,9 @@ def _create_mb_artist(mbid):
     @return: a CachedArtist object with basic MusicBrainz data
     """
     try:
-        mmda_logger('mb','request','artist',mbid)
+        t = mmda_logger('mb','request','artist',mbid)
         mb_artist = mb_query.getArtistById(mbid, MB_ARTIST_INCLUDES)
-        mmda_logger('mb','result', 'artist',mb_artist.name)
+        mmda_logger('mb','result', 'artist',mb_artist.name,t)
     except WebServiceError, e:
         # TODO: hard error page here
         # TODO: 404 not found redirect to different page? conditional?

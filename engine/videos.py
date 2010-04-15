@@ -7,6 +7,7 @@ from mmda.engine.artist import get_basic_artist
 from mmda.engine.api.youtube import populate_artist_videos_youtube
 from mmda.engine.utils  import mmda_logger
 
+from mmda.engine.future import Future
 
 def get_populated_artist_videos(mbid):
     """
@@ -17,7 +18,9 @@ def get_populated_artist_videos(mbid):
     @return: a CachedArtistVideos object
     """
     artist_videos = get_basic_artist_videos(mbid)
-    artist_videos = populate_artist_videos_youtube(artist_videos)
+
+    futured_youtube = Future(populate_artist_videos_youtube,artist_videos)
+    artist_videos = futured_youtube()
 
     artist_videos.save_any_changes()
 

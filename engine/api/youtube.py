@@ -27,7 +27,7 @@ def populate_artist_videos_youtube(artist_videos):
         artist = get_basic_artist(artist_videos._id)
 
         try:
-            mmda_logger('yt','request','artist-videos',artist_videos.artist_name)
+            t = mmda_logger('yt','request','artist-videos',artist_videos.artist_name)
 
             # check if artist has dedicated Youtube channel
             if 'urls' in artist and 'Youtube' in artist.urls:
@@ -57,7 +57,7 @@ def populate_artist_videos_youtube(artist_videos):
             mmda_logger('yt-search','ERROR',e)
             #raise Http500
         else:
-            mmda_logger('yt','result','artist-videos',len(feed.entry))
+            mmda_logger('yt','result','artist-videos',len(feed.entry),t)
 
             for entry in feed.entry:
                 try:

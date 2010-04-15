@@ -11,6 +11,7 @@ from mmda.engine.artist import get_basic_artist
 from mmda.engine.api.lastfm import populate_artist_pictures_lastfm
 from mmda.engine.api.flickr import populate_artist_pictures_flickr
 
+from mmda.engine.future import Future
 
 def get_populated_artist_pictures(mbid):
     """
@@ -22,8 +23,11 @@ def get_populated_artist_pictures(mbid):
     """
     artist_pictures = get_basic_artist_pictures(mbid)
 
-    artist_pictures = populate_artist_pictures_lastfm(artist_pictures)
-    artist_pictures = populate_artist_pictures_flickr(artist_pictures)
+    futured_lastfm = Future(populate_artist_pictures_lastfm, artist_pictures)
+    futured_flickr = Future(populate_artist_pictures_flickr, artist_pictures)
+
+    artist_pictures = futured_lastfm()
+    artist_pictures = futured_flickr()
 
     artist_pictures.save_any_changes()
 

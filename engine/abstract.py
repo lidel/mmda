@@ -50,10 +50,10 @@ def get_abstract_from_dbpedia(artist_or_releasegroup):
             session = surf.Session(store)
             sparql_query = "SELECT ?abstract WHERE {{ <http://dbpedia.org/resource/%s> <http://dbpedia.org/property/abstract> ?abstract FILTER langMatches( lang(?abstract), '%s') } }" % (wiki_resource, wiki_lang)
             try:
-                mmda_logger('wiki','request','abstract',wiki_resource)
+                t = mmda_logger('wiki','request','abstract',wiki_resource)
                 # TODO: timeout?
                 sparql_result = session.default_store.execute_sparql(sparql_query) # TODO: error handling
-                mmda_logger('wiki','result','found',len(sparql_result['results']['bindings']))
+                mmda_logger('wiki','result','found',len(sparql_result['results']['bindings']),t)
                 if sparql_result['results']['bindings']:
                     abstract = {'content':unicode(sparql_result['results']['bindings'][0]['abstract']), 'url':wiki_url, 'lang':wiki_lang, 'provider':'Wikipedia'}
                     # TODO: add cache_status dbpedia

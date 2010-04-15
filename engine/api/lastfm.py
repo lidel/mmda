@@ -6,6 +6,7 @@ from django.conf import settings
 from mmda.engine.utils import mmda_logger
 from django.utils.html import strip_tags
 from mmda.pictures.models import CachedArtistPictures
+from mmda.engine.future import Future
 
 LASTFM_LIMIT=20
 
@@ -21,19 +22,26 @@ def populate_artist_lastfm(artist):
         lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
         lastfm.enable_caching()
         try:
-            mmda_logger('last','request','artist-data',artist._id)
+            t = mmda_logger('last','request','artist-data',artist._id)
             lastfm_artist = lastfm.get_artist_by_mbid(artist._id)
             # TODO: run there in parallel (?)
-            lastfm_images = lastfm_artist.get_images(limit=5)
-            lastfm_url    = lastfm_artist.get_url()
+            lastfm_images = Future(lastfm_artist.get_images,pylast.IMAGES_ORDER_POPULARITY,5)
+            lastfm_url    = Future(lastfm_artist.get_url)
             # we get similar artists from lastfm database, but only those with mbid (omg, omg)
             # TODO: think about numbers of fetched things
-            lastfm_similar  = _lastfm_get_similar_optimized(lastfm_artist,limit=10)
-            lastfm_tags     = lastfm_artist.get_top_tags(limit=10)
+            lastfm_similar  = Future(_lastfm_get_similar_optimized,lastfm_artist,10)
+            lastfm_tags     = Future(lastfm_artist.get_top_tags,10)
             lastfm_abstract = None
             if 'abstract' not in artist:
                 lastfm_abstract = lastfm_artist.get_bio_summary()
-            mmda_logger('last','result','artist-data',artist._id)
+
+            # wait for all Future to come ;-)
+            lastfm_url()
+            lastfm_tags()
+            lastfm_images()
+            lastfm_similar()
+
+            mmda_logger('last','result','artist-data',artist._id,t)
         except Exception, e:
             mmda_logger('pylast','ERROR',e)
         else:
@@ -41,21 +49,21 @@ def populate_artist_lastfm(artist):
 
             # TODO: remove random?
             import random
-            random.shuffle(lastfm_tags)
+            random.shuffle(lastfm_tags())
 
             if lastfm_abstract:
-                artist.abstract = {'content':strip_tags(lastfm_abstract), 'lang':'en', 'provider':'Last.fm', 'url':lastfm_url}
+                artist.abstract = {'content':strip_tags(lastfm_abstract), 'lang':'en', 'provider':'Last.fm', 'url':lastfm_url()}
 
-            artist.tags                     = [(t.item.name.lower(), int( float(t.weight)/(float(100)/float(4)) ) ) for t in lastfm_tags]
-            artist.similar                  = lastfm_similar
-            artist.urls['Last.fm']          = [lastfm_url]
+            artist.tags                     = [(t.item.name.lower(), int( float(t.weight)/(float(100)/float(4)) ) ) for t in lastfm_tags()]
+            artist.similar                  = lastfm_similar()
+            artist.urls['Last.fm']          = [lastfm_url()]
 
             # TODO: optimize
-            if lastfm_images:
+            if lastfm_images():
                 artist_pictures = CachedArtistPictures.get_or_create(artist._id)
                 if 'lastfm' not in artist_pictures:
                     artist_pictures.artist_name = artist.name
-                    artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images]
+                    artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images()]
                     artist_pictures.cache_state['lastfm'] = [1,datetime.utcnow()]
                     artist_pictures.save()
                     mmda_logger('db','store',artist_pictures)
@@ -80,7 +88,7 @@ def populate_release_lastfm(release_group, release_mbid):
         lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
         lastfm.enable_caching()
         try:
-            mmda_logger('last','request','release-data',release_mbid)
+            t = mmda_logger('last','request','release-data',release_mbid)
 
             lastfm_album = lastfm.get_album_by_mbid(release_mbid)
 
@@ -89,11 +97,14 @@ def populate_release_lastfm(release_group, release_mbid):
             lastfm_url      = lastfm_album.get_url()
 
             if 'abstract' not in release_group:
-                lastfm_abstract = lastfm_album.get_wiki_summary()
+                lastfm_abstract = Future(lastfm_album.get_wiki_summary)
             if 'cover' not in release:
                 lastfm_cover = lastfm_album.get_cover_image()
+            # wait for Future
+            if 'abstract' not in release_group:
+                lastfm_abstract()
 
-            mmda_logger('last','result','release-data',release_mbid)
+            mmda_logger('last','result','release-data',release_mbid,t)
         except Exception, e:
             mmda_logger('pylast','ERROR',e)
         else:
@@ -101,8 +112,8 @@ def populate_release_lastfm(release_group, release_mbid):
                     release['urls'] = {}
                 release['urls']['Last.fm'] = [lastfm_url]
 
-                if lastfm_abstract:
-                    release_group.abstract = {'content':strip_tags(lastfm_abstract), 'lang':'en', 'provider':'Last.fm', 'url':lastfm_url}
+                if lastfm_abstract and lastfm_abstract():
+                    release_group.abstract = {'content':strip_tags(lastfm_abstract()), 'lang':'en', 'provider':'Last.fm', 'url':lastfm_url}
 
                 if lastfm_cover:
                     release['cover'] = lastfm_cover
@@ -151,11 +162,11 @@ def populate_artist_pictures_lastfm(artist_pictures):
         lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
         lastfm.enable_caching()
         try:
-            mmda_logger('last','request','artist pictures',artist_pictures._id)
+            t = mmda_logger('last','request','artist pictures',artist_pictures._id)
             lastfm_artist = lastfm.get_artist_by_mbid(artist_pictures._id)
-            lastfm_images = lastfm_artist.get_images(limit=LASTFM_LIMIT) #TODO: make 50?
+            lastfm_images = lastfm_artist.get_images(order=pylast.IMAGES_ORDER_POPULARITY,limit=LASTFM_LIMIT)
             # TODO: add lastfm event info, that can be used as a tag in flickr search
-            mmda_logger('last','result','found pictures',len(lastfm_images))
+            mmda_logger('last','result','found pictures',len(lastfm_images),t)
         except Exception, e:
             mmda_logger('pylast','ERROR',e)
         else:
@@ -180,11 +191,11 @@ def populate_tag_lastfm(tag):
         lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
         lastfm.enable_caching()
         try:
-            mmda_logger('last','request','tag-artists',tag.get_id)
+            t = mmda_logger('last','request','tag-artists',tag.get_id)
             lastfm_tag = lastfm.get_tag(tag.get_id)
             lastfm_artists = _lastfm_get_tag_artists_optimized(lastfm_tag)
             #dir(lastfm_artists)
-            mmda_logger('last','result','found',len(lastfm_artists))
+            mmda_logger('last','result','found',len(lastfm_artists),t)
         except Exception, e:
             mmda_logger('pylast','ERROR',e)
         else:
