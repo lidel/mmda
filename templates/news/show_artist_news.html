@@ -11,9 +11,11 @@
 {% if recent_news %}
 <ul>
 {% for news in recent_news %}
-<li>{{ news|pprint }}</li>
+<li><h5>{{ news.title }}</h5><small>{{ news.date }}</small>
+<p>{{ news.summary|escape }}</p>
+<p><a href="{{ news.url }}">read more at {{ news.src }}</a></p></li>
 {% endfor %}
-</ul?
+</ul>
 {% else %}
 Sorry, no news about this artist are avaiable at the moment..  <big> :'-( </big>
 {% endif %}
