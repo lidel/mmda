@@ -12,6 +12,9 @@ MB_WEBSERVICE_HOST  = 'musicbrainz.org'             # mmda is efficient, but wit
                                                     # make more than 1 req/s, so it should use mirror server
                                                     # when deployed
 
+
+USER_AGENT = "MMDA/0.1 +http://music.aergia.eu/"    # how MMDA should say hello to other servers ;-)
+
 # Django settings for mmda project.
 
 DEBUG = True

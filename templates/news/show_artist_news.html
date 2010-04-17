@@ -8,13 +8,30 @@
 {% endblock %}
 {% block content %}
 
-{% if recent_news %}
+{% if recent_news.sources %}
+
+News articles presented here are fetched from:
 <ul>
-{% for news in recent_news %}
-<li><h5>{{ news.title }}</h5><small>{{ news.date }}</small>
-<p>{{ news.summary|escape }}</p>
-<p><a href="{{ news.url }}">read more at {{ news.src }}</a></p></li>
+{% for feed_url,feed in recent_news.sources.items %}
+<li><a href="{{ feed.url }}">{{ feed.name }}</a> (<a href="{{ feed_url }}">feed</a>)</li>
 {% endfor %}
+</ul>
+
+
+<h3>News stream</h3>
+
+<ul>
+
+{% for feed_url,feed in recent_news.sources.items %}
+{% for news in feed.items %}
+
+<li><h5><a href="{{ news.url }}">{{ news.title|safe }}</a></h5><small>{{ news.date|pprint }}</small>
+{% if news.summary %}<p>{{ news.summary|truncatewords_html:100|safe }}</p>{% endif %}
+<p>read {% if news.summary %}more{% endif %} at <a href="{{ news.url }}">{{ feed.name }}</a></p></li>
+
+{% endfor %}
+{% endfor %}
+
 </ul>
 {% else %}
 Sorry, no news about this artist are avaiable at the moment..  <big> :'-( </big>

@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanen
 from django.core.urlresolvers import reverse
 
 from mmda.artists.templatetags.release_helpers import slugify2
-from mmda.engine.news import get_recent_artist_news
+from mmda.engine.news import get_populated_artist_news
 from mmda.engine.artist import get_basic_artist
 
 def show_artist_news(request, uri_artist, mbid):
@@ -17,9 +17,9 @@ def show_artist_news(request, uri_artist, mbid):
     @return: a rendered news page or a redirection to a proper URL
     """
     artist = get_basic_artist(mbid)
-    recent_news = get_recent_artist_news(artist)
+    recent_news = get_populated_artist_news(artist)
 
-    artist.save_any_changes()
+    #artist.save_any_changes()
 
     # basic SEO check
     artist_seo_name = slugify2(artist.name)

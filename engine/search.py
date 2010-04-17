@@ -31,7 +31,7 @@ def get_basic_cached_search_result(query_type, query_string):
     if 'mb' not in search_result.cache_state: #TODO: add 14day window check
 
         try:
-            mmda_logger('mb','request','search for',query_string)
+            t = mmda_logger('mb','request','search for',query_string)
 
             if query_type == 'artist':
                 filter  = ws.ArtistFilter(name=query_string,limit=RESULTS_LIMIT)
@@ -55,7 +55,7 @@ def get_basic_cached_search_result(query_type, query_string):
             mmda_logger('search','ERROR',e)
             raise e
         else:
-            mmda_logger('mb','result','results',len(search_result.results))
+            mmda_logger('mb','result','results',len(search_result.results),t)
             search_result.cache_state['mb'] = [1,datetime.utcnow()]
             search_result.save()
 

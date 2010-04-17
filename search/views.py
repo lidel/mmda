@@ -5,6 +5,7 @@ from mmda.search.models import CachedSearchResult
 from mmda.artists.templatetags.release_helpers import slugify2
 from django.core.urlresolvers import reverse
 from mmda.engine.search import get_basic_cached_search_result
+from couchdbkit.resource import ResourceNotFound
 
 def create_search_result(request, query_type=None, query_string=None):
     """
