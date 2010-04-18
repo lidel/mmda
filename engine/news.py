@@ -2,7 +2,7 @@
 from django.conf import settings
 from django.utils.html  import strip_tags
 from mmda.engine.utils  import mmda_logger
-from mmda.engine.future import Future
+from mmda.engine.future import Future, timeout
 from mmda.news.models import CachedArtistNews
 
 import feedparser
@@ -83,7 +83,7 @@ def populate_artist_news(news, artist):
         try:
             t = mmda_logger('news','request','to check',len(pending_sources))
             future_calls = [Future(_get_fetched_and_parsed_feed,source) for source in pending_sources]
-            fetched_feeds = [future_obj() for future_obj in future_calls if future_obj()]
+            fetched_feeds = [future_obj() for future_obj in future_calls if timeout(future_obj,t=20)]
 
         except Exception, e:
             mmda_logger('feed-fetch','ERROR',e)
@@ -94,6 +94,8 @@ def populate_artist_news(news, artist):
 
                     if feed.status == 304:
                         mmda_logger('news','present','no updates',feed.href)
+                        news.sources[feed.href]['cache'] = datetime.utcnow()
+                        news.changes_present = True
                         continue
                     elif feed.status == 404:
                         mmda_logger('news','present','404',feed.href)

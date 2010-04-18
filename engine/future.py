@@ -48,3 +48,27 @@ class Future:
         self.__C.notify()
         self.__C.release()
 
+
+def timeout(func, args=(), kwargs={}, t=1.0, default=None):
+    """
+    http://code.activestate.com/recipes/473878/
+    """
+    class InterruptableThread(Thread):
+        def __init__(self):
+            Thread.__init__(self)
+            self.result = None
+
+        def run(self):
+            try:
+                self.result = func(*args, **kwargs)
+            except:
+                self.result = default
+
+    it = InterruptableThread()
+    it.start()
+    it.join(t)
+    if it.isAlive():
+        return default
+    else:
+        return it.result
+
