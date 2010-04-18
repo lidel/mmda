@@ -23,8 +23,8 @@ BANNED_DOMAINS = ('twitter.com',)
 LOOK_FOR_FEEDS = ('Blog','OfficialHomepage','Fanpage')
 
 SEARCH_TIMEOUT  = 5
-FEED_CACHE_TIME = 1 #900 # 15 minutes
-HANDICAPPED_FEED_CACHE_TIME = 86400 # 1 day
+FEED_CACHE = 86400 # 1 day
+SMART_FEED_CACHE = 900 # 15 minutes
 
 def get_populated_artist_news(artist):
     """
@@ -46,6 +46,7 @@ def populate_artist_news(news, artist):
 
     # TODO: add condition that search for new feeds each 7 days?
     if news.sources:
+        mmda_logger('news','present','cached',len(news.sources.keys()))
         """
             Sad story about ETag and Last-Modified Headers:
 
@@ -57,68 +58,80 @@ def populate_artist_news(news, artist):
                 myspace feeds have no etag or L-M headers (17/Apr/2010)
 
             That is why MMDA uses 'cache' field to limit number
-            of HTTP requests to such handicapped feeds to 1/24h
+            of HTTP requests to such handicapped feeds separately
 
             reference: http://www.feedparser.org/docs/http-etag.html
         """
         now = datetime.utcnow()
-        news_sources = []
-        potential_sources = news.sources.keys()
+        pending_sources = []
 
-        for source_url in potential_sources:
+        for source_url in  news.sources.keys():
             source          = news.sources[source_url]
-            feed_is_sane    = source.has_key('etag') or source.has_key('last_modified')
+            etag            = source['etag']                    if source.has_key('etag')     else None
+            last_modified   = source['modified'].utctimetuple() if source.has_key('modified') else None
+            feed_is_smart   = etag or last_modified
             cache_time      = (now - source['cache']).seconds
 
-            if feed_is_sane and cache_time > FEED_CACHE_TIME:
-                news_sources.append(source_url)
-            elif cache_time > HANDICAPPED_FEED_CACHE_TIME:
-                news_sources.append(source_url)
+            if (feed_is_smart and cache_time > SMART_FEED_CACHE) or cache_time > FEED_CACHE:
+                pending_sources.append((source_url, etag, last_modified))
     else:
-        news_sources = _get_news_sources(artist)
+        # if there are no cached feeds
+        pending_sources = _get_news_sources(artist)
 
-    # TODO: remove after debug
-    #news_sources = _get_news_sources(artist)
-    if news_sources:
-        # pull down all feeds
-        t = mmda_logger('news','request','feeds',len(news_sources))
-        future_calls = [Future(feedparser.parse,rss_url) for rss_url in news_sources]
-        # block until they are all in
-        feeds = [future_obj() for future_obj in future_calls]
+    if pending_sources:
 
-        #news.sources = {} # TODO: remove after debug + add condition if 'if' below
+        try:
+            t = mmda_logger('news','request','to check',len(pending_sources))
+            future_calls = [Future(_get_fetched_and_parsed_feed,source) for source in pending_sources]
+            fetched_feeds = [future_obj() for future_obj in future_calls if future_obj()]
 
-        for feed in feeds:
-            # some feeds may be badly formatted, sometimes FeedFinder may fail
-            # in such cases mmda just jumps to the next feed
-            try:
-                feed_src = urlparse.urlsplit(feed.feed.link).netloc.replace('www.','')
+        except Exception, e:
+            mmda_logger('feed-fetch','ERROR',e)
 
-                feed_entries = [{
-                    'title':e.title,
-                    # some feeds are only headlines..
-                    'summary':e.summary if e.has_key('summary') else None,
-                    'date':mktime(e.updated_parsed),
-                    'url':e.link
-                    } for e in feed.entries]
+        else:
+            for feed in fetched_feeds:
+                try:
 
-                news_source = {
-                        'url':  feed.feed.link,
-                        'name': feed_src,
-                        'items':feed_entries,
-                        'cache':datetime.utcnow()
-                        }
-                if feed.has_key('modified') and feed.modified:
-                    news_source['last_modified'] = mktime(feed.modified)
-                if feed.has_key('etag') and feed.etag:
-                    news_source['etag'] = feed.etag
+                    if feed.status == 304:
+                        mmda_logger('news','present','no updates',feed.href)
+                        continue
+                    elif feed.status == 404:
+                        mmda_logger('news','present','404',feed.href)
+                        del news.sources[feed.href]
+                    else:
+                        feed_src = urlparse.urlsplit(feed.feed.link).netloc.replace('www.','')
+                        mmda_logger('news','present','fetched',feed_src)
 
-                news.sources[feed.href] = news_source
-                news.changes_present = True
-            except Exception, e:
-                mmda_logger('feed','ERROR',e)
+                    feed_entries = [{
+                        'title':    e.title if e.has_key('title') else None,
+                        'summary':  e.summary if e.has_key('summary') else None,
+                        'date':     datetime(*e.updated_parsed[0:6]),
+                        'url':      e.link
+                        } for e in feed.entries]
 
-        mmda_logger('news','result','got content',len(news_sources),t)
+                    news_source = {
+                            'url':  feed.feed.link,
+                            'name': feed_src,
+                            'items':feed_entries,
+                            'cache':datetime.utcnow()
+                            }
+                    if feed.has_key('modified') and feed.modified:
+                        news_source['modified'] = datetime(*feed.modified[0:6])
+                    if feed.has_key('etag') and feed.etag:
+                        news_source['etag'] = feed.etag
+
+                except Exception, e:
+                    # some feeds may be badly formatted, sometimes FeedFinder may fail
+                    # some myspace feeds have no entries...  trying
+                    # to predict all possible failures is pointless.
+                    # in such cases mmda just jumps to the next feed
+                    mmda_logger('feed-parse','ERROR',e)
+                    continue
+                else:
+                    news.sources[feed.href] = news_source
+                    news.changes_present = True
+
+            mmda_logger('news','result','got results',len(pending_sources),t)
 
     # TODO: move news sort to  view?
     #decorated = [(entry["date"], entry) for entry in entries]
@@ -128,9 +141,22 @@ def populate_artist_news(news, artist):
     return news
 
 
+def _get_fetched_and_parsed_feed(source):
+    """
+    Return parsed feed from a source tuple.
 
+    @param source: a tuple with feed url and optional etag/last-modified values
 
+    @return: a feed object
+    """
+    source_url, etag, modified = source
 
+    try:
+        feed = feedparser.parse(source_url, etag=etag, modified=modified)
+    except:
+        return None
+    else:
+        return feed
 
 class FeedFinder(SGMLParser):
     """
@@ -200,8 +226,8 @@ def _get_news_sources(artist):
     @return: a list of strings with URLs
     """
     sources = []
+    future_calls = []
 
-    # TODO:  what cache rules should be added here?
     if 'Myspace' in artist.urls:
 
         if 'myspace_id' not in artist:
@@ -209,23 +235,23 @@ def _get_news_sources(artist):
             myspace_id = _get_myspace_id(myspace_profile)
             if myspace_id:
                 artist.myspace_id = myspace_id
+                artist.changes_present = True
 
         if 'myspace_id' in artist:
             myspace_blog_feed = "http://blogs.myspace.com/Modules/BlogV2/Pages/RssFeed.aspx?friendID=%s" % artist.myspace_id
             sources.append(myspace_blog_feed)
 
-    future_calls = []
     t = mmda_logger('www','request','find feeds',artist.name)
 
     for source_type in LOOK_FOR_FEEDS:
         if source_type in artist.urls:
-            future_calls.extend([Future(_get_feed_link_for,url) for url in artist.urls[source_type]])
+            future_calls = [Future(_get_feed_link_for,url) for url in artist.urls[source_type]]
 
-    [sources.append(url()) for url in future_calls if url()]
+    sources.extend(list(set([url() for url in future_calls if url()])))
 
     mmda_logger('www','result','found feeds',len(sources),t)
 
-    return sources
+    return [(src,None,None) for src in sources]
 
 def _get_myspace_id(profile_url):
     """
@@ -257,3 +283,4 @@ def _get_myspace_id(profile_url):
 
     mmda_logger('mspc','result','myspace ID',id,t)
     return id
+
