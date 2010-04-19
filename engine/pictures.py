@@ -45,6 +45,7 @@ def get_basic_artist_pictures(mbid):
         artist_pictures = CachedArtistPictures.get(mbid)
         if 'artist_name' not in artist_pictures:
             raise ResourceNotFound
+        mmda_logger('db','present',artist_pictures._doc_type, artist_pictures.get_id)
     except ResourceNotFound:
         # overhead, but in most cases artist page
         # is a place where user will go next anyway

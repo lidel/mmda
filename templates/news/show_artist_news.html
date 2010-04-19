@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load release_helpers %}
 {% block title %}{{ artist.name }} - news page at music.aergia.eu{% endblock %}
+{% block meta %}
+<link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" />
+{% endblock %}
 {% block header %}
 <h1>motherfuckin' news</h1>
 <h2>about “<a href="{% url show-artist uri_artist mbid %}">{{ artist.name }}</a>”</h2>
@@ -9,14 +12,15 @@
 {% block content %}
 
 {% if news_stream %}
+<a href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" rel="alternate" type="application/rss+xml"><img alt="" style="vertical-align:middle;border:0" src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png"/></a>
+<a href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/">Subscribe to Atom feed</a><br>
 
 News articles presented here are fetched from:
 <ul>
 {% for src in news_sources %}
-<li><a href="{{ src.url }}">{{ src.name }}</a> (<a href="{{ src.feed }}">feed</a>)</li>
+<li><a href="{{ src.url }}">{{ src.name }}</a></li>
 {% endfor %}
 </ul>
-
 
 <h3>News stream</h3>
 

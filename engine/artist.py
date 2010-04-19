@@ -86,6 +86,7 @@ def get_basic_artist(mbid):
     #TODO: handle Various Artists' artist (VARIOUS_ARTISTS_ID)
     try:
         artist = CachedArtist.get(mbid)
+        mmda_logger('db','present',artist._doc_type, artist.get_id)
     except ResourceNotFound:
         artist = _create_mb_artist(mbid)
     return  artist

@@ -61,6 +61,8 @@ def get_basic_release(mbid):
         else:
             get_basic_artist(artist_mbid)
             release_group = CachedReleaseGroup.view('artists/releases',include_docs=True, key=mbid).one()
+    else:
+        mmda_logger('db','present',release_group._doc_type, release_group.get_id)
     return release_group
 
 def _populate_deep_release_mb(release_group,release_mbid):

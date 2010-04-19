@@ -4,6 +4,9 @@
 {% load related_websites %}
 {% load tag_cloud %}
 {% block title %}{{ artist.name }} - artist page at music.aergia.eu{% endblock %}
+{% block meta %}
+<link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" />
+{% endblock %}
 {% block header %}
 <h1>motherfuckin' artist</h1>
 <h2>{{artist.name}}</h2>
@@ -18,8 +21,7 @@
 </p>
 {% endif %}
 
-<h5>Subpages</h5>
-<ul>
+<ul id="artistnav">
     <li><a href="{% url show-artist-pictures uri_artist mbid %}">Pictures</a></li>
     <li><a href="{% url show-artist-videos uri_artist mbid %}">Videos</a></li>
     <li><a href="{% url show-artist-news uri_artist mbid %}">News</a></li>

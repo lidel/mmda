@@ -1,9 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <title>{% block title %}{% endblock %}</title>
-  <meta name="robots" content="NONE,NOARCHIVE">
-  <style type="text/css">
+{% block meta %}{% endblock %}
+  <meta name="robots" content="NONE,NOARCHIVE" />
+  <meta charset="utf-8" />
+  <style>
     html * { padding:0; margin:0; }
     body * { padding:10px 20px; }
     body * * { padding:0; }
@@ -58,14 +60,39 @@
     }
     #youtube-videos {display:block; text-align: center}
     #youtube-videos li {float:left; margin: 5px; display:block; position:relative; padding: 5px; font-size: x-small; border: 1px solid #888; max-width: 130px}
+
 </style>
 
+<style>
+
+
+
+</style>
+
+
+<!--[if lte IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
 </head>
 <body>
-  <div id="summary">
 
-<form action="/search/" method="post" style="display:block;width:410px;float:right">
-<fieldset>
+  <header id="summary">
+
+
+
+{% block header %}{% endblock %}
+
+  </header>
+  <div id="info">
+{% block content %}{% endblock %}
+  </div>
+
+  <div id="explanation">
+{% block footer %}{% endblock %}
+  </div>
+
+<form action="/search/" method="post">
+<fieldset style="position:absolute:top:0px;right:0px;display:block;width:410px">
     <legend>Search form</legend>
         <label for="type">Search for</label>
     <select id="type" name="type">
@@ -78,18 +105,6 @@
     <button tabindex="2" class="search-button" type="submit"><span>Search</span></button>
 </fieldset>
 </form>
-
-
-{% block header %}{% endblock %}
-  </div>
-  <div id="info">
-{% block content %}{% endblock %}
-  </div>
-
-  <div id="explanation">
-{% block footer %}{% endblock %}
-  </div>
-
 </body>
 </html>
 

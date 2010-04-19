@@ -25,9 +25,9 @@ HTTP_OPENER.addheaders = [('User-agent', settings.USER_AGENT)]
 BANNED_DOMAINS = ('twitter.com',)
 LOOK_FOR_FEEDS = ('Blog','OfficialHomepage','Fanpage')
 
-SEARCH_TIMEOUT  = 5
-FEED_CACHE = 86400 # 1 day
-SMART_FEED_CACHE = 900 # 15 minutes
+SEARCH_TIMEOUT  = 5 # seconds
+FEED_CACHE = 86400 # = 1 day
+SMART_FEED_CACHE = 900 # = 15 minutes
 
 def get_populated_artist_news(artist):
     """
@@ -47,8 +47,7 @@ def get_populated_artist_news(artist):
     view = get_db('news').view('news/artist_news', startkey=[artist.get_id,u'\uFFF0'], endkey=[artist.get_id], descending=True)
 
     news_stream  = [group['value'] for group in view.all()]
-    # TODO: is 'feed' used? if no - remove
-    news_sources = [{'name':src['name'],'feed':url, 'url':src['url']} for url,src in news.sources.iteritems()]
+    news_sources = [{'name':src['name'], 'url':src['url']} for url,src in news.sources.iteritems()]
 
     return (news_stream, news_sources)
 
@@ -115,7 +114,7 @@ def populate_artist_news(news, artist):
                         mmda_logger('news','present','fetched',feed_src)
 
                     feed_entries = [{
-                        'title':    e.title if e.has_key('title') else None,
+                        'title':    e.title.strip() if e.has_key('title') else None,
                         'summary':  e.summary if e.has_key('summary') else None,
                         'date':     datetime(*e.updated_parsed[0:6]),
                         'url':      e.link
