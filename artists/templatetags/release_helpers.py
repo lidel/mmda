@@ -7,6 +7,7 @@ from django.conf import settings
 from django.template.defaultfilters import slugify, urlencode, escape
 
 from musicbrainz2.utils import extractUuid
+from datetime import datetime
 
 register = template.Library()
 
@@ -126,3 +127,17 @@ def coralize(value):
         return '/'.join(url)
 coralize.is_safe = True
 
+@register.filter
+def iso2date(str):
+    """
+    Parse string with date and return Python datetime.
+
+    @param str: a string
+
+    @return: a datetime object
+    """
+    try:
+        return datetime.strptime(str,'%Y-%m-%dT%H:%M:%SZ')
+    except:
+        return None
+spacecamel.is_safe = True

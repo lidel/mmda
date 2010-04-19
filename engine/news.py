@@ -1,6 +1,7 @@
 # -*- coding: utf-8
 from django.conf import settings
 from django.utils.html  import strip_tags
+from couchdbkit.ext.django.loading import get_db
 from mmda.engine.utils  import mmda_logger
 from mmda.engine.future import Future, timeout
 from mmda.news.models import CachedArtistNews
@@ -9,6 +10,8 @@ import feedparser
 import re
 import urllib2
 import urlparse
+
+from operator import itemgetter
 
 from datetime import datetime
 from time import mktime
@@ -40,7 +43,14 @@ def get_populated_artist_news(artist):
     news = populate_artist_news(news, artist)
     news.save_any_changes()
 
-    return news
+    # neat trick with high unicode character and lexical sorting
+    view = get_db('news').view('news/artist_news', startkey=[artist.get_id,u'\uFFF0'], endkey=[artist.get_id], descending=True)
+
+    news_stream  = [group['value'] for group in view.all()]
+    # TODO: is 'feed' used? if no - remove
+    news_sources = [{'name':src['name'],'feed':url, 'url':src['url']} for url,src in news.sources.iteritems()]
+
+    return (news_stream, news_sources)
 
 def populate_artist_news(news, artist):
 
@@ -235,11 +245,10 @@ def _get_news_sources(artist):
         if 'myspace_id' not in artist:
             myspace_profile = artist.urls['Myspace'][0]
             myspace_id = _get_myspace_id(myspace_profile)
-            if myspace_id:
-                artist.myspace_id = myspace_id
-                artist.changes_present = True
+            artist.myspace_id = myspace_id
+            artist.changes_present = True
 
-        if 'myspace_id' in artist:
+        if 'myspace_id' in artist and artist.myspace_id:
             myspace_blog_feed = "http://blogs.myspace.com/Modules/BlogV2/Pages/RssFeed.aspx?friendID=%s" % artist.myspace_id
             sources.append(myspace_blog_feed)
 

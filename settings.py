@@ -8,7 +8,9 @@ FLICKR_API_KEY = '' # flickr key
                                                     # if you use this software please replace it with your own key(!)
                                                     # it can be obtained for free at http://www.flickr.com/services/api
 
-MB_WEBSERVICE_HOST  = 'musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
+#MB_WEBSERVICE_HOST  = 'musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
+MB_WEBSERVICE_HOST  = 'www.uk.musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
+#MB_WEBSERVICE_HOST  = 'music.aergia.eu'             # mmda is efficient, but with many concurrent users it can
                                                     # make more than 1 req/s, so it should use mirror server
                                                     # when deployed
 
