@@ -38,7 +38,7 @@
 {% urls_for release mbid %}
 
 {% if release.remaster_of or release.remasters or release.set_prev or release.set_next %}
-<h1>Relations with other releases:</h1>
+<h1>Relations with other releases</h1>
 
 {% if release.set_prev %}previous in set: <a href="{% url show-release uri_artist release.set_prev.title|slugify2 release.set_prev.mbid %}">{{ release.set_prev.title }}</a> {% endif %}
 {% if release.set_next %}next in set: <a href="{% url show-release uri_artist release.set_next.title|slugify2 release.set_next.mbid %}">{{ release.set_next.title }}</a> {% endif %}

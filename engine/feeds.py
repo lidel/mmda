@@ -34,7 +34,7 @@ class ArtistNewsFeed(Feed):
             return artist
 
     def title(self, artist):
-        return "%s – artist news stream at %s" % (artist.name, 'TODO')
+        return u"%s – artist news stream at %s" % (artist.name, 'TODO')
 
     def subtitle(self):
         if self.news_sources:

@@ -240,6 +240,7 @@ a:hover {
 }
 ol {
     list-style-type: decimal-leading-zero;
+    margin-left:25px;
 }
 ul{
 	list-style:square inside;
@@ -283,7 +284,6 @@ body {
     padding: 5px;
 }
 
-*/
 ul#artistnav {
     margin: 1em 0 1em 0;
     padding: 3px 10px 3px 10px;

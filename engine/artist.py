@@ -108,6 +108,7 @@ def _create_mb_artist(mbid):
         # TODO: 404 not found redirect to different page? conditional?
         # TODO:  HTTP Error 503: Service Temporarily Unavailable -> special case:  please wait few seconds and hit F5
         mmda_logger('mb-artist','ERROR',e)
+        raise e
     else:
         artist                      = CachedArtist.get_or_create(mbid)
         artist                      = _populate_artist_mb(artist, mb_artist)
