@@ -79,7 +79,7 @@ def spacecamel(value):
     """
     # TODO: make it smart
     if value != 'IMDb':
-        return re.sub('((?=[A-Z][a-z])|(?<=[a-z])(?=[A-Z]))', ' ', value)
+        return re.sub('((?=[A-Z][a-z])|(?<=[a-z])(?=[A-Z]))', ' ', value).strip()
     else:
         return value
 spacecamel.is_safe = True

@@ -73,7 +73,7 @@ def get_artist_best_pictures(mbid):
 
     shuffle(best_pictures)
 
-    return best_pictures
+    return best_pictures[:4]
 
 def get_basic_artist(mbid):
     """

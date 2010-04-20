@@ -12,9 +12,10 @@ from musicbrainz2.utils import extractUuid
 
 from mmda.artists.models import CachedReleaseGroup
 from mmda.engine.abstract import populate_abstract
+from mmda.engine.artist import get_basic_artist
 from mmda.engine.utils import mmda_logger, decruft_mb, humanize_duration
 from mmda.engine.api.lastfm import populate_release_lastfm
-from mmda.engine.api.musicbrainz import mb_query, MB_RELEASE_INCLUDES
+from mmda.engine.api.musicbrainz import mb_query, MB_RELEASE_INCLUDES, MB_RELEASE_ARTIST
 
 
 
@@ -51,13 +52,13 @@ def get_basic_release(mbid):
         # TODO: optimize? its just one additional request on rare ocassions tho..
         try:
             t = mmda_logger('mb','request','artist mbid of release',mbid)
-            mb_release  = mb_query.getReleaseById(mbid, ws.ReleaseIncludes(artist=True))
+            mb_release  = mb_query.getReleaseById(mbid, MB_RELEASE_ARTIST)
             artist_mbid = extractUuid(mb_release.artist.id)
             mmda_logger('mb','result','artist mbid',artist_mbid,t)
         except WebServiceError, e:
             # TODO: add error handling here
             mmda_logger('mb-release','ERROR',e)
-            raise Http500
+            raise e
         else:
             get_basic_artist(artist_mbid)
             release_group = CachedReleaseGroup.view('artists/releases',include_docs=True, key=mbid).one()
@@ -84,7 +85,7 @@ def _populate_deep_release_mb(release_group,release_mbid):
         except WebServiceError, e:
             # TODO: hard error here
             mmda_logger('mb-release','ERROR',e)
-            raise Http500
+            raise e
         else:
             # make sure mbid of an artist is present
             if 'artist_mbid' not in release_group:

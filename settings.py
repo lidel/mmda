@@ -93,6 +93,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'mmda.urls'
 
+STATIC_DOC_ROOT = '/home/lidel/work/magisterka/django_app/mmda/static'
+
 TEMPLATE_DIRS = (
     '/home/lidel/work/magisterka/django_app/mmda/templates',
 )

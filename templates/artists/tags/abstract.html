@@ -1,7 +1,3 @@
-<div style="float:right;width:500px;text-align:justify;margin-right:10px;font-size:x-small">
-<h4>Abstract</h4>
-<p>{{ entity.abstract.content }}
-<br/><small><a href="{{ entity.abstract.url }}">read more at {{ entity.abstract.provider }}{% ifnotequal entity.abstract.lang 'en' %} [{{ entity.abstract.lang }}]{% endifnotequal %}</a></small>
-<br/>
-<br/></p>
-</div>
+<h1>Abstract</h1>
+<blockquote cite="#abstractsource"><p>{{ entity.abstract.content }}</p></blockquote>
+<cite id="abstractsource"><a href="{{ entity.abstract.url }}">read more at {{ entity.abstract.provider }}{% ifnotequal entity.abstract.lang 'en' %} [{{ entity.abstract.lang }}]{% endifnotequal %}</a></cite>

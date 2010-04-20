@@ -1,0 +1,371 @@
+/* Selection of classes from:
+ * TYPOGRIDPHY - TYPOGRAPHICAL AND GRID LAYOUT CSS FRAMEWORK FROM HARRY ROBERTS OF CSS WIZARDRY 
+ * v 0.1.1 / May 2008 /  http://csswizardry.com
+ * */
+
+/* RESET CSS */
+body,div,header,article,section,aside,footer,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {  
+	margin:0;
+	padding:0;
+}
+fieldset,img {
+	border:0;
+}
+address,caption,cite,code,dfn,em,strong,th,var {
+	font-style:normal;
+	font-weight:normal;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-size:100%;
+	font-weight:normal;
+}
+q:before,q:after {
+	content:'';
+}
+abbr,acronym {
+	border:0;
+}
+/* END RESET CSS */
+
+/* MAIN STRUCTURE STYLES */
+html{
+	font-size:100%;
+	min-height:101%;
+}
+body{
+	font-size:62.5%;
+	/*font-family: Garamond, Georgia, "Times New Roman", serif;*/
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+	color:#666;
+	background:/*url(images/grid.gif) top center repeat-y*/ #fff; /* Uncomment to display the grid */
+	border-top:0.5em solid #66c;
+	padding:0 1em;
+    text-shadow:1px 1px 1px #eee;
+
+}
+#wrapper{
+	width:94em;
+	margin:0 auto;
+}
+#header{
+	width:94em;
+	padding-top:1.5em;
+	margin-bottom:2em;
+}
+
+/*GRIDS*/
+
+.generic{
+	border-top:0.5em solid #66c; /* The border at the top of each grid */
+	float:left;
+	padding-top:1em;
+	margin-bottom:2em;
+}
+/* Sets styles for any 'start' grids - this class MUST be given to a grid that is the first in a horizontal series */
+.clear{
+	clear:both;
+}
+/* Sets styles for any 'end' grids - this class MUST be given to a grid that is the last in a horizontal series */
+.end{
+	margin-left:0 !important;
+	margin-right:0 !important;
+}
+/* 220px */
+.twotwenty{
+	width:22em;
+	margin-right:2em;
+}
+/* 280px */
+.twoeighty{
+	width:28em;
+	margin-right:2em;
+}
+/* 340px */
+.threeforty{
+	width:34em;
+	margin-right:2em;
+}
+/* 400px */
+.fourhun{
+	width:40em;
+	margin-right:2em;
+}
+/* 460px */
+.foursixty{
+	width:46em;
+	margin-right:2em;
+}
+/* 520px */
+.fivetwenty{
+	width:52em;
+	margin-right:2em;
+}
+/* 580px */
+.fiveeighty{
+	width:58em;
+	margin-right:2em;
+}
+/* 640px */
+.sixforty{
+	width:64em;
+	margin-right:2em;
+}
+/* 700px */
+.sevenhun{
+	width:70em;
+	margin-right:2em;
+}
+/* 760px */
+.sevensixty{
+	width:76em;
+	margin-right:2em;
+}
+/* 820px */
+.eighttwenty{
+	width:82em;
+	margin-right:2em;
+}
+/* 880px */
+.eighteighty{
+	width:88em;
+	margin-right:2em;
+}
+/* 940px */
+.nineforty{
+	width:94em;
+}
+
+/*PARAGRAPHS*/
+
+.generic p{
+	font-size:1.2em;
+	line-height:1.5em;
+	margin-bottom:1.5em;
+}
+/* Styles an introductory paragraph, similar to newspapers. Assign this class to the first paragraph in an article */
+p.intro:first-line{
+	font-variant:small-caps;
+}
+/* Styles a drop cap on each paragraph with this class */
+p.drop:first-letter{
+	float:left;
+	font-size:3em;
+	margin-top:-0.05em;
+	margin-right:0.1em;
+	margin-bottom:-0.5em;
+}
+
+/* OTHER*/
+
+blockquote p{
+	font-size:1.2em!important;
+	line-height:1.5em!important;
+	margin-bottom:1.5em!important;
+}
+
+.generic strong{
+	font-variant:small-caps;
+}
+.generic em{
+	font-style:italic;
+	font-weight:inherit;
+}
+.clear{
+	clear:both;
+}
+.right-float{ /* Float any item to the right */
+	float:right;
+	margin-left:2em;
+	margin-right:0;
+}
+.left-float{ /* Float any item to the left */
+	float:left;
+	margin-right:2em;
+	margin-left:0;
+}
+.code{ /* Styling for and code type items */
+	font-family:Courier, "Courier New", monospace;
+	background:#ddd;
+	font-size:1em;
+}
+
+/* THE END, REST IS MINE LOL */
+
+
+.artistgfx {
+    max-height: 126px;
+    overflow: hidden;
+}
+.artistgfx img {
+    float:left;
+}
+
+	/*background-image:url('http://imgur.com/jZEss.jpg');
+	background-repeat:no-repeat;
+	background-position:top center;
+	background-color:#657077;
+	margin:40px;*/
+h1 {
+    font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
+    font-weight:normal;
+    font-size: 40px;
+    text-shadow: 1px 1px 0 #FFFFFF;
+    letter-spacing: 0px;
+}
+#header h1 {
+    text-shadow: 1px 1px 3px #ccc;
+}
+h1 small {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-left: 10px;
+    text-shadow: 1px 1px 0 #FFFFFF;
+}
+
+a {
+    text-decoration:none;
+    color:#66c;
+    padding:3px;
+}
+a:hover {
+    /*border-bottom: 1px solid black;*/
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    background:#66c;
+    color:#fff;
+    text-shadow:1px 1px 1px #333;
+
+}
+ol {
+    list-style-type: decimal-leading-zero;
+}
+ul{
+	list-style:square inside;
+	margin-bottom:1.8em;
+}
+/*
+body {
+
+    font-size: 84%;
+    //font-family: Arial, Helvetica, sans-serif;
+    padding: 0.75em;
+    min-width: 45em;
+}*/
+
+#content h1 {
+    border-bottom: 1px dotted  #66c;
+    margin-bottom: 5px;
+    margin-top: 8px;
+    font-size: 20px;
+}
+
+#content h2 {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+#searchbox {
+    display: block;
+    position: absolute;
+    top:0px;
+    right:5px;
+    background:#66c;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    text-shadow:none;
+    color:#fff;
+}
+
+#searchbox fieldset {
+    padding: 5px;
+}
+
+*/
+ul#artistnav {
+    margin: 1em 0 1em 0;
+    padding: 3px 10px 3px 10px;
+    border-bottom: 1px solid #66c;
+    list-style-type: none;
+    text-align: left;
+    font: bold 11px verdana, arial, sans-serif;
+}
+
+ul#artistnav li {
+    display: inline;
+}
+
+body#a-overview li.a-overview,
+body#a-pictures li.a-pictures,
+body#a-videos   li.a-videos,
+body#a-news     li.a-news
+{
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+body#a-overview li.a-overview a,
+body#a-pictures li.a-pictures a,
+body#a-videos   li.a-videos a,
+body#a-news     li.a-news a
+{
+    top: 1px;
+    padding-top: 4px;
+    position: relative;
+    color: #000;
+    background-color: #fff;
+}
+
+ul#artistnav li a {
+    padding: 3px 4px;
+    margin-right: 0px;
+    text-decoration: none;
+    border: 1px solid #66c;
+    border-bottom: none;
+    color: #666;
+    background-color: #ccf;
+}
+
+ul#artistnav a:hover {
+    background: #fff;
+}
+
+
+
+
+
+
+    /* TAG CLOUD PROTOTYPE */
+    .tag-cloud {
+        text-align: center;
+        padding: 5px;
+        background-color: #FFFFCC;
+        margin:0;
+    }
+    /* TODO: make django tag that makes cloud from list */
+    .tag-cloud a {
+        color: #223;
+        vertical-align:middle;
+        margin-right:2px;
+        margin-left:2px;
+        line-height: 15px;
+    }
+    .tag-0 {
+        font-size: 9px;
+    }
+    .tag-1 {
+        font-size: 11px;
+    }
+    .tag-2 {
+        font-size: 15px;
+    }
+    .tag-3 {
+        font-size: 18px;
+    }
+    .tag-4 {
+        font-size: 20px;
+    }
+    #youtube-videos {display:block; text-align: center}
+    #youtube-videos li {float:left; margin: 5px; display:block; position:relative; padding: 5px; font-size: x-small; border: 1px solid #888; max-width: 130px}

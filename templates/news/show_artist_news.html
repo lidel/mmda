@@ -1,14 +1,18 @@
 {% extends "base.html" %}
 {% load release_helpers %}
+{% block bodytag %}<body id="a-news">{% endblock %}
 {% block title %}{{ artist.name }} - news page at music.aergia.eu{% endblock %}
 {% block meta %}
 <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" />
 {% endblock %}
 {% block header %}
-<h1>motherfuckin' news</h1>
-<h2>about “<a href="{% url show-artist uri_artist mbid %}">{{ artist.name }}</a>”</h2>
-
+<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name }}</a>
+    <small>news stream</small>
+</h1>
 {% endblock %}
+
+{% block navigation %}{% include "artists/artistnav.html" %}{% endblock %}
+
 {% block content %}
 
 {% if news_stream %}

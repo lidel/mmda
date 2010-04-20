@@ -1,5 +1,5 @@
 {% load release_helpers %}
-<h5>{{ entity_type }} related websites:</h5>
+<h1>{{ entity_type }} related websites</h1>
 <ul>
     {% for type,links in entity.urls.items %}
     {% if links|length_is:"1" %}

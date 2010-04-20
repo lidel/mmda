@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from mmda.engine.feeds import ArtistNewsFeed
+from django.conf import settings
 
 feeds  = {
     'artist': ArtistNewsFeed,
@@ -12,7 +13,7 @@ urlpatterns = patterns('',
     (r'^artist/', include('mmda.artists.urls')),
     (r'^tag/', include('mmda.tags.urls')),
     (r'^search/', include('mmda.search.urls')),
-    (r'^(?P<url>.+)/feed/$','django.contrib.syndication.views.feed', {'feed_dict': feeds})
-    #(r'^feed/(?P<url>.*)/$', 'django.contrib.syndication.views.feed', {'feed_dict': feeds})
+    (r'^(?P<url>.+)/feed/$','django.contrib.syndication.views.feed', {'feed_dict': feeds}),
+    (r'^static/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.STATIC_DOC_ROOT, 'show_indexes': True}),
 
 )

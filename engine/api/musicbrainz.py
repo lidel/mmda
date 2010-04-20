@@ -23,4 +23,5 @@ MB_RELEASE_INCLUDES = ws.ReleaseIncludes(
                         releaseRelations=True,
                         urlRelations=True,
                         )
+MB_RELEASE_ARTIST   = ws.ReleaseIncludes(artist=True)
 
