@@ -48,7 +48,7 @@ def get_basic_cached_search_result(query_type, query_string):
                 import pylast
                 lastfm = pylast.get_lastfm_network(api_key = settings.LASTFM_API_KEY)
                 lastfm_similar_tags = lastfm.search_for_tag(query_string).get_next_page()
-                search_result.results = [ t.name for t in lastfm_similar_tags ]
+                search_result.results = [ tag.name for tag in lastfm_similar_tags ]
 
         except Exception, e:
             # TODO: hard error here

@@ -3,7 +3,7 @@
 {% block bodytag %}<body id="a-videos">{% endblock %}
 {% block title %}{{ artist_videos.artist_name }} - artist videos page at music.aergia.eu{% endblock %}
 {% block header %}
-<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_videos.artist_name }}</a>
+<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_videos.artist_name|addtypography }}</a>
     <small>videos</small>
 </h1>
 {% endblock %}
@@ -11,19 +11,21 @@
 {% block navigation %}{% include "artists/artistnav.html" %}{% endblock %}
 
 {% block content %}
-
+<section class="generic nineforty end">
+<header class="twotwenty left-float">
 {% if artist_videos.youtube_channel %}
-Videos published on official <a href="{{ artist_videos.youtube_channel }}">{{ artist_videos.artist_name }} YouTube channel</a>
-<h1>Official Youtube channel:</h1>
+<h1>Official Youtube channel</h1>
+<p>Videos published on official <a href="{{ artist_videos.youtube_channel }}">{{ artist_videos.artist_name }} YouTube channel</a></p>
 {% else %}
-There is no official video channel avaiable, but some of YouTube videos dispalyed below may be related.
 <h1>Youtube</h1>
+<p>There is no official video channel avaiable, but some of YouTube videos dispalyed here using universal search may be related.</p>
 {% endif %}
+</header>
 
 <ul id="youtube-videos">
 {% for video in artist_videos.youtube %}
 <li><a href="{{ video.url }}"><img src="{{ video.thumb }}" width="120" height="90" /><br>{{ video.title|truncatewords:5 }}</a> <small>({{ video.duration }}s)</small></li>
 {% endfor %}
 </ul>
-
+</section>
 {% endblock %}

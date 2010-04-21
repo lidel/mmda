@@ -5,7 +5,7 @@
 {% block title %}{{ artist_pictures.artist_name }} - artist pictures page at music.aergia.eu{% endblock %}
 
 {% block header %}
-<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_pictures.artist_name }}</a>
+<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_pictures.artist_name|addtypography }}</a>
     <small>pictures</small>
 </h1>
 {% endblock %}
@@ -14,24 +14,37 @@
 
 {% block content %}
 
-<section class="generic fiveeighty">
+{% if artist_pictures.lastfm or artist_pictures.flickr %}
+<section class="generic sixforty clear">
 <h1>Last.fm</h1>
-<p>Images rated by users in descending order.</p>
-<p>
+<p>Top-rated images in descending order.</p>
+{% if artist_pictures.lastfm %}
 {% for image in artist_pictures.lastfm %}
     <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"  /></a>
 {% endfor %}
-</p>
+{% else %}
+<p>Sorry, nothing here <big>:'-(</big></p>
+{% endif %}
 </section>
 
-<section class="generic threeforty end">
+<section class="generic twoeighty end">
 <h1>Flickr</h1>
-<p>Top results  for “{{ artist_pictures.artist_name }}”: </p>
-<p>
+<p>Top results  for “{{ artist_pictures.artist_name }}” tag. </p>
+{% if artist_pictures.flickr %}
 {% for image in artist_pictures.flickr %}
     <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="75" height="75" alt="{{ image.title }}"  /></a>
 {% endfor %}
-</p>
+{% else %}
+<p>Sorry, nothing here <big>:'-(</big></p>
+{% endif %}
 </section>
+
+{% else %}
+
+<section class="generic nineforty end">
+<p>Sorry, nothing here <big>:'-(</big></p>
+</section>
+
+{% endif %}
 
 {% endblock %}

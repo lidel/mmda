@@ -16,7 +16,7 @@
 
 <div id="wrapper">
 
-<header id="header" class="generic">
+<header id="header">
 {% block header %}{% endblock %}
 </header>
 
@@ -27,6 +27,10 @@
 </article>
 
 
+
+<footer id="foot" class="generic nineforty">{% block footer %}
+MMDA 1.0 powered by MusicBrainz, Wikipedia, Last.fm, Flickr and Youtube APIs.
+{% endblock %}</footer>
 <aside id="searchbox">
 <form action="/search/" method="post">
 <fieldset>
@@ -42,8 +46,6 @@
 </fieldset>
 </form>
 </aside>
-
-<footer id="foot">{% block footer %}{% endblock %}</footer>
 </div>
 </body>
 </html>

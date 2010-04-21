@@ -3,49 +3,32 @@
 {% load universal_abstract %}
 {% load related_websites %}
 {% load tag_cloud %}
-{% block bodytag %}<body id="a-overview">{% endblock %}
+{% block bodytag %}<body id="a-profile">{% endblock %}
 {% block title %}{{ artist.name }} - artist page at music.aergia.eu{% endblock %}
 {% block meta %}
 <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" />
 {% endblock %}
 {% block header %}
-<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name }}</a>
-    <small>overview</small>
+<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name|addtypography }}</a>
+    <small>artist profile</small>
 </h1>
-
 {% endblock %}
 
 {% block navigation %}{% include "artists/artistnav.html" %}{% endblock %}
 
 {% block content %}
 
-<section class="generic sevenhun artistgfx">
+<section class="generic fiveeighty clear">
+
+<div class="artistgfx">
 {% for image in artist_pictures %}
-{% if forloop.first %}
-<a href="{{ image.url }}"><img src="{{ image.big|coralize }}" width="252" alt="{{ image.title }}"/></a>
-{% else %}
 <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"/></a>
-{% endif %}
 {% endfor %}
-</section>
-<section class="generic twotwenty end">
-{% ifnotequal artist.artist_type 'Unknown' %}{{ artist.artist_type|lower }}{% endifnotequal %}
-{% if artist.disambiguation %}<h4>{{artist.disambiguation}}</h4>{% endif %}
-{% if artist.aliases %}also known as: <em>{{ artist.aliases|join:", " }}</em>{% endif %}
-{% if artist.dates %}
-<p>
-{% ifnotequal artist.artist_type 'Person' %}active{% endifnotequal %}
-{% if artist.dates.from %}{% ifequal artist.artist_type 'Person' %}born {% else %}from {% endifequal %} <em>{{ artist.dates.from }}</em>{% endif %}
-{% if artist.dates.to %}{% ifequal artist.artist_type 'Person' %}died {% else %}to {% endifequal %} <em>{{ artist.dates.to }}</em>{% endif %}
-</p>
-{% endif %}
-{% tag_cloud_for artist.tags %}
-</section>
+</div>
 
-
-<section class="generic fiveeighty">
 {% abstract_for artist %}
 
+{% if primary_releases %}
 <h1>Releases</h1>
     {% regroup primary_releases|dictsort:"release_type" by release_type as releases_by_type %}
     {% for type in releases_by_type %}
@@ -56,9 +39,30 @@
         {% endfor %}
         </ul>
     {% endfor %}
+{% endif %}
+
 </section>
 <section class="generic threeforty end">
+{% if artist.disambiguation or artist.dates or artist.aliases %}
+<h1>{% if artist.artist_type %}{{ artist.artist_type }}{% else %}Artist{% endif %}</h1>
+<ul>
+    {% if artist.disambiguation %}<li>{{artist.disambiguation}}</li>{% endif %}
+    {% if artist.aliases %}<li>also known as: <em>{{ artist.aliases|join:", " }}</em></li>{% endif %}
+{% if artist.dates %}
+<li>{% ifnotequal artist.artist_type 'Person' %}active{% endifnotequal %}
+{% if artist.dates.from %}{% ifequal artist.artist_type 'Person' %}born {% else %}from {% endifequal %} <em>{{ artist.dates.from }}</em>{% endif %}
+{% if artist.dates.to %}{% ifequal artist.artist_type 'Person' %}died {% else %}to {% endifequal %} <em>{{ artist.dates.to }}</em>{% endif %}
+</li>
+{% endif %}
+</ul>
+{% endif %}
+
 {% urls_for artist artist._id %}
+
+{% if artist.tags %}
+<h1>Folksonomy</h1>
+{% tag_cloud_for artist.tags %}
+{% endif %}
 
 {% if artist.members or  artist.member_of  or artist.collaborations or  artist.collaboration_of  %}
 <h1>Relationships</h1>
@@ -115,9 +119,9 @@
 </section>
 
 
-<section class="generic nineforty">
-
-<h1>Similar artists:</h1>
+<section class="generic nineforty clear">
+{% if artist.similar %}
+<h1>Similar artists</h1>
 <ul>
     {% for similar_artist in artist.similar %}
     <li><a href="{% url show-artist similar_artist.name|slugify2 similar_artist.mbid %}">{{ similar_artist.name }}</a> ~{{similar_artist.score|percentage:100}}</li>
@@ -125,7 +129,7 @@
     <li> no info </li>
     {% endfor %}
 </ul>
-
+{% endif %}
 </section>
 
 {% endblock %}

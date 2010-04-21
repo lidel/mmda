@@ -6,7 +6,7 @@
 <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" />
 {% endblock %}
 {% block header %}
-<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name }}</a>
+<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name|addtypography }}</a>
     <small>news stream</small>
 </h1>
 {% endblock %}
@@ -14,27 +14,33 @@
 {% block navigation %}{% include "artists/artistnav.html" %}{% endblock %}
 
 {% block content %}
-
+<section class="generic twoeighty">
 {% if news_stream %}
-<a href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" rel="alternate" type="application/rss+xml"><img alt="" style="vertical-align:middle;border:0" src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png"/></a>
-<a href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/">Subscribe to Atom feed</a><br>
+<h1>News stream sources</h1>
 
-News articles presented here are fetched from:
+<p>Articles presented here are fetched from:</p>
 <ul>
 {% for src in news_sources %}
 <li><a href="{{ src.url }}">{{ src.name }}</a></li>
 {% endfor %}
 </ul>
+{% endif %}
+<h1>Feed</h1>
+<p><a href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" rel="alternate" type="application/rss+xml"><img alt="" style="vertical-align:middle;border:0" src="http://www.feedburner.com/fb/images/pub/feed-icon16x16.png"/></a>
+<a href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/">Subscribe to Atom feed</a></p>
 
-<h3>News stream</h3>
+</section>
+<section class="generic sixforty end">
+{% if news_stream %}
 
-<ul>
+
+<ul class="news-stream">
 
 {% for news in news_stream %}
 
-<li><h5><a href="{{ news.url }}">{{ news.title|safe }}</a></h5><small>{{ news.date|iso2date|date }}</small>
-{% if news.summary %}<p>{{ news.summary|truncatewords_html:100|safe }}</p>{% endif %}
-<p>read {% if news.summary %}more{% endif %} at <a href="{{ news.url }}">{{ news.source }}</a></p></li>
+<li><h1><a href="{{ news.url }}">{{ news.title|safe }}</a> <small>{{ news.date|iso2date|date }}</small></h1>
+{% if news.summary %}<blockquote cite="{{ news.url }}"><p><span class="opener">“</span>{{ news.summary|truncatewords_html:100|safe }}” <cite>read {% if news.summary %}more{% endif %} at <a href="{{ news.url }}">{{ news.source }}</a></cite></p></blockquote>{% endif %}
+</li>
 
 {% endfor %}
 
@@ -42,5 +48,5 @@ News articles presented here are fetched from:
 {% else %}
 Sorry, no news about this artist are avaiable at the moment..  <big> :'-( </big>
 {% endif %}
-
+</section>
 {% endblock %}

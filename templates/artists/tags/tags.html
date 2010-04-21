@@ -1,7 +1,7 @@
-<div class="tag-cloud">
+<ul class="tag-cloud">
     {% for tag,size in tags %}
-    <a class="tag-{{ size }}" href="{% url show-tag tag %}">{{ tag }}</a>
+    <li><a class="tag-{{ size }}" href="{% url show-tag tag %}">{{ tag }}</a></li>
     {% empty %}
-    no tags :-(
+    <li>no tags :-(</li>
     {% endfor %}
-</div>
+</ul>

@@ -10,6 +10,7 @@ from django.core.cache import cache
 
 
 ITEMS_LIMIT = 30
+# TODO: language awareness?
 
 class ArtistNewsFeed(Feed):
     """

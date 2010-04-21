@@ -1,14 +1,11 @@
 {% load release_helpers %}
 <h1>{{ entity_type }} related websites</h1>
-<ul>
+<ul id="related-urls">
     {% for type,links in entity.urls.items %}
     {% if links|length_is:"1" %}
     <li><a href="{{ links|first }}" class="url-{{ type|lower }}">{{ type|spacecamel }}</a></li>
     {% else %}
-    <li>{{ type|spacecamel }}: {% for link in links %}
-    <a href="{{ link }}" class="url-{{ type|lower }}">#{{ forloop.counter }}</a>
-    {% endfor %}
-    </li>
+    <li class="many">{{ type|spacecamel }}: {% for link in links %}<a href="{{ link }}" class="url-{{ type|lower }}">#{{ forloop.counter }}</a>{% endfor %}</li>
     {% endif %}
     {% endfor %}
     <li><a href="http://musicbrainz.org/{{ entity_type|lower }}/{{ mbid }}.html">MusicBrainz</a></li>

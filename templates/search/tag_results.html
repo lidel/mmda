@@ -2,18 +2,18 @@
 {% load release_helpers %}
 {% block title %}“{{ search_result.query_string|escape }}” – tag search results{% endblock %}
 {% block header %}
-<h1>Tag search results</h1>
-for query: <big>“{{ search_result.query_string|escape }}”</big>
+<h1>Tag search results
+<small>for query: “{{ search_result.query_string|escape }}”</small></h1>
 
 {% endblock %}
 {% block content %}
-
-<ul>
+<section class="generic nineforty end">
+<ol id="tag-search-result">
 {% for tag in search_result.results %}
 <li><a href="{% url show-tag tag %}">{{ tag }}</a><br>
 {% empty %}
 <p>Sorry, no tags matched your query <big>:'-(</big></p>
 {% endfor %}
-</ul>
-
+</ol>
+</section>
 {% endblock %}

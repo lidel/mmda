@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.cache import cache
 from mmda.engine.utils import mmda_logger
 
-FLICKR_LIMIT=50
+FLICKR_LIMIT=48
 
 def populate_artist_pictures_flickr(artist_pictures):
     """

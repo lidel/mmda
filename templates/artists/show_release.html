@@ -5,8 +5,8 @@
 {% block title %}“{{ release.title }}” release page at mmda{% endblock %}
 {% block header %}
 
-<h1>“{{ release.title }}”</h1>
-    <small>by <a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ release_group.artist_name }}</a></small>
+<h1>“{{ release.title|addtypography }}” <small>release page</small></h1>
+    <big>by <a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ release_group.artist_name }}</a></big>
 </h1>
 
 {% endblock %}
@@ -17,14 +17,14 @@
 
 <h1>Track listing</h1>
 {% if release.cover %}<img src="{{ release.cover|coralize }}" alt="artwork" width="160" height="160" class="right-float" />{% endif %}
-<ol>
+<ol class="tracklisting">
     {% for track in release.tracks %}
-    <li><small>[{{ track.duration|default:"?:??" }}]</small> {{ track.title }}</li>
+    <li>{{ track.title }}<span class="duration">{{ track.duration|default:"?:??" }}</span></li>
     {% endfor %}
 </ol>
 
 {% if release.release_events  %}
-<h1>Release events:</h1>
+<h1 class="clear">Release events</h1>
 <ul>
     {% for event in release.release_events %}
     <li>{{ event.date }} {{ event.country }} {{ event.format }}</li>

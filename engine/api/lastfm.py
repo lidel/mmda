@@ -8,7 +8,7 @@ from django.utils.html import strip_tags
 from mmda.pictures.models import CachedArtistPictures
 from mmda.engine.future import Future
 
-LASTFM_LIMIT=20
+LASTFM_PICTURE_LIMIT=40
 
 def populate_artist_lastfm(artist):
     """
@@ -164,7 +164,7 @@ def populate_artist_pictures_lastfm(artist_pictures):
         try:
             t = mmda_logger('last','request','artist pictures',artist_pictures._id)
             lastfm_artist = lastfm.get_artist_by_mbid(artist_pictures._id)
-            lastfm_images = lastfm_artist.get_images(order=pylast.IMAGES_ORDER_POPULARITY,limit=LASTFM_LIMIT)
+            lastfm_images = lastfm_artist.get_images(order=pylast.IMAGES_ORDER_POPULARITY,limit=LASTFM_PICTURE_LIMIT)
             # TODO: add lastfm event info, that can be used as a tag in flickr search
             mmda_logger('last','result','found pictures',len(lastfm_images),t)
         except Exception, e:

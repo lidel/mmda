@@ -4,7 +4,7 @@ import random
 
 from django import template
 from django.conf import settings
-from django.template.defaultfilters import slugify, urlencode, escape
+from django.template.defaultfilters import slugify, urlencode, force_escape, safe
 
 from musicbrainz2.utils import extractUuid
 from datetime import datetime
@@ -63,9 +63,9 @@ def slugify2(value):
     """
     slugified = slugify(value)
     if len(slugified):
-        return escape(slugified)
+        return safe(force_escape(slugified))
     else:
-        return escape(value.strip().replace(' ','-').lower())
+        return safe(force_escape(value.strip().replace(' ','-').lower()))
 slugify2.is_safe = True
 
 @register.filter
@@ -141,3 +141,21 @@ def iso2date(str):
     except:
         return None
 spacecamel.is_safe = True
+
+@register.filter
+def addtypography(string):
+    """
+    Add typographic eye-candy to a string.
+
+    @param value: a string
+
+    @return: an updated string
+    """
+    try:
+        html = force_escape(string)
+        html = html.replace('&amp;','<span class="amp">&amp;</span>')
+        return safe(html)
+    except Exception, e:
+        print e 
+        return string
+addtypography.is_safe = True
