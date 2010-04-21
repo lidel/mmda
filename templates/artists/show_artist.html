@@ -122,8 +122,8 @@
 </section>
 
 
-<section class="generic nineforty clear">
 {% if artist.similar %}
+<section class="generic nineforty clear">
 <h1>Similar artists</h1>
 <ul>
     {% for similar_artist in artist.similar %}
@@ -132,7 +132,7 @@
     <li> no info </li>
     {% endfor %}
 </ul>
-{% endif %}
 </section>
+{% endif %}
 
 {% endblock %}

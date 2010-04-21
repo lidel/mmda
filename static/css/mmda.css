@@ -268,7 +268,7 @@ ol li{
 
 
 .artistgfx {
-    height: 135px;
+    height: 145px;
     overflow: hidden;
 }
 .artistgfx a {
@@ -286,7 +286,11 @@ ol li{
     box-shadow: 5px 5px 5px #ccc;
     -moz-box-shadow: 5px 5px 5px #ccc;
     -webkit-box-shadow: 5px 5px 5px #ccc;
-    margin-right:10px;
+    margin-right:5px;
+    margin-left:5px;
+    margin-top:10px;
+    -webkit-transform: rotate(-5deg);
+    -moz-transform: rotate(-5deg);
 }
 
 

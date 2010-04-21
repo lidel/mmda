@@ -8,7 +8,7 @@
 {% endblock %}
 {% block header %}
 
-<h1>“{{ release.title|addtypography }}” <small>release page</small></h1>
+<h1>“<a href="{% url show-release uri_artist, uri_release, mbid %}">{{ release.title|addtypography }}</a>” <small>release page</small></h1>
     <big>by <a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ release_group.artist_name }}</a></big>
 </h1>
 
