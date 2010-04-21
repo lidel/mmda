@@ -325,6 +325,7 @@ a {
     text-decoration:none;
     color:#66c;
     padding:3px;
+	white-space:nowrap; /* TODO: move to ul via credits at  http://127.0.0.1:8000/artist/tool/release/nima/b1b9bf98-86fa-4092-950f-1fb6744a25b4/ */
 }
 a:hover {
     /*border-bottom: 1px solid black;*/
@@ -491,10 +492,14 @@ nav ul li a:hover {
         font-size: 20px;
     }
     #youtube-videos {display:block; text-align: center}
-    #youtube-videos li {float:right; margin: 5px; display:block; position:relative; padding: 5px; font-size: x-small; border: 1px solid #888; max-width: 130px; height:150px;}
+    #youtube-videos li {float:left; margin: 5px; display:block; position:relative; padding: 5px; font-size: x-small; border: 1px solid #888; max-width: 130px; height:150px;}
 
 
 /* NEWS FEED */
+ul.news-stream {
+    margin-left:5px;
+    margin-right:5px;
+}
 ul.news-stream li {
     display: block;
 	font-size: 1em;
@@ -535,18 +540,24 @@ ul.news-stream li blockquote cite:before {
 /* TRACKLISTING */
 ol.tracklisting {
     list-style-type: decimal-leading-zero;
+    position:relative;
+    display:block;
+    margin-right:18em;
 }
 ol.tracklisting li {
-    text-overflow:ellipsis;
+    /*text-overflow:ellipsis;
+    -moz-text-overflow:ellipsis;
 	overflow:hidden;
-	white-space:nowrap;
-    display:block;
-    width:400px;
+	white-space:nowrap;*/
+    margin-bottom:0.5em;
 }
-ol.tracklisting li .duration {
-    font-weight: bold;
+ol.tracklisting li span {
+	font-family: monospace;
+    position:absolute;
+    right:0;
+}
+img.artwork {
     display:block;
-    float:right;
 }
 
 

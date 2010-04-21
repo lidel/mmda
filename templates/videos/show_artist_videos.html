@@ -2,6 +2,9 @@
 {% load release_helpers %}
 {% block bodytag %}<body id="a-videos">{% endblock %}
 {% block title %}{{ artist_videos.artist_name }} - artist videos page at music.aergia.eu{% endblock %}
+{% block meta %}
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+{% endblock %}
 {% block header %}
 <h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_videos.artist_name|addtypography }}</a>
     <small>videos</small>
@@ -12,7 +15,6 @@
 
 {% block content %}
 <section class="generic nineforty end">
-<header class="twotwenty left-float">
 {% if artist_videos.youtube_channel %}
 <h1>Official Youtube channel</h1>
 <p>Videos published on official <a href="{{ artist_videos.youtube_channel }}">{{ artist_videos.artist_name }} YouTube channel</a></p>
@@ -20,8 +22,9 @@
 <h1>Youtube</h1>
 <p>There is no official video channel avaiable, but some of YouTube videos dispalyed here using universal search may be related.</p>
 {% endif %}
-</header>
+</section>
 
+<section class="generic nineforty end">
 <ul id="youtube-videos">
 {% for video in artist_videos.youtube %}
 <li><a href="{{ video.url }}"><img src="{{ video.thumb }}" width="120" height="90" /><br>{{ video.title|truncatewords:5 }}</a> <small>({{ video.duration }}s)</small></li>

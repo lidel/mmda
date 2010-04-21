@@ -3,6 +3,10 @@ import surf
 from datetime import datetime
 from mmda.engine.utils import mmda_logger
 
+from BeautifulSoup import BeautifulStoneSoup
+from urllib2 import urlopen
+
+ABSTRACT_TIMEOUT = 5 #seconds
 
 def populate_abstract(artist_or_releasegroup):
     """
@@ -14,13 +18,13 @@ def populate_abstract(artist_or_releasegroup):
     @return: a CachedArtist or CachedReleaseGroup object
     """
     if 'abstract' not in artist_or_releasegroup:
-        abstract = get_abstract_from_dbpedia(artist_or_releasegroup)
+        abstract = get_abstract_from_bbc(artist_or_releasegroup)
+        if not abstract:
+            abstract = get_abstract_from_dbpedia(artist_or_releasegroup)
         # TODO: add other abstract sources here
 
         if abstract:
             artist_or_releasegroup.abstract = abstract
-            artist_or_releasegroup.cache_state[abstract['provider']]  = [1,datetime.utcnow()]
-            artist_or_releasegroup.changes_present = True
 
     return artist_or_releasegroup
 
@@ -36,7 +40,7 @@ def get_abstract_from_dbpedia(artist_or_releasegroup):
     # if artist_or_releasegroup is ReleaseGroup, we look for release with wikipedia URL
     # TODO: check performance, and if better - replace in other parts
     # TODO: DRY: refactor
-    if 'Wikipedia' not in artist_or_releasegroup.cache_state:
+    if 'dbpedia' not in artist_or_releasegroup.cache_state:
         wiki_resource = None
         if 'releases' in artist_or_releasegroup:
             for release in artist_or_releasegroup['releases'].itervalues():
@@ -60,6 +64,8 @@ def get_abstract_from_dbpedia(artist_or_releasegroup):
             except Exception, e:
                 # TODO: handle it?
                 mmda_logger('surf-dbpedia','ERROR',e)
+        artist_or_releasegroup.cache_state['dbpedia'] = [1,datetime.utcnow()]
+        artist_or_releasegroup.changes_present = True
     return abstract
 
 def find_best_wikipedia_resource(wikipedia_urls):
@@ -80,3 +86,32 @@ def find_best_wikipedia_resource(wikipedia_urls):
     return (wiki_resource, wiki_lang, wiki_url)
 
 
+def get_abstract_from_bbc(artist):
+    """
+    Populate CachedArtist with short Wikipedia abstract from BBC API.
+
+    BBC provide abstracts only for artists, so we skip it if argument is a release
+
+    @param artist_or_releasegroup: a CachedArtist or CachedReleaseGroup object
+
+    @return: a dictionary with an abstract structure
+    """
+    abstract = {}
+    if artist._doc_type == 'CachedArtist' and 'bbc' not in artist.cache_state:
+        try:
+            t = mmda_logger('bbc','request','abstract',artist.get_id)
+            xml = urlopen("http://www.bbc.co.uk/music/artists/%s/wikipedia.xml" % artist.get_id, timeout=ABSTRACT_TIMEOUT).read()
+            xmlSoup = BeautifulStoneSoup(xml)
+            abstract = {
+                    'content':xmlSoup.wikipedia_article.content.text,
+                    'url':xmlSoup.wikipedia_article.url.text,
+                    'lang':'en',
+                    'provider':'Wikipedia'
+                    }
+        except Exception, e:
+            mmda_logger('bbc','ERROR',e)
+        else:
+            mmda_logger('bbc','result','found',abstract['url'],t)
+        artist.cache_state['bbc'] = [1,datetime.utcnow()]
+        artist.changes_present = True
+    return abstract

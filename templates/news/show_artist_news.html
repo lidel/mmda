@@ -4,6 +4,7 @@
 {% block title %}{{ artist.name }} - news page at music.aergia.eu{% endblock %}
 {% block meta %}
 <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" />
+<meta name="robots" content="noindex,nofollow,noarchive"/>
 {% endblock %}
 {% block header %}
 <h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name|addtypography }}</a>

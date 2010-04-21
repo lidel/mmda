@@ -3,6 +3,9 @@
 
 {% block bodytag %}<body id="a-pictures">{% endblock %}
 {% block title %}{{ artist_pictures.artist_name }} - artist pictures page at music.aergia.eu{% endblock %}
+{% block meta %}
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+{% endblock %}
 
 {% block header %}
 <h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_pictures.artist_name|addtypography }}</a>

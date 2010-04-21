@@ -3,6 +3,9 @@
 {% load universal_abstract %}
 {% load related_websites %}
 {% block title %}“{{ release.title }}” release page at mmda{% endblock %}
+{% block meta %}
+<meta name="robots" content="index,nofollow,noarchive"/>
+{% endblock %}
 {% block header %}
 
 <h1>“{{ release.title|addtypography }}” <small>release page</small></h1>
@@ -16,10 +19,10 @@
 {% abstract_for release_group %}
 
 <h1>Track listing</h1>
-{% if release.cover %}<img src="{{ release.cover|coralize }}" alt="artwork" width="160" height="160" class="right-float" />{% endif %}
+{% if release.cover %}<img src="{{ release.cover|coralize }}" alt="artwork" width="160" height="160" class="right-float artwork" />{% endif %}
 <ol class="tracklisting">
     {% for track in release.tracks %}
-    <li>{{ track.title }}<span class="duration">{{ track.duration|default:"?:??" }}</span></li>
+    <li>{{ track.title }}<span>{{ track.duration|default:"?:??" }}</span></li>
     {% endfor %}
 </ol>
 

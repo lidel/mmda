@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 {% load release_helpers %}
 {% block title %}“{{ search_result.query_string|escape }}” – tag search results{% endblock %}
+{% block meta %}
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+{% endblock %}
 {% block header %}
 <h1>Tag search results
 <small>for query: “{{ search_result.query_string|escape }}”</small></h1>
