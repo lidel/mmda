@@ -107,7 +107,7 @@ def get_abstract_from_bbc(artist):
         try:
             t = mmda_logger('bbc','request','abstract',artist.get_id)
             xml = urlopen("http://www.bbc.co.uk/music/artists/%s/wikipedia.xml" % artist.get_id, timeout=ABSTRACT_TIMEOUT).read()
-            xmlSoup = BeautifulStoneSoup(xml)
+            xmlSoup = BeautifulStoneSoup(xml, convertEntities=BeautifulStoneSoup.HTML_ENTITIES)
             abstract = {
                     'content':xmlSoup.wikipedia_article.content.text,
                     'url':xmlSoup.wikipedia_article.url.text,
