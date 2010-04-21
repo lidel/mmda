@@ -18,6 +18,7 @@ def populate_abstract(artist_or_releasegroup):
     @return: a CachedArtist or CachedReleaseGroup object
     """
     if 'abstract' not in artist_or_releasegroup:
+        # TODO: parallelize this
         abstract = get_abstract_from_bbc(artist_or_releasegroup)
         if not abstract:
             abstract = get_abstract_from_dbpedia(artist_or_releasegroup)
@@ -42,6 +43,8 @@ def get_abstract_from_dbpedia(artist_or_releasegroup):
     # TODO: DRY: refactor
     if 'dbpedia' not in artist_or_releasegroup.cache_state:
         wiki_resource = None
+        cache_state = 0
+
         if 'releases' in artist_or_releasegroup:
             for release in artist_or_releasegroup['releases'].itervalues():
                 if 'urls' in release  and 'Wikipedia' in release['urls']:
@@ -64,7 +67,10 @@ def get_abstract_from_dbpedia(artist_or_releasegroup):
             except Exception, e:
                 # TODO: handle it?
                 mmda_logger('surf-dbpedia','ERROR',e)
-        artist_or_releasegroup.cache_state['dbpedia'] = [1,datetime.utcnow()]
+            else:
+                cache_state = 1
+
+        artist_or_releasegroup.cache_state['dbpedia'] = [cache_state,datetime.utcnow()]
         artist_or_releasegroup.changes_present = True
     return abstract
 
@@ -110,8 +116,10 @@ def get_abstract_from_bbc(artist):
                     }
         except Exception, e:
             mmda_logger('bbc','ERROR',e)
+            cache_state = 0
         else:
             mmda_logger('bbc','result','found',abstract['url'],t)
-        artist.cache_state['bbc'] = [1,datetime.utcnow()]
+            cache_state = 1
+        artist.cache_state['bbc'] = [cache_state,datetime.utcnow()]
         artist.changes_present = True
     return abstract

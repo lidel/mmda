@@ -21,11 +21,13 @@
 
 <section class="generic fiveeighty clear">
 
+{% if artist_pictures %}
 <div class="artistgfx">
 {% for image in artist_pictures %}
 <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"/></a>
 {% endfor %}
 </div>
+{% endif %}
 
 {% abstract_for artist %}
 
