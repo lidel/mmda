@@ -47,10 +47,10 @@ body{
 div#wrapper{
 	width:94em;
 	margin:0 auto;
-    border-left: 15px solid #fff;
-    border-right:15px solid #fff;
+    border-left: 15px solid #fefefe;
+    border-right:15px solid #fefefe;
     height:100%;
-    background: #fff;
+    background: #fefefe;
     overflow:hidden;
     position:relative;
 }
@@ -58,7 +58,7 @@ div#wrapper{
 	width:94em;
 	float:left;
 	padding-top:2.5em;
-	margin-bottom:2em;
+	margin-bottom:2.5em;
 }
 
 /*GRIDS*/
@@ -164,7 +164,6 @@ p.drop:first-letter{
 }
 
 /* OTHER*/
-
 blockquote p{
     font-family: Georgia, Garamond, "Times New Roman", serif;
 	font-size:1.4em!important;
@@ -172,7 +171,6 @@ blockquote p{
     text-align: justify;
 	margin-bottom:1.3em!important;
 }
-
 .generic strong{
 	font-variant:small-caps;
 }
@@ -270,70 +268,81 @@ ol li{
 
 /* THE END, REST IS MINE LOL */
 
+/* ARTIST PAGE */
 
-.artistgfx {
-    height: 145px;
-    overflow: hidden;
-}
-.artistgfx a {
+#artistgfx a {
     display: inline;
     height:126px;
     width:126px;
 }
-.artistgfx a:hover {
+#artistgfx a:hover {
     background:none;
 }
-.artistgfx img {
+#artistgfx img {
     -moz-border-radius:15px;
     -webkit-border-radius:15px;
     border-radius:15px;
     box-shadow: 5px 5px 5px #ccc;
     -moz-box-shadow: 5px 5px 5px #ccc;
     -webkit-box-shadow: 5px 5px 5px #ccc;
-    margin-right:5px;
-    margin-left:5px;
-    margin-top:10px;
-    -webkit-transform: rotate(-5deg);
-    -moz-transform: rotate(-5deg);
+    margin: 1em 5px 1em 5px;
 }
 
 
 /* url padding fix */
-ul#related-urls li {
+#related-urls ul {
+    margin-left:0;
+}
+#related-urls li {
     display: block;
     list-style-type: none;
 }
-ul#related-urls .many {
-    padding-left: 0px;
+#related-urls img {
 }
-ul#related-urls img {
+
+.favicons img {
     vertical-align:text-top;
     margin-right:1em;
     width:16px;
     height:16px;
+    box-shadow: 1px 1px 5px #aaa;
+    -moz-box-shadow: 1px 1px 5px #aaa;
+    -webkit-box-shadow: 1px 1px 5px #aaa;
 }
-ul#related-urls .many img {
-    margin-right:0;
+.favicons {
+    line-height: 16px;
 }
-	/*background-image:url('http://imgur.com/jZEss.jpg');
-	background-repeat:no-repeat;
-	background-position:top center;
-	background-color:#657077;
-	margin:40px;*/
+
+/* multi-column */
+
+#release-events ul,
+#similar-artists ul {
+    -moz-column-count: 3;
+    -moz-column-gap: 1em;
+}
+
+
+
+
+
+
+
+
+
+
 h1 {
     font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
     font-weight:normal;
-    font-size: 500%;
-    text-shadow: 1px 1px 0 #FFFFFF;
     letter-spacing: 0px;
 }
 #header h1 {
     text-shadow: 1px 1px 3px #ccc;
+    font-size: 500%;
 }
 #header span.by {
     font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
     font-style: italic;
-    margin-left:1.5em;
+    margin-left:2em;
     font-size: 150%;
 }
 #header span.by a {
@@ -347,6 +356,13 @@ h1 {
     text-shadow: 1px 1px 0 #FFFFFF;
 	white-space:nowrap;
 }
+
+
+#header h1.release-title {/* hung quotes */
+    text-indent: -0.5em;
+    margin-left:0.5em;
+}
+
 
 a {
     text-decoration:none;
@@ -378,6 +394,7 @@ body {
     margin-bottom: 5px;
     margin-top: 8px;
     font-size: 20px;
+    text-shadow: 1px 1px 2px #ddd;
 }
 
 #content h2 {
@@ -408,19 +425,21 @@ body {
 }
 
 cite#abstractsource { /* mine */
-    margin-top:-1.3em;
+    margin-top:-1em;
+    margin-bottom:2em;
     display:block;
 }
-cite#abstractsource:before {
-    content:'❦';
-    font-size:200%;
+cite#abstractsource img {
+    vertical-align:top;
+}
+cite#abstractsource small {
+    float:right;
 }
 
 /* NAV */
 
 nav ul {
     margin-bottom: 1px;
-    padding-left: 10px;
     list-style-type: none;
     text-align: left;
 }
@@ -560,37 +579,35 @@ ul.news-stream li blockquote cite:before {
 
 
 /* TRACKLISTING */
-ol.tracklisting {
+#tracklisting ol {
     list-style-type: decimal-leading-zero;
-    position:relative;
     display:block;
     margin-right:18em;
 }
-ol.tracklisting li {
+#tracklisting li {
+    position:relative;
     list-style-position: outside;
     margin-left:2.4em;
-    /*text-overflow:ellipsis;
-    -moz-text-overflow:ellipsis;
-	overflow:hidden;
-	white-space:nowrap;*/
     margin-bottom:0.5em;
     color: #aaa;
     line-height: 1.5em;
     border-bottom: 1px dotted #ddd;
 }
-ol.tracklisting li span.duration {
+#tracklisting span.duration {
 	font-family: monospace;
     position:absolute;
+    top:0;
     right:0;
     color: #888;
     font-size:1.1em;
 }
-ol.tracklisting span.title {
+#tracklisting span.title {
     color: #555;
     font-size:1.1em;
-    max-width: 25em;
+    max-width: 26em;
+    display:block;
 }
-img.artwork {
+#tracklisting img.artwork {
     display:block;
 }
 

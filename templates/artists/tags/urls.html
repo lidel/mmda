@@ -1,6 +1,7 @@
 {% load release_helpers %}
+<section id="related-urls">
 <h1>{{ entity_type }} related websites</h1>
-<ul id="related-urls">
+<ul class="favicons">
     {% for type,links in entity.urls.items %}
     {% if links|length_is:"1" %}
     <li><a href="{{ links|first }}" class="url-{{ type|lower }}">{{ type|spacecamel }}</a></li>
@@ -11,3 +12,4 @@
     {% endfor %}
     <li><a href="http://musicbrainz.org/{{ entity_type|lower }}/{{ mbid }}.html">MusicBrainz</a></li>
 </ul>
+</section>

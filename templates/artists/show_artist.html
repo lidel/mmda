@@ -20,142 +20,147 @@
 {% block content %}
 
 <section class="generic fiveeighty clear">
-
-{% if artist_pictures %}
-<div class="artistgfx">
-{% for image in artist_pictures %}
-<a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"/></a>
-{% endfor %}
-</div>
-{% endif %}
-
-{% abstract_for artist %}
-
-{% if primary_releases %}
-    <section id="artist-releases">
-    {% regroup primary_releases|dictsort:"release_type" by release_type as releases_by_type %}
-    <h1>Discography</h1>
-    <ul id="release-types">
-    {% for type in releases_by_type %}
-    <li{% if forloop.last %} class="last"{% endif %}><a href="#{{ type.grouper|lower }}-releases">{{ type.grouper }}</a></li>
+    {% if artist_pictures %}
+    <div id="artistgfx">
+    {% for image in artist_pictures %}
+    <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"/></a>
     {% endfor %}
-    </ul>
-    <ul class="release-list">
-    {% for type in releases_by_type %}
-        <li id="{{ type.grouper|lower }}-releases" class="type"><h2>{{ type.grouper }}</h2>
-        {% regroup type.list|inclusivedictsort:"year" by year as releases_by_year %}
-            <ul>
-        {% for year in releases_by_year %}
-            <li class="year"><h3>{{ year.grouper|default:"????" }}</h3>
-            <ul>
-                {% for release in year.list|inclusivedictsort:"date" %}
-                <li class="title"><a href="{% url show-release artist.name|slugify2, release.title|slugify2, release.mbid %}">{{ release.title|addtypography }}</a></li>
-                {% endfor %}
-            </ul>
+    </div>
+    {% endif %}
+
+    {% abstract_for artist %}
+
+    {% if primary_releases %}
+    <section id="artist-releases">
+        {% regroup primary_releases|dictsort:"release_type" by release_type as releases_by_type %}
+        <h1>Discography</h1>
+        <ul id="release-types">
+        {% for type in releases_by_type %}
+        <li{% if forloop.last %} class="last"{% endif %}><a href="#{{ type.grouper|lower }}-releases">{{ type.grouper }}</a></li>
+        {% endfor %}
+        </ul>
+        <ul class="release-list">
+        {% for type in releases_by_type %}
+            <li id="{{ type.grouper|lower }}-releases" class="type"><h2>{{ type.grouper }}</h2>
+            {% regroup type.list|inclusivedictsort:"year" by year as releases_by_year %}
+                <ul>
+            {% for year in releases_by_year %}
+                <li class="year"><h3>{{ year.grouper|default:"????" }}</h3>
+                <ul>
+                    {% for release in year.list|inclusivedictsort:"date" %}
+                    <li class="title"><a href="{% url show-release artist.name|slugify2, release.title|slugify2, release.mbid %}">{{ release.title|addtypography }}</a></li>
+                    {% endfor %}
+                </ul>
+                </li>
+            {% endfor %}
+                </ul>
             </li>
         {% endfor %}
-            </ul>
-        </li>
-    {% endfor %}
-    </ul>
-    <script>
-    $(function() {
-        $("#release-types").show();
-        $("li.type > h2").hide();
-        $("#artist-releases").tabs();
-    });
-    </script>
+        </ul>
+        <script>
+        $(function() {
+            $("#release-types").show();
+            $("#artist-releases li.type > h2").hide();
+            $("#artist-releases").tabs();
+        });
+        </script>
     </section>
-{% endif %}
+    {% endif %}
 </section>
 
 <section class="generic threeforty end">
-{% if artist.disambiguation or artist.dates or artist.aliases %}
-<h1>{% if artist.artist_type %}{{ artist.artist_type }}{% else %}Artist{% endif %}</h1>
-<ul>
-    {% if artist.disambiguation %}<li>{{artist.disambiguation}}</li>{% endif %}
-    {% if artist.aliases %}<li>also known as: <em>{{ artist.aliases|join:", " }}</em></li>{% endif %}
-{% if artist.dates %}
-<li>{% ifnotequal artist.artist_type 'Person' %}active{% endifnotequal %}
-{% if artist.dates.from %}{% ifequal artist.artist_type 'Person' %}born {% else %}from {% endifequal %} <em>{{ artist.dates.from }}</em>{% endif %}
-{% if artist.dates.to %}{% ifequal artist.artist_type 'Person' %}died {% else %}to {% endifequal %} <em>{{ artist.dates.to }}</em>{% endif %}
-</li>
-{% endif %}
-</ul>
-{% endif %}
+    {% if artist.disambiguation or artist.dates or artist.aliases %}
+    <section id="disambiguation">
+        <h1>{% if artist.artist_type %}{{ artist.artist_type }}{% else %}Artist{% endif %}</h1>
+        <ul>
+        {% if artist.disambiguation %}<li>{{artist.disambiguation}}</li>{% endif %}
+        {% if artist.aliases %}<li>also known as: <em>{{ artist.aliases|join:", " }}</em></li>{% endif %}
+        {% if artist.dates %}
+            <li>{% ifnotequal artist.artist_type 'Person' %}active{% endifnotequal %}
+            {% if artist.dates.from %}{% ifequal artist.artist_type 'Person' %}born {% else %}from {% endifequal %} <em>{{ artist.dates.from }}</em>{% endif %}
+            {% if artist.dates.to %}{% ifequal artist.artist_type 'Person' %}died {% else %}to {% endifequal %} <em>{{ artist.dates.to }}</em>{% endif %}
+            </li>
+        {% endif %}
+        </ul>
+    </section>
+    {% endif %}
 
-{% urls_for artist artist._id %}
+    {% urls_for artist artist._id %}
 
-{% if artist.tags %}
-<h1>Folksonomy</h1>
-{% tag_cloud_for artist.tags %}
-{% endif %}
+    {% if artist.tags %}
+    <section id="tags">
+        <h1>Folksonomy</h1>
+        {% tag_cloud_for artist.tags %}
+    </section>
+    {% endif %}
 
-{% if artist.members or  artist.member_of  or artist.collaborations or  artist.collaboration_of  %}
-<h1>Relationships</h1>
-{% if artist.members %}
-<h2>Members:</h2>
-<ul>
-    {% for member in artist.members %}
-    <li><a href="{% url show-artist member.name|slugify2 member.mbid %}">{{ member.name }}</a>
-    <small>{% if member.from %} from {{ member.from }} {% endif %} {% if member.to %} to {{ member.to }}{% endif %}</small>
-    </li>
-    {% empty %}
-    <li> no info </li>
-    {% endfor %}
-</ul>
-{% endif %}
+    {% if artist.members or  artist.member_of  or artist.collaborations or  artist.collaboration_of  %}
+    <section id="artist-relationships">
+        <h1>Relationships</h1>
 
+        {% if artist.members %}
+        <h2>Members:</h2>
+        <ul>
+            {% for member in artist.members %}
+            <li><a href="{% url show-artist member.name|slugify2 member.mbid %}">{{ member.name }}</a>
+            <small>{% if member.from %} from {{ member.from }} {% endif %} {% if member.to %} to {{ member.to }}{% endif %}</small>
+            </li>
+            {% empty %}
+            <li> no info </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-{% if artist.member_of %}
-<h2>Member of:</h2>
-<ul>
-    {% for member in artist.member_of %}
-    <li><a href="{% url show-artist member.name|slugify2 member.mbid %}">{{ member.name }}</a>
-    <small>{% if member.from %} from {{ member.from }} {% endif %} {% if member.to %} to {{ member.to }}{% endif %}</small>
-    </li>
-    {% empty %}
-    <li> no info </li>
-    {% endfor %}
-</ul>
-{% endif %}
+        {% if artist.member_of %}
+        <h2>Member of:</h2>
+        <ul>
+            {% for member in artist.member_of %}
+            <li><a href="{% url show-artist member.name|slugify2 member.mbid %}">{{ member.name }}</a>
+            <small>{% if member.from %} from {{ member.from }} {% endif %} {% if member.to %} to {{ member.to }}{% endif %}</small>
+            </li>
+            {% empty %}
+            <li> no info </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-{% if artist.collaborations %}
-<h2>Collaborated on:</h2>
-<ul>
-    {% for project in artist.collaborations %}
-    <li><a href="{% url show-artist project.name|slugify2 project.mbid %}">{{ project.name }}</a></li>
-    {% empty %}
-    <li> no info </li>
-    {% endfor %}
-</ul>
-{% endif %}
+        {% if artist.collaborations %}
+        <h2>Collaborated on:</h2>
+        <ul>
+            {% for project in artist.collaborations %}
+            <li><a href="{% url show-artist project.name|slugify2 project.mbid %}">{{ project.name }}</a></li>
+            {% empty %}
+            <li> no info </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-{% if artist.collaboration_of %}
-<h2>Is a collaboration of:</h2>
-<ul>
-    {% for project in artist.collaboration_of %}
-    <li><a href="{% url show-artist project.name|slugify2 project.mbid %}">{{ project.name }}</a></li>
-    {% empty %}
-    <li> no info </li>
-    {% endfor %}
-</ul>
-{% endif %}
+        {% if artist.collaboration_of %}
+        <h2>Is a collaboration of:</h2>
+        <ul>
+            {% for project in artist.collaboration_of %}
+            <li><a href="{% url show-artist project.name|slugify2 project.mbid %}">{{ project.name }}</a></li>
+            {% empty %}
+            <li> no info </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-{% endif %}
+    </section>
+    {% endif %}
 </section>
 
 
 {% if artist.similar %}
-<section class="generic nineforty clear">
-<h1>Similar artists</h1>
-<ul style="-moz-column-count: 3; -moz-column-gap: 1em;">
-    {% for similar_artist in artist.similar %}
-    <li><a href="{% url show-artist similar_artist.name|slugify2 similar_artist.mbid %}">{{ similar_artist.name }}</a> ~{{similar_artist.score|percentage:100}}</li>
-    {% empty %}
-    <li> no info </li>
-    {% endfor %}
-</ul>
+<section id="similar-artists" class="generic nineforty clear">
+    <h1>Similar artists</h1>
+    <ul>
+        {% for similar_artist in artist.similar %}
+        <li><a href="{% url show-artist similar_artist.name|slugify2 similar_artist.mbid %}">{{ similar_artist.name }}</a> ~{{similar_artist.score|percentage:100}}</li>
+        {% empty %}
+        <li> no info </li>
+        {% endfor %}
+    </ul>
 </section>
 {% endif %}
 

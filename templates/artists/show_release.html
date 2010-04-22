@@ -8,90 +8,96 @@
 {% endblock %}
 {% block header %}
 
-<h1>“<a href="{% url show-release uri_artist, uri_release, mbid %}">{{ release.title|addtypography }}</a>” <small>release page</small></h1>
+<h1 class="release-title">“<a href="{% url show-release uri_artist, uri_release, mbid %}">{{ release.title|addtypography }}</a>” <small>release page</small></h1>
 <span class="by">by <a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ release_group.artist_name }}</a></span>
 
 {% endblock %}
 {% block content %}
 
 <section class="generic fiveeighty">
-{% abstract_for release_group %}
+    {% abstract_for release_group %}
 
-<h1>Track listing</h1>
-{% if release.cover %}<img src="{{ release.cover|coralize }}" alt="artwork" width="160" height="160" class="right-float artwork" />{% endif %}
-<ol class="tracklisting">
-    {% for track in release.tracks %}
-    <li><span class="title">{{ track.title }}</span><span class="duration">{{ track.duration|default:"?:??" }}</span></li>
-    {% endfor %}
-</ol>
+    <section id="tracklisting">
+        <h1>Track listing</h1>
+        {% if release.cover %}<img src="{{ release.cover|coralize }}" alt="artwork" width="160" height="160" class="right-float artwork" />{% endif %}
+        <ol>
+            {% for track in release.tracks %}
+            <li><span class="title">{{ track.title }}</span><span class="duration">{{ track.duration|default:"?:??" }}</span></li>
+            {% endfor %}
+        </ol>
+    </section>
 
-{% if release.release_events  %}
-<h1 class="clear">Release events</h1>
-<ul>
-    {% for event in release.release_events %}
-    <li>{{ event.date }} {{ event.country }} {{ event.format }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+    {% if release.release_events  %}
+    <section id="release-events">
+        <h1 class="clear">Release events</h1>
+        <ul>
+            {% for event in release.release_events %}
+            <li>{{ event.date }} {{ event.country }} {{ event.format }}</li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
 </section>
 
 
 <section class="generic threeforty end">
-{% urls_for release mbid %}
+    {% urls_for release mbid %}
 
-{% if release.remaster_of or release.remasters or release.set_prev or release.set_next %}
-<h1>Relations with other releases</h1>
+    {% if release.remaster_of or release.remasters or release.set_prev or release.set_next %}
+    <section id="release-relations">
+        <h1>Relations with other releases</h1>
 
-{% if release.set_prev %}previous in set: <a href="{% url show-release uri_artist release.set_prev.title|slugify2 release.set_prev.mbid %}">{{ release.set_prev.title }}</a> {% endif %}
-{% if release.set_next %}next in set: <a href="{% url show-release uri_artist release.set_next.title|slugify2 release.set_next.mbid %}">{{ release.set_next.title }}</a> {% endif %}
+        {% if release.set_prev %}<p>previous in set: <a href="{% url show-release uri_artist release.set_prev.title|slugify2 release.set_prev.mbid %}">{{ release.set_prev.title }}</a><p/>{% endif %}
+        {% if release.set_next %}<p>next in set: <a href="{% url show-release uri_artist release.set_next.title|slugify2 release.set_next.mbid %}">{{ release.set_next.title }}</a></p>{% endif %}
 
-{% if release.remasters %}
-    This release has remastered versions:
-    <ul>
-    {% for remaster in release.remasters %}
-    <li><a href="{% url show-release uri_artist remaster.title|slugify2 remaster.mbid %}">{{ remaster.title }}</a></li>
-    {% endfor %}
-    </ul>
-{% endif %}
+        {% if release.remasters %}
+            This release has remastered versions:
+            <ul>
+            {% for remaster in release.remasters %}
+            <li><a href="{% url show-release uri_artist remaster.title|slugify2 remaster.mbid %}">{{ remaster.title }}</a></li>
+            {% endfor %}
+            </ul>
+        {% endif %}
 
-{% if release.remaster_of %}
-This is a remastered version of
-<a href="{% url show-release uri_artist release.remaster_of.title|slugify2 release.remaster_of.mbid %}">{{ release.remaster_of.title }}</a>
-{% endif %}
-
-{% endif %}
-
-
-
+        {% if release.remaster_of %}
+        <p>This is a remastered version of
+        <a href="{% url show-release uri_artist release.remaster_of.title|slugify2 release.remaster_of.mbid %}">{{ release.remaster_of.title }}</a></p>
+        {% endif %}
+    </section>
+    {% endif %}
 
 
 
-{% if release.credits %}
-<h1>Credits:</h1>
-{% regroup release.credits|dictsort:"type" by type as credits %}
-<ul>
-{% for credit_type in credits %}
-<li>{{ credit_type.grouper|spacecamel|lower }}: 
-    {% for credit_artist in credit_type.list %}
-    <a href="{% url show-artist credit_artist.name|slugify2 credit_artist.mbid %}">{{ credit_artist.name }}</a>{% if not forloop.last %}, {% endif %}
-    {% endfor %}
-</li>
-{% endfor %}
-</ul>
-{% endif %}
 
 
-{% if not release_group.releases.items|length_is:"1" %}
-<h1>Alternative track listings</h1>
-<ul>
-{% for alt_mbid,alt_release in release_group.releases.items %}
-    {% ifnotequal alt_release release %}
-    <li><a href="{% url show-release uri_artist, alt_release.title|slugify2, alt_mbid %}">{{ alt_release.title }}</a> {{alt_release.}} <small>({{alt_release.tracks_count}} tracks)</small></li>
-    {% endifnotequal %}
-{% endfor %}
 
-</ul>
-{% endif %}
+    {% if release.credits %}
+    <section id="release-credits">
+        <h1>Credits:</h1>
+        {% regroup release.credits|dictsort:"type" by type as credits %}
+        <ul>
+        {% for credit_type in credits %}
+        <li>{{ credit_type.grouper|spacecamel|lower }}: 
+            {% for credit_artist in credit_type.list %}
+            <a href="{% url show-artist credit_artist.name|slugify2 credit_artist.mbid %}">{{ credit_artist.name }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </li>
+        {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
+
+
+    {% if not release_group.releases.items|length_is:"1" %}
+    <section id="other-track-listings">
+        <h1>Alternative track listings</h1>
+        <ul>
+        {% for alt_mbid,alt_release in release_group.releases.items %}{% ifnotequal alt_release release %}
+            <li><a href="{% url show-release uri_artist, alt_release.title|slugify2, alt_mbid %}">{{ alt_release.title }}</a> {{alt_release.}} <small>({{alt_release.tracks_count}} tracks)</small></li>
+        {% endifnotequal %}{% endfor %}
+        </ul>
+    </section>
+    {% endif %}
 
 </section>
 
