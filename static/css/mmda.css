@@ -239,11 +239,12 @@ ol li a {
 }
 ul{
 	margin-bottom:1.8em;
-	list-style:square inside;
+	list-style:square outside url("/images/blueball.gif");
+    margin-left:1.5em;
 }
 ul li{
 	font-size:1.3em;
-	line-height:1.6em;
+	line-height:1.7em;
 }
 ul li.caption{ /* Apply this class to the first list item in a list to give it a caption */
 	font-variant:small-caps;
@@ -300,11 +301,20 @@ ol li{
 /* url padding fix */
 ul#related-urls li {
     display: block;
+    list-style-type: none;
 }
 ul#related-urls .many {
-    padding-left: 3px;
+    padding-left: 0px;
 }
-
+ul#related-urls img {
+    vertical-align:text-top;
+    margin-right:1em;
+    width:16px;
+    height:16px;
+}
+ul#related-urls .many img {
+    margin-right:0;
+}
 	/*background-image:url('http://imgur.com/jZEss.jpg');
 	background-repeat:no-repeat;
 	background-position:top center;
@@ -320,11 +330,20 @@ h1 {
 #header h1 {
     text-shadow: 1px 1px 3px #ccc;
 }
-h1 small {
+#header span.by {
+    font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
+    font-style: italic;
+    margin-left:1.5em;
+    font-size: 150%;
+}
+#header span.by a {
+    font-size: 150%;
+    font-style: normal;
+}
+#header h1 small {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     text-transform: uppercase;
-    font-size: 12px;
-    margin-left: 10px;
+    font-size: 0.2em;
     text-shadow: 1px 1px 0 #FFFFFF;
 	white-space:nowrap;
 }
@@ -343,10 +362,6 @@ a:hover {
     color:#fff;
     text-shadow:1px 1px 1px #333;
 
-}
-ul{
-	list-style:square inside;
-	margin-bottom:1.8em;
 }
 /*
 body {
@@ -378,7 +393,6 @@ body {
     background:#66c;
     text-shadow:none;
     color:#fff;
-    width:41em;
 
     -webkit-border-bottom-right-radius: 5px;
     -webkit-border-bottom-left-radius: 5px;
@@ -389,7 +403,7 @@ body {
 }
 
 #searchbox fieldset {
-    padding-bottom:3px;
+    padding: 0 5px 2px 5px;
     text-align:center;
 }
 
@@ -553,16 +567,28 @@ ol.tracklisting {
     margin-right:18em;
 }
 ol.tracklisting li {
+    list-style-position: outside;
+    margin-left:2.4em;
     /*text-overflow:ellipsis;
     -moz-text-overflow:ellipsis;
 	overflow:hidden;
 	white-space:nowrap;*/
     margin-bottom:0.5em;
+    color: #aaa;
+    line-height: 1.5em;
+    border-bottom: 1px dotted #ddd;
 }
-ol.tracklisting li span {
+ol.tracklisting li span.duration {
 	font-family: monospace;
     position:absolute;
     right:0;
+    color: #888;
+    font-size:1.1em;
+}
+ol.tracklisting span.title {
+    color: #555;
+    font-size:1.1em;
+    max-width: 25em;
 }
 img.artwork {
     display:block;
@@ -607,42 +633,42 @@ ol#tag-search-result li {
     border-right: 1px solid #ccc;
     padding: 0 5px 0 2px;
 }
-#release-types a {
+#artist-releases #release-types a {
     color: #666;
 }
-#release-types a:hover {
+#artist-releases #release-types a:hover {
     color: #fff;
 }
 
-li.ui-tabs-selected a {
+#artist-releases li.ui-tabs-selected a {
     font-weight: bold;
 }
-li.ui-tabs-selected a:before {
+#artist-releases li.ui-tabs-selected a:before {
 	content:'☉ ' !important;
 }
-.last {
+#artist-releases .last {
     border-right: none !important;
 }
 
 /* release-list*/
-ul.release-list {
+#artist-releases ul.release-list {
     margin-top: 1em !important;
 }
-li.title,
-li.year,
-li.type {
+#artist-releases li.title,
+#artist-releases li.year,
+#artist-releases li.type {
     list-style-type:none;
     font-family: Georgia, Garamond, "Times New Roman", serif;
 }
-li.type h2 {
+#artist-releases li.type h2 {
     padding-top: 0.5em !important;
     font-size: 1.2em !important;
 }
-li.year ul {
+#artist-releases li.year ul {
     margin: 0.25em 0 0.25em 3.5em !important;
     font-size: 1.4em !important;
 }
-li.year h3 {
+#artist-releases li.year h3 {
     border-top:1px dotted #eee;
     color: #aaa;
     padding-top: 0.5em !important;
@@ -650,7 +676,7 @@ li.year h3 {
     font-size: 1.1em !important;
     display:block;
 }
-li.title {
+#artist-releases li.title {
 	white-space:nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

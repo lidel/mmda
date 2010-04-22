@@ -9,8 +9,7 @@
 {% block header %}
 
 <h1>“<a href="{% url show-release uri_artist, uri_release, mbid %}">{{ release.title|addtypography }}</a>” <small>release page</small></h1>
-    <big>by <a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ release_group.artist_name }}</a></big>
-</h1>
+<span class="by">by <a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ release_group.artist_name }}</a></span>
 
 {% endblock %}
 {% block content %}
@@ -22,7 +21,7 @@
 {% if release.cover %}<img src="{{ release.cover|coralize }}" alt="artwork" width="160" height="160" class="right-float artwork" />{% endif %}
 <ol class="tracklisting">
     {% for track in release.tracks %}
-    <li>{{ track.title }}<span>{{ track.duration|default:"?:??" }}</span></li>
+    <li><span class="title">{{ track.title }}</span><span class="duration">{{ track.duration|default:"?:??" }}</span></li>
     {% endfor %}
 </ol>
 
@@ -83,7 +82,7 @@ This is a remastered version of
 
 
 {% if not release_group.releases.items|length_is:"1" %}
-<h5>Alternative track listings</h5>
+<h1>Alternative track listings</h1>
 <ul>
 {% for alt_mbid,alt_release in release_group.releases.items %}
     {% ifnotequal alt_release release %}

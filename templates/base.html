@@ -17,11 +17,15 @@
   google.load("jquery", "1.4.2");
   google.load("jqueryui", "1.8.0");
 </script>
+<script src="/static/js/jquery.favicons.min.js"></script>
+<script>
+google.setOnLoadCallback(function() {
+    //jQuery('#related-urls').favicons({insert: 'insertBefore', defaultIco: 'http://www.askthecssguy.com.nyud.net/examples/faviconcues/external.gif'});
+});
+</script>
 
 </head>
-{% block bodytag %}<body>{% endblock %}
-
-<div id="wrapper">
+{% block bodytag %}<body>{% endblock %}<div id="wrapper">
 
 <header id="header">
 {% block header %}{% endblock %}
@@ -32,8 +36,6 @@
 <article id="content">
 {% block content %}{% endblock %}
 </article>
-
-
 
 <footer id="foot" class="generic nineforty">{% block footer %}
 MMDA 1.0 powered by MusicBrainz, Wikipedia, Last.fm, Flickr and Youtube APIs.

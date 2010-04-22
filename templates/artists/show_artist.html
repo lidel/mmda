@@ -149,7 +149,7 @@
 {% if artist.similar %}
 <section class="generic nineforty clear">
 <h1>Similar artists</h1>
-<ul>
+<ul style="-moz-column-count: 3; -moz-column-gap: 1em;">
     {% for similar_artist in artist.similar %}
     <li><a href="{% url show-artist similar_artist.name|slugify2 similar_artist.mbid %}">{{ similar_artist.name }}</a> ~{{similar_artist.score|percentage:100}}</li>
     {% empty %}
