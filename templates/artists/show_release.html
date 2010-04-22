@@ -8,6 +8,7 @@
 {% endblock %}
 {% block header %}
 
+{% if release.cover %}<div id="artwork"><img src="{{ release.cover|coralize }}" alt="{{ release_group.title }} artwork" width="152" height="152" class="artwork" /><div></div></div>{% endif %}
 <h1 class="release-title">“<a href="{% url show-release uri_artist, uri_release, mbid %}">{{ release.title|addtypography }}</a>” <small>release page</small></h1>
 <span class="by">by <a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ release_group.artist_name }}</a></span>
 
@@ -19,7 +20,6 @@
 
     <section id="tracklisting">
         <h1>Track listing</h1>
-        {% if release.cover %}<img src="{{ release.cover|coralize }}" alt="artwork" width="160" height="160" class="right-float artwork" />{% endif %}
         <ol>
             {% for track in release.tracks %}
             <li><span class="title">{{ track.title }}</span><span class="duration">{{ track.duration|default:"?:??" }}</span></li>
@@ -30,7 +30,7 @@
     {% if release.release_events  %}
     <section id="release-events">
         <h1 class="clear">Release events</h1>
-        <ul>
+        <ul class="threecols{% if not release.release_events|length_is:"1" %} colrule{% endif %}">
             {% for event in release.release_events %}
             <li>{{ event.date }} {{ event.country }} {{ event.format }}</li>
             {% endfor %}
@@ -75,7 +75,7 @@
     <section id="release-credits">
         <h1>Credits:</h1>
         {% regroup release.credits|dictsort:"type" by type as credits %}
-        <ul>
+        <ul class="out">
         {% for credit_type in credits %}
         <li>{{ credit_type.grouper|spacecamel|lower }}: 
             {% for credit_artist in credit_type.list %}
@@ -91,9 +91,9 @@
     {% if not release_group.releases.items|length_is:"1" %}
     <section id="other-track-listings">
         <h1>Alternative track listings</h1>
-        <ul>
+        <ul class="out">
         {% for alt_mbid,alt_release in release_group.releases.items %}{% ifnotequal alt_release release %}
-            <li><a href="{% url show-release uri_artist, alt_release.title|slugify2, alt_mbid %}">{{ alt_release.title }}</a> {{alt_release.}} <small>({{alt_release.tracks_count}} tracks)</small></li>
+            <li><a class="br" href="{% url show-release uri_artist, alt_release.title|slugify2, alt_mbid %}">{{ alt_release.title }}</a> {{alt_release.}} <small class="nobr">({{alt_release.tracks_count}} tracks)</small></li>
         {% endifnotequal %}{% endfor %}
         </ul>
     </section>

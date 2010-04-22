@@ -6,18 +6,20 @@
 {% endblock %}
 {% block header %}
 <h1>Artist search results</h1>
-for query: <big>“{{ search_result.query_string|escape }}”</big>
+<span class="query">for query <big>“<a href="{% url show-search-result query_type query_string query_id %}">{{ search_result.query_string|escape }}</a>”</big></span>
 
 {% endblock %}
 {% block content %}
-
-<ul>
-{% for result in search_result.results %}
-<li><a href="{% url show-artist result.name|slugify2|default:"0" result.mbid %}">{{ result.name }}</a> ~{{ result.score }}%<br>
-    <small>{{ result.note|default:""}}</small> </li>
-{% empty %}
-<p>Sorry, no artist matched your query <big>:'-(</big></p>
-{% endfor %}
-</ul>
-
+<section class="generic nineforty end search-results" id="artist-search-results">
+    <ul class="twocols">
+    {% for result in search_result.results %}
+    <li><span class="score">~{{ result.score }}%</span>
+    <a href="{% url show-artist result.name|slugify2|default:"0" result.mbid %}">{{ result.name|addtypography }}</a> 
+    {% if result.note %}<span class="disambiguation">{{ result.note|default:"" }}</span>{% endif %}</li>
+    {% empty %}
+    <p>Sorry, no artist matched your query <big>:'-(</big></p>
+    {% endfor %}
+    </ul>
+</section>
 {% endblock %}
+

@@ -1,5 +1,7 @@
+<section id="abstract">
 <h1>Abstract</h1>
-<blockquote cite="#abstractsource" id="abstract"><p class="drop intro">{{ entity.abstract.content|urlize }}</p></blockquote>
+<blockquote cite="#abstractsource"><p class="drop intro">{{ entity.abstract.content|urlize }}</p></blockquote>
 <cite id="abstractsource" class="favicons"><a href="{{ entity.abstract.url }}">read more at {{ entity.abstract.provider }}{% ifnotequal entity.abstract.lang 'en' %} [{{ entity.abstract.lang }}]{% endifnotequal %}</a>
     <small>This abstract is licensed under the GNU Free Documentation License</small>
 </cite>
+</section>

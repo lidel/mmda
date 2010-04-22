@@ -72,8 +72,8 @@
     {% if artist.disambiguation or artist.dates or artist.aliases %}
     <section id="disambiguation">
         <h1>{% if artist.artist_type %}{{ artist.artist_type }}{% else %}Artist{% endif %}</h1>
-        <ul>
-        {% if artist.disambiguation %}<li>{{artist.disambiguation}}</li>{% endif %}
+        <ul class="out">
+        {% if artist.disambiguation %}<li class="caption">{{artist.disambiguation}}</li>{% endif %}
         {% if artist.aliases %}<li>also known as: <em>{{ artist.aliases|join:", " }}</em></li>{% endif %}
         {% if artist.dates %}
             <li>{% ifnotequal artist.artist_type 'Person' %}active{% endifnotequal %}
@@ -152,11 +152,11 @@
 
 
 {% if artist.similar %}
-<section id="similar-artists" class="generic nineforty clear">
+<section id="similar-artists" class="generic nineforty clear search-results">
     <h1>Similar artists</h1>
-    <ul>
+    <ul class="threecols">
         {% for similar_artist in artist.similar %}
-        <li><a href="{% url show-artist similar_artist.name|slugify2 similar_artist.mbid %}">{{ similar_artist.name }}</a> ~{{similar_artist.score|percentage:100}}</li>
+        <li><a href="{% url show-artist similar_artist.name|slugify2 similar_artist.mbid %}">{{ similar_artist.name }}</a> <span class="score">~{{similar_artist.score|percentage:100}}</score></li>
         {% empty %}
         <li> no info </li>
         {% endfor %}

@@ -57,8 +57,8 @@ div#wrapper{
 #header{
 	width:94em;
 	float:left;
-	padding-top:2.5em;
-	margin-bottom:2.5em;
+	padding-top:5em;
+	margin-bottom:4em;
 }
 
 /*GRIDS*/
@@ -237,8 +237,8 @@ ol li a {
 }
 ul{
 	margin-bottom:1.8em;
-	list-style:square outside url("/images/blueball.gif");
-    margin-left:1.5em;
+	list-style:square inside url("/images/blueball.gif");
+    /*margin-left:1.5em;*/
 }
 ul li{
 	font-size:1.3em;
@@ -247,7 +247,7 @@ ul li{
 ul li.caption{ /* Apply this class to the first list item in a list to give it a caption */
 	font-variant:small-caps;
 	list-style:none;
-	color:#000;
+	color:#222;
 }
 li > ul, li > ol{
 	margin-bottom:0;
@@ -285,11 +285,13 @@ ol li{
     box-shadow: 5px 5px 5px #ccc;
     -moz-box-shadow: 5px 5px 5px #ccc;
     -webkit-box-shadow: 5px 5px 5px #ccc;
-    margin: 1em 5px 1em 5px;
+    margin: 1em 5px 2em 5px;
+}
+#abstract blockquote {
+    margin: 1.25em 0 2em 0;
 }
 
 
-/* url padding fix */
 #related-urls ul {
     margin-left:0;
 }
@@ -297,9 +299,6 @@ ol li{
     display: block;
     list-style-type: none;
 }
-#related-urls img {
-}
-
 .favicons img {
     vertical-align:text-top;
     margin-right:1em;
@@ -313,20 +312,64 @@ ol li{
     line-height: 16px;
 }
 
-/* multi-column */
 
-#release-events ul,
-#similar-artists ul {
+.twocols {
+    -moz-column-count: 2;
+    -webkit-column-count: 2;
+    column-count: 2;
+
+    -moz-column-gap: 3em;
+    -webkit-column-gap: 3em;
+    column-gap: 3em;
+}
+.threecols {
     -moz-column-count: 3;
-    -moz-column-gap: 1em;
+    -webkit-column-count: 3;
+    column-count: 3;
+
+    -moz-column-gap: 2em;
+    -webkit-column-gap: 2em;
+    column-gap: 2em;
+}
+.colrule {
+    -moz-column-rule: 1px dotted #aaa;
+    -webkit-column-rule: 1px dotted #aaa;
+    column-rule: 1px dotted #aaa;
+}
+ul.colrule {
+    list-style-position:inside;
+}
+
+#similar-artists ul {/*TODO CLEANUP*/
+    margin-left:0em;
+}
+
+#artist-relationships ul {
+    margin-left:1em;
+}
+#artist-relationships h2 {
+	font-variant:small-caps;
+    font-size: 1.35em;
+    margin: 1em 0 0 0;
+}
+
+ul.in > li {
+    list-style-position: inside !important;
+}
+ul.out > li {
+    list-style-position: outside !important;
+    margin-left:1.5em;
 }
 
 
-
-
-
-
-
+.nobr,
+.nobr * {
+	white-space: nowrap !important;
+}
+.br,
+.br * {
+	white-space: normal !important;
+}
 
 
 
@@ -375,31 +418,16 @@ a:hover {
     -webkit-border-radius:5px;
     border-radius:5px;
     background:#66c;
-    color:#fff;
+    color:#fff !important;
     text-shadow:1px 1px 1px #333;
 
 }
-/*
-body {
-
-    font-size: 84%;
-    //font-family: Arial, Helvetica, sans-serif;
-    padding: 0.75em;
-    min-width: 45em;
-}*/
-
 
 #content h1 {
     border-bottom: 1px dotted  #66c;
-    margin-bottom: 5px;
-    margin-top: 8px;
-    font-size: 20px;
+    margin-bottom: 0.5em;
+    font-size: 2em;
     text-shadow: 1px 1px 2px #ddd;
-}
-
-#content h2 {
-    margin-top: 8px;
-    font-size: 12px;
 }
 
 #searchbox {
@@ -426,11 +454,12 @@ body {
 
 cite#abstractsource { /* mine */
     margin-top:-1em;
-    margin-bottom:2em;
+    margin-bottom:3em;
     display:block;
 }
 cite#abstractsource img {
     vertical-align:top;
+    margin-right: 0.5em;
 }
 cite#abstractsource small {
     float:right;
@@ -453,8 +482,6 @@ body#a-pictures li.a-pictures a,
 body#a-videos   li.a-videos a,
 body#a-news     li.a-news a
 {
-    /*top: -1px;*/
-    /*padding-top: 8px;*/
     position: relative;
     color: #000;
     background-color: #fff;
@@ -496,43 +523,28 @@ nav ul li a:hover {
 
 
 
-    /* TAG CLOUD PROTOTYPE */
-    ul.tag-cloud {
-        text-align: center;
-        padding: 5px;
-        /*background-color: #FFFFCC;*/
-        margin:0;
-        display:block;
-    }
-    /* TODO: make django tag that makes cloud from list */
-    ul.tag-cloud li {
-        display: inline;
-    }
-    ul.tag-cloud a {
-        color: #223;
-        vertical-align:middle;
-        line-height: 1.4em;
-    }
-    ul.tag-cloud a:hover {
-        color: #fff;
-    }
-    .tag-0 {
-        font-size: 9px;
-    }
-    .tag-1 {
-        font-size: 11px;
-    }
-    .tag-2 {
-        font-size: 15px;
-    }
-    .tag-3 {
-        font-size: 18px;
-    }
-    .tag-4 {
-        font-size: 20px;
-    }
-    #youtube-videos {display:block; text-align: center}
-    #youtube-videos li {float:left; margin: 5px; display:block; position:relative; padding: 5px; font-size: x-small; border: 1px solid #888; max-width: 130px; height:150px;}
+/* TAG CLOUD PROTOTYPE */
+ul.tag-cloud {
+    text-align: center;
+    padding: 0.1em;
+    margin:0 0 1.5em 0;
+    display:block;
+}
+ul.tag-cloud li {
+    display: inline;
+}
+ul.tag-cloud a {
+    color: #223;
+    vertical-align:middle;
+    line-height: 1.4em;
+}
+.tag-0 {font-size: 0.7em;}
+.tag-1 {font-size: 0.9em;}
+.tag-2 {font-size: 1.1em;}
+.tag-3 {font-size: 1.3em;}
+.tag-4 {font-size: 1.5em;}
+#youtube-videos {display:block; text-align: center}
+#youtube-videos li {float:left; margin: 5px; display:block; position:relative; padding: 5px; font-size: x-small; border: 1px solid #888; max-width: 130px; height:150px;}
 
 
 /* NEWS FEED */
@@ -582,7 +594,6 @@ ul.news-stream li blockquote cite:before {
 #tracklisting ol {
     list-style-type: decimal-leading-zero;
     display:block;
-    margin-right:18em;
 }
 #tracklisting li {
     position:relative;
@@ -604,28 +615,32 @@ ul.news-stream li blockquote cite:before {
 #tracklisting span.title {
     color: #555;
     font-size:1.1em;
-    max-width: 26em;
+    max-width: 39em;
     display:block;
 }
-#tracklisting img.artwork {
-    display:block;
-}
+div#artwork {
+    position:relative;
+    width:160px;
+    height:152px;
 
-
-/* multicolumn search result */
-ol#tag-search-result {
-    float: left;
-    width: 94em;
-    margin: 0;
-    padding: 0;
-    list-style-type: decimal-leading-zero;
+    float:right;
+    margin-left:5em;
+    margin-top:-2em;
 }
-ol#tag-search-result li {
-    float: left;
-    width: 12em;
-    margin: 0;
-    padding: 0;
-    font-size:2.5em;
+div#artwork > img {
+    right:1px;
+    top:1px;
+    position:absolute;
+    width:150px;
+    height:150px;
+}
+div#artwork > div {
+    height:152px;
+    width:160px;
+    position:absolute;
+    left:0;
+    top:0;
+    background-image: url('http://i.imgur.com/u8lwN.png');
 }
 
 
@@ -652,9 +667,6 @@ ol#tag-search-result li {
 }
 #artist-releases #release-types a {
     color: #666;
-}
-#artist-releases #release-types a:hover {
-    color: #fff;
 }
 
 #artist-releases li.ui-tabs-selected a {
@@ -699,3 +711,53 @@ ol#tag-search-result li {
     text-overflow: ellipsis;
 }
 
+
+/* TAG PAGE (TAG ARTISTS) */
+/* SEARCH RESULTS */
+/* multi-column */
+
+#header span.query {
+    font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
+    font-style: italic;
+    margin-left:1em;
+    font-size: 200%;
+}
+#header span.query big {
+    font-size: 150%;
+}
+
+section.search-results li {
+    font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
+    list-style-type:none;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-bottom: 1px dotted #eee;
+    display:block;
+}
+section.search-results a {
+    font-size: 1.5em;
+	white-space:normal;
+}
+/*artist search specific */
+section#similar-artists span.score,
+section#artist-search-results span.score {
+    color:#aaa;
+    font-size: 1.2em;
+    float:right;
+    display:block;
+}
+section#artist-search-results span.disambiguation {
+    font-variant: small-caps;
+    margin-left:1em;
+}
+/*release search specific */
+section#release-search-results span.score {
+    color:#aaa;
+    font-size: 1.2em;
+    float:right;
+    display:block;
+}
+section#release-search-results span.artist {
+    margin-left:1em;
+    font-size:0.8em;
+}

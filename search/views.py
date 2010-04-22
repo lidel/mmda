@@ -52,5 +52,5 @@ def show_search_result(request, query_type, query_string, query_id):
     seo_query_string = slugify2(search_result.query_string)
     if query_type != seo_query_type or query_string != seo_query_string:
         return HttpResponseRedirect(reverse('show-search-result', args=(seo_query_type,seo_query_string,query_id)))
-
+    # TODO: if only 1 result, redirect to it directly
     return render_to_response("search/%s_results.html" % search_result.query_type, locals())
