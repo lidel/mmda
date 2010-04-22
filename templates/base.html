@@ -5,12 +5,19 @@
 {% block meta %}{% endblock %}
   <meta name="robots" content="NONE,NOARCHIVE" />
   <meta charset="utf-8" />
-    <link rel="stylesheet" type="text/css" href="/static/css/mmda.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="/static/css/mmda.css" media="screen" />
 
 
 <!--[if lte IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+<script src="http://www.google.com/jsapi"></script>
+<script>
+  // Load jQuery
+  google.load("jquery", "1.4.2");
+  google.load("jqueryui", "1.8.0");
+</script>
+
 </head>
 {% block bodytag %}<body>{% endblock %}
 

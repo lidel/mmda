@@ -233,7 +233,10 @@ img.right-img{ /* Float any image to the RIGHT and give it some margin */
 }
 
 /* LIST STYLES */
-
+ul li a,
+ol li a {
+	white-space:nowrap;
+}
 ul{
 	margin-bottom:1.8em;
 	list-style:square inside;
@@ -323,13 +326,13 @@ h1 small {
     font-size: 12px;
     margin-left: 10px;
     text-shadow: 1px 1px 0 #FFFFFF;
+	white-space:nowrap;
 }
 
 a {
     text-decoration:none;
     color:#66c;
     padding:3px;
-	white-space:nowrap; /* TODO: move to ul via credits at  http://127.0.0.1:8000/artist/tool/release/nima/b1b9bf98-86fa-4092-950f-1fb6744a25b4/ */
 }
 a:hover {
     /*border-bottom: 1px solid black;*/
@@ -510,8 +513,9 @@ ul.news-stream li {
 }
 ul.news-stream li h1 {
         text-transform: uppercase;
-        display:block;
-        overflow:hidden;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
 }
 ul.news-stream li h1 small {
         float:right;
@@ -580,3 +584,75 @@ ol#tag-search-result li {
     padding: 0;
     font-size:2.5em;
 }
+
+
+/* ARTIST DISCOGRAPHY */
+
+/* list of release types */
+#artist-releases * { /* make local reset, just to be sure it wont break in future */
+    margin:0;
+    padding:0;
+}
+#artist-releases a {
+    padding:3px;
+}
+#artist-releases #release-types { /* hide if no javascript */
+     display: none;
+}
+.ui-tabs .ui-tabs-hide {
+     display: none;
+}
+#artist-releases #release-types li {
+    display:inline;
+    border-right: 1px solid #ccc;
+    padding: 0 5px 0 2px;
+}
+#release-types a {
+    color: #666;
+}
+#release-types a:hover {
+    color: #fff;
+}
+
+li.ui-tabs-selected a {
+    font-weight: bold;
+}
+li.ui-tabs-selected a:before {
+	content:'☉ ' !important;
+}
+.last {
+    border-right: none !important;
+}
+
+/* release-list*/
+ul.release-list {
+    margin-top: 1em !important;
+}
+li.title,
+li.year,
+li.type {
+    list-style-type:none;
+    font-family: Georgia, Garamond, "Times New Roman", serif;
+}
+li.type h2 {
+    padding-top: 0.5em !important;
+    font-size: 1.2em !important;
+}
+li.year ul {
+    margin: 0.25em 0 0.25em 3.5em !important;
+    font-size: 1.4em !important;
+}
+li.year h3 {
+    border-top:1px dotted #eee;
+    color: #aaa;
+    padding-top: 0.5em !important;
+    margin-bottom:-2em !important;
+    font-size: 1.1em !important;
+    display:block;
+}
+li.title {
+	white-space:nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+

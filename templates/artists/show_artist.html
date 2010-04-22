@@ -32,19 +32,43 @@
 {% abstract_for artist %}
 
 {% if primary_releases %}
-<h1>Releases</h1>
+    <section id="artist-releases">
     {% regroup primary_releases|dictsort:"release_type" by release_type as releases_by_type %}
+    <h1>Discography</h1>
+    <ul id="release-types">
     {% for type in releases_by_type %}
-    <h6>{{ type.grouper }}</h6>
-        <ul>
-        {% for release in type.list|inclusivedictsort:"year" %}
-        <li><small>({{ release.year|trim|default:"____" }})</small> <a href="{% url show-release artist.name|slugify2, release.title|slugify2, release.mbid %}">{{ release.title }}</a></li>
-        {% endfor %}
-        </ul>
+    <li{% if forloop.last %} class="last"{% endif %}><a href="#{{ type.grouper|lower }}-releases">{{ type.grouper }}</a></li>
     {% endfor %}
+    </ul>
+    <ul class="release-list">
+    {% for type in releases_by_type %}
+        <li id="{{ type.grouper|lower }}-releases" class="type"><h2>{{ type.grouper }}</h2>
+        {% regroup type.list|inclusivedictsort:"year" by year as releases_by_year %}
+            <ul>
+        {% for year in releases_by_year %}
+            <li class="year"><h3>{{ year.grouper|default:"????" }}</h3>
+            <ul>
+                {% for release in year.list|inclusivedictsort:"date" %}
+                <li class="title"><a href="{% url show-release artist.name|slugify2, release.title|slugify2, release.mbid %}">{{ release.title|addtypography }}</a></li>
+                {% endfor %}
+            </ul>
+            </li>
+        {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+    <script>
+    $(function() {
+        $("#release-types").show();
+        $("li.type > h2").hide();
+        $("#artist-releases").tabs();
+    });
+    </script>
+    </section>
 {% endif %}
-
 </section>
+
 <section class="generic threeforty end">
 {% if artist.disambiguation or artist.dates or artist.aliases %}
 <h1>{% if artist.artist_type %}{{ artist.artist_type }}{% else %}Artist{% endif %}</h1>
