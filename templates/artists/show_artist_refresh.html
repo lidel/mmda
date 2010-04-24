@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load release_helpers %}
+{% load universal_abstract %}
+{% load related_websites %}
+{% load tag_cloud %}
+{% block bodytag %}<body id="a-refresh">{% endblock %}
+{% block title %}{{ artist.name }} - refresh page at music.aergia.eu{% endblock %}
+{% block meta %}
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+{% endblock %}
+{% block header %}
+<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name|addtypography }}</a>
+    <small>artist refresh page</small>
+</h1>
+{% endblock %}
+
+{% block navigation %}{% include "artists/artistnav.html" %}{% endblock %}
+
+{% block content %}
+<section class="generic fourhun">
+    <h1>Refresh settings</h1>
+<form action="" method="post">
+<fieldset>
+    <p>
+    Select data to refresh:</p>
+    <p>
+    <input type="checkbox" name="reset" value="artists" /> artist with releases<br/>
+    <input type="checkbox" name="reset" value="pictures" /> pictures<br/>
+    <input type="checkbox" name="reset" value="videos" /> videos<br/>
+    <input type="checkbox" name="reset" value="news" /> news sources<br/>
+    </p>
+    <p>{{ html_for_captcha|safe }}</p>
+    <input type="hidden" name="mbid" value="{{ mbid }}">
+    <input type="hidden" name="uri_artist" value="{{ mbid }}">
+    <p><button type="submit"><span>Force refresh</span></button></p>
+</fieldset>
+</form>
+
+</section>
+<section class="generic fivetwenty end">
+    <h1>What is artist refresh?</h1>
+    <p>Long story short: removing <em>old</em> and fetching <em>fresh</em> artist-related data.</p>
+    <p><abbr title="Music Meta-Data Aggregator">MMDA</abbr>&mdash;an engine that runs this website&mdash;intensively caches all data.
+    Because of that some of it can be out of date.</p>
+    <p>Usually data is quite okay (because of automatic refresh thresholds), but if you are sure that some of it requires refresh, you can do it here.</p>
+    <h1>This artist's cache status</h1>
+    <ul>
+    {% for db in artist_cache_state %}
+        {% for doc,apis in db.items %}
+        <li><em>{{ doc }}</em>
+            <ul>
+                {% for api, state in apis.items %}
+                <li>{{ api }} – {{ state|last|iso2date|date }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+        {% endfor %}
+    {% endfor %}
+    </ul>
+</section>
+{% endblock %}
