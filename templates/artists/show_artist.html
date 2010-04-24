@@ -31,9 +31,9 @@
     {% abstract_for artist %}
 
     {% if primary_releases %}
-    <section id="artist-releases">
         {% regroup primary_releases|dictsort:"release_type" by release_type as releases_by_type %}
         <h1>Discography</h1>
+        <section id="artist-releases">
         <ul id="release-types">
         {% for type in releases_by_type %}
         <li{% if forloop.last %} class="last"{% endif %}><a href="#{{ type.grouper|lower }}-releases">{{ type.grouper }}</a></li>
@@ -57,22 +57,21 @@
             </li>
         {% endfor %}
         </ul>
-        <script>
-        $(function() {
-            $("#release-types").show();
-            $("#artist-releases li.type > h2").hide();
-            $("#artist-releases").tabs();
-        });
-        </script>
     </section>
+    <script>
+    $(function() {
+        $("#release-types").show();
+        $("#artist-releases li.type > h2").hide();
+        $("#artist-releases").tabs({ fx: { height: 'toggle', duration: 'fast', opacity: 'toggle'} });
+    });
+    </script>
     {% endif %}
 </section>
 
 <section class="generic threeforty end">
     {% if artist.disambiguation or artist.dates or artist.aliases %}
-    <section id="disambiguation">
         <h1>{% if artist.artist_type %}{{ artist.artist_type }}{% else %}Artist{% endif %}</h1>
-        <ul class="out">
+        <ul id="disambiguation">
         {% if artist.disambiguation %}<li class="caption">{{artist.disambiguation}}</li>{% endif %}
         {% if artist.aliases %}<li>also known as: <em>{{ artist.aliases|join:", " }}</em></li>{% endif %}
         {% if artist.dates %}
@@ -82,16 +81,13 @@
             </li>
         {% endif %}
         </ul>
-    </section>
     {% endif %}
 
     {% urls_for artist artist._id %}
 
     {% if artist.tags %}
-    <section id="tags">
         <h1>Folksonomy</h1>
         {% tag_cloud_for artist.tags %}
-    </section>
     {% endif %}
 
     {% if artist.members or  artist.member_of  or artist.collaborations or  artist.collaboration_of  %}

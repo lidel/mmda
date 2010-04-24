@@ -211,7 +211,7 @@ def _get_feed_link_for(url):
         feed_src = urlparse.urlsplit(url).netloc.replace('www.','')
         if feed_src in BANNED_DOMAINS:
             raise Exception
-
+        # TODO: handle 301, 302 redirections
         usock = HTTP_OPENER.open(url, timeout=SEARCH_TIMEOUT)
         parser = FeedFinder()
         while 1:

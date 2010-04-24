@@ -75,6 +75,28 @@ def get_artist_best_pictures(mbid):
 
     return best_pictures[:4]
 
+def get_artist_cache_state(mbid):
+    """
+    Get artist cache status required by mmda.artists.show_artist
+
+    @param mbid:    a string containing a MusicBrainz ID of an artist
+
+    @return: a list of dicts with artist picture meta-data
+    """
+    cache_states = []
+    # TODO: one big database? how would that work?
+    databases = ['artists','pictures','videos','news']
+
+    for db in databases:
+        try:
+            doc = get_db(db).get(mbid)
+            if doc.has_key('cache_state') and doc['cache_state']:
+                cache_states.append({db:doc['cache_state']})
+        except:
+            continue
+
+    return cache_states
+
 def get_basic_artist(mbid):
     """
     Make sure basic artist document is present and contains required data.
@@ -252,10 +274,10 @@ def _create_shallow_releases_mb(mb_artist):
         if 'primary' not in release_group or release_group['primary'][1] == None or mb_earliest_release_date < release_group['primary'][1]:
             release_group['primary'] = [release_mbid, mb_earliest_release_date]
 
-    # TODO: optimize? remove? wtf
+    # just to make sure no old data is left..
     old_cached_release_groups = get_db('artists').view('artists/release_groups', key=artist_mbid)
     for group in old_cached_release_groups:
-        CachedReleaseGroup.get(group['id']).delete()
+        del get_db('artists')[group['id']]
 
     for release_group in there_will_be_dragons.itervalues():
         cached_release_group = CachedReleaseGroup.wrap(release_group) # TODO: think if wrap is the best way of dealing with this

@@ -8,6 +8,13 @@ FLICKR_API_KEY = '' # flickr key
                                                     # if you use this software please replace it with your own key(!)
                                                     # it can be obtained for free at http://www.flickr.com/services/api
 
+                                                    # reCAPTCHA
+                                                    # you can get them at: https://admin.recaptcha.net/recaptcha/createsite/
+RECAPTCHA_PUB_KEY  = ''
+RECAPTCHA_PRIV_KEY = ''
+
+
+
 #MB_WEBSERVICE_HOST  = 'musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
 MB_WEBSERVICE_HOST  = 'www.uk.musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
 #MB_WEBSERVICE_HOST  = 'music.aergia.eu'             # mmda is efficient, but with many concurrent users it can

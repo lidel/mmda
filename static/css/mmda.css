@@ -25,7 +25,21 @@ q:before,q:after {
 abbr,acronym {
 	border:0;
 }
+/* RESET LISTS */
+ul {
+    list-style-position:inside;
+    margin-bottom:1em; /*TODO?*/
+}
+ul li {
+    list-style-type: none;
+}
+li > ul {
+    margin-left:1em;
+}
 /* END RESET CSS */
+
+
+
 
 /* MAIN STRUCTURE STYLES */
 html{
@@ -37,14 +51,15 @@ html{
 body{
 	font-size:62.5%;
     font-family: verdana, helvetica, arial, sans-serif;
-	color:#555;
+	color:#444;
 	background:/*url(images/grid.gif) top center repeat-y*/ #eee; /* Uncomment to display the grid */
-	border-top:0.5em solid #66c;
+	border-top:0.5em solid #436F8D;
 	padding:0 1em;
     text-shadow:1px 1px 1px #eee;
 
 }
-div#wrapper{
+/* wrapper */
+body > div { 
 	width:94em;
 	margin:0 auto;
     border-left: 15px solid #fefefe;
@@ -54,7 +69,7 @@ div#wrapper{
     overflow:hidden;
     position:relative;
 }
-#header{
+body > div > header {
 	width:94em;
 	float:left;
 	padding-top:5em;
@@ -64,7 +79,7 @@ div#wrapper{
 /*GRIDS*/
 
 .generic{
-	border-top:0.5em solid #66c; /* The border at the top of each grid */
+	border-top:0.5em solid #436F8D; /* The border at the top of each grid */
 	float:left;
 	padding-top:1em;
 	margin-bottom:2em;
@@ -166,9 +181,9 @@ p.drop:first-letter{
 /* OTHER*/
 blockquote p{
     font-family: Georgia, Garamond, "Times New Roman", serif;
-	font-size:1.4em!important;
-	line-height:1.7em!important;
     text-align: justify;
+	/*font-size:1.4em!important;
+	line-height:1.7em!important;*/
 	margin-bottom:1.3em!important;
 }
 .generic strong{
@@ -178,7 +193,7 @@ blockquote p{
 	font-style:italic;
 	font-weight:inherit;
 }
-.amp{ /* Give those ampersands a right sexy look */
+.amp{
 	font-family:Baskerville, "Goudy Old Style", "Palatino", "Book Antiqua", serif;
 	font-style:italic;
 	font-weight:normal;
@@ -188,9 +203,6 @@ abbr{
 	border-bottom:1px dotted #666;
 	border-color:inherit;
 	cursor:help;
-}
-.clear{
-	clear:both;
 }
 .right-float{ /* Float any item to the right */
 	float:right;
@@ -202,79 +214,23 @@ abbr{
 	margin-right:2em;
 	margin-left:0;
 }
-.code{ /* Styling for and code type items */
-	font-family:Courier, "Courier New", monospace;
-	background:#ddd;
-	font-size:1em;
-}
+
 /* IMAGE STYLES */
 img{
 	font-size:1em;
 }
-img.left-img{ /* Float any image to the LEFT and give it some margin */
-	font-size:1em;
-	float:left;
-	padding:4px;
-	border:1px solid #ccc;
-	margin-bottom:1.8em;
-	margin-right:2em;
-	margin-top:0.3em;
-}
-img.right-img{ /* Float any image to the RIGHT and give it some margin */
-	font-size:1em;
-	float:right;
-	padding:4px;
-	border:1px solid #ccc;
-	margin-bottom:1.8em;
-	margin-left:2em;
-	margin-top:0.3em;
-}
 
 /* LIST STYLES */
-ul li a,
-ol li a {
-	white-space:nowrap;
-}
-ul{
-	margin-bottom:1.8em;
-	list-style:square inside url("/images/blueball.gif");
-    /*margin-left:1.5em;*/
-}
-ul li{
-	font-size:1.3em;
-	line-height:1.7em;
-}
-ul li.caption{ /* Apply this class to the first list item in a list to give it a caption */
+ul li.caption{
 	font-variant:small-caps;
 	list-style:none;
 	color:#222;
 }
-li > ul, li > ol{
-	margin-bottom:0;
-	margin-left:5em;
-}
-li > ul li, li > ol li{
-	font-size:1em;
-}
-ol{
-	margin-bottom:1.8em;
-	list-style:decimal inside;
-}
-ol li{
-	font-size:1.2em;
-	line-height:1.5em;
-}
-
 
 /* THE END, REST IS MINE LOL */
 
 /* ARTIST PAGE */
 
-#artistgfx a {
-    display: inline;
-    height:126px;
-    width:126px;
-}
 #artistgfx a:hover {
     background:none;
 }
@@ -287,17 +243,10 @@ ol li{
     -webkit-box-shadow: 5px 5px 5px #ccc;
     margin: 1em 5px 2em 5px;
 }
-#abstract blockquote {
-    margin: 1.25em 0 2em 0;
-}
 
 
-#related-urls ul {
-    margin-left:0;
-}
-#related-urls li {
-    display: block;
-    list-style-type: none;
+.favicons {
+    line-height: 16px;
 }
 .favicons img {
     vertical-align:text-top;
@@ -307,9 +256,6 @@ ol li{
     box-shadow: 1px 1px 5px #aaa;
     -moz-box-shadow: 1px 1px 5px #aaa;
     -webkit-box-shadow: 1px 1px 5px #aaa;
-}
-.favicons {
-    line-height: 16px;
 }
 
 
@@ -340,18 +286,6 @@ ul.colrule {
     list-style-position:inside;
 }
 
-#similar-artists ul {/*TODO CLEANUP*/
-    margin-left:0em;
-}
-
-#artist-relationships ul {
-    margin-left:1em;
-}
-#artist-relationships h2 {
-	font-variant:small-caps;
-    font-size: 1.35em;
-    margin: 1em 0 0 0;
-}
 
 ul.in > li {
     list-style-position: inside !important;
@@ -378,26 +312,32 @@ h1 {
     font-weight:normal;
     letter-spacing: 0px;
 }
-#header h1 {
+header > h1 {
     text-shadow: 1px 1px 3px #ccc;
     font-size: 500%;
+    position:relative;
 }
-#header span.by {
+header > h1 > span.by {
     font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
     font-style: italic;
+    font-size: 25%;
     margin-left:2em;
-    font-size: 150%;
+    margin-top:0.5em;
+    display:block;
 }
-#header span.by a {
+header > h1 > span.by a {
     font-size: 150%;
     font-style: normal;
 }
-#header h1 small {
+header > h1 > small {
     font-family: Verdana, Arial, Helvetica, sans-serif;
     text-transform: uppercase;
     font-size: 0.2em;
     text-shadow: 1px 1px 0 #FFFFFF;
 	white-space:nowrap;
+    display:block;
+    position:absolute;
+    left:10em;
 }
 
 
@@ -409,7 +349,7 @@ h1 {
 
 a {
     text-decoration:none;
-    color:#66c;
+    color:#436F8D;
     padding:3px;
 }
 a:hover {
@@ -417,14 +357,14 @@ a:hover {
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
     border-radius:5px;
-    background:#66c;
+    background:#436F8D;
     color:#fff !important;
     text-shadow:1px 1px 1px #333;
 
 }
 
 #content h1 {
-    border-bottom: 1px dotted  #66c;
+    border-bottom: 1px dotted  #436F8D;
     margin-bottom: 0.5em;
     font-size: 2em;
     text-shadow: 1px 1px 2px #ddd;
@@ -435,7 +375,7 @@ a:hover {
     position: absolute;
     top:-0.5em;
     right:0px;
-    background:#66c;
+    background:#436F8D;
     text-shadow:none;
     color:#fff;
 
@@ -480,21 +420,26 @@ nav ul li {
 body#a-profile  li.a-profile a,
 body#a-pictures li.a-pictures a,
 body#a-videos   li.a-videos a,
-body#a-news     li.a-news a
+body#a-news     li.a-news a,
+body#a-refresh  li.a-refresh a
 {
     position: relative;
     color: #000;
     background-color: #fff;
+}
+li.a-refresh {
+    right:0;
+    position:absolute;
 }
 
 nav ul li a {
     padding: 3px 4px;
     margin-right: 0px;
     text-decoration: none;
-    border: 1px solid #66c;
+    border: 1px solid #436F8D;
     border-bottom: none;
     color: #666;
-    background-color: #ccf;
+    background-color: #eee;
     font-weight: bold;
 }
 
@@ -524,26 +469,28 @@ nav ul li a:hover {
 
 
 /* TAG CLOUD PROTOTYPE */
-ul.tag-cloud {
+ul#tag-cloud {
     text-align: center;
     padding: 0.1em;
     margin:0 0 1.5em 0;
     display:block;
 }
-ul.tag-cloud li {
+#tag-cloud li {
     display: inline;
 }
-ul.tag-cloud a {
+#tag-cloud a {
     color: #223;
     vertical-align:middle;
     line-height: 1.4em;
+    white-space: nowrap;
 }
-.tag-0 {font-size: 0.7em;}
-.tag-1 {font-size: 0.9em;}
-.tag-2 {font-size: 1.1em;}
-.tag-3 {font-size: 1.3em;}
-.tag-4 {font-size: 1.5em;}
-#youtube-videos {display:block; text-align: center}
+#tag-cloud .t0 {font-size: 0.8em;}
+#tag-cloud .t1 {font-size: 1.0em;}
+#tag-cloud .t2 {font-size: 1.2em;}
+#tag-cloud .t3 {font-size: 1.4em;}
+#tag-cloud .t4 {font-size: 1.6em;}
+
+ #youtube-videos {display:block; text-align: center}
 #youtube-videos li {float:left; margin: 5px; display:block; position:relative; padding: 5px; font-size: x-small; border: 1px solid #888; max-width: 130px; height:150px;}
 
 
@@ -591,20 +538,23 @@ ul.news-stream li blockquote cite:before {
 
 
 /* TRACKLISTING */
-#tracklisting ol {
+ol#tracklisting {
     list-style-type: decimal-leading-zero;
     display:block;
 }
-#tracklisting li {
+ol#tracklisting > li {
     position:relative;
     list-style-position: outside;
-    margin-left:2.4em;
+    margin-left:2.5em;
     margin-bottom:0.5em;
     color: #aaa;
     line-height: 1.5em;
     border-bottom: 1px dotted #ddd;
 }
-#tracklisting span.duration {
+ol#tracklisting > li:hover {
+    background:#eef;
+}
+ol#tracklisting > li > span.duration {
 	font-family: monospace;
     position:absolute;
     top:0;
@@ -612,7 +562,7 @@ ul.news-stream li blockquote cite:before {
     color: #888;
     font-size:1.1em;
 }
-#tracklisting span.title {
+ol#tracklisting > li > span.title {
     color: #555;
     font-size:1.1em;
     max-width: 39em;
@@ -643,11 +593,17 @@ div#artwork > div {
     background-image: url('http://i.imgur.com/u8lwN.png');
 }
 
+#other-track-listings > li > a {
+	white-space: normal !important;
+}
+#other-track-listings > li > small {
+	white-space: nowrap !important;
+}
 
 /* ARTIST DISCOGRAPHY */
 
 /* list of release types */
-#artist-releases * { /* make local reset, just to be sure it wont break in future */
+section#artist-releases * { /* make local reset, just to be sure it wont break in future */
     margin:0;
     padding:0;
 }
@@ -695,7 +651,8 @@ div#artwork > div {
 }
 #artist-releases li.year ul {
     margin: 0.25em 0 0.25em 3.5em !important;
-    font-size: 1.4em !important;
+    font-size: 1.25em !important;
+    line-height: 1.75em !important;
 }
 #artist-releases li.year h3 {
     border-top:1px dotted #eee;
