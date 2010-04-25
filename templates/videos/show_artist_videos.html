@@ -5,6 +5,9 @@
 {% block meta %}
 <meta name="robots" content="noindex,nofollow,noarchive"/>
 {% endblock %}
+{% block jquery %}
+    $("#youtube-videos a").hover(function(){$(this).fadeTo('fast',0.5);$(this).fadeTo('slow',1);});
+{% endblock %}
 {% block header %}
 <h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_videos.artist_name|addtypography }}</a>
     <small>videos</small>
@@ -27,7 +30,9 @@
 <section class="generic nineforty end">
 <ul id="youtube-videos">
 {% for video in artist_videos.youtube %}
-<li><a href="{{ video.url }}"><img src="{{ video.thumb }}" width="120" height="90" /><br>{{ video.title|truncatewords:5 }}</a> <small>({{ video.duration }}s)</small></li>
+<li><a href="{{ video.url }}"><img src="{{ video.thumb }}" alt="" />
+    <div>{{ video.title }} <span>({{ video.duration }}s)</span></div></a>
+</li>
 {% endfor %}
 </ul>
 </section>

@@ -1,10 +1,10 @@
 /* Selection of classes from:
- * TYPOGRIDPHY - TYPOGRAPHICAL AND GRID LAYOUT CSS FRAMEWORK FROM HARRY ROBERTS OF CSS WIZARDRY 
+ * TYPOGRIDPHY - TYPOGRAPHICAL AND GRID LAYOUT CSS FRAMEWORK FROM HARRY ROBERTS OF CSS WIZARDRY
  * v 0.1.1 / May 2008 /  http://csswizardry.com
  * */
 
 /* RESET CSS */
-body,div,header,article,section,aside,footer,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {  
+body,div,header,article,section,aside,footer,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
 	margin:0;
 	padding:0;
 }
@@ -59,7 +59,7 @@ body{
 
 }
 /* wrapper */
-body > div { 
+body > div {
 	width:94em;
 	margin:0 auto;
     border-left: 15px solid #fefefe;
@@ -81,7 +81,7 @@ body > div > header {
 .generic{
 	border-top:0.5em solid #436F8D; /* The border at the top of each grid */
 	float:left;
-	padding-top:1em;
+	padding-top:0.5em;
 	margin-bottom:2em;
 }
 /* Sets styles for any 'start' grids - this class MUST be given to a grid that is the first in a horizontal series */
@@ -231,8 +231,20 @@ ul li.caption{
 
 /* ARTIST PAGE */
 
-#artistgfx a:hover {
+#artistgfx {
+    position:relative;
+}
+#artistgfx > div {
+    position:absolute;
+    right:0;
+    bottom:0;
+}
+#artistgfx li {
+    display:inline;
+}
+#artistgfx li > a:hover {
     background:none;
+    border:none;
 }
 #artistgfx img {
     -moz-border-radius:15px;
@@ -286,7 +298,7 @@ ul.colrule {
     list-style-position:inside;
 }
 
-
+/*
 ul.in > li {
     list-style-position: inside !important;
 }
@@ -294,8 +306,8 @@ ul.out > li {
     list-style-position: outside !important;
     margin-left:1.5em;
 }
-
-
+*/
+/*
 .nobr,
 .nobr * {
 	white-space: nowrap !important;
@@ -304,7 +316,7 @@ ul.out > li {
 .br * {
 	white-space: normal !important;
 }
-
+*/
 
 
 h1 {
@@ -341,7 +353,7 @@ header > h1 > small {
 }
 
 
-#header h1.release-title {/* hung quotes */
+header > h1.release-title {/* hung quotes */
     text-indent: -0.5em;
     margin-left:0.5em;
 }
@@ -353,18 +365,18 @@ a {
     padding:3px;
 }
 a:hover {
-    /*border-bottom: 1px solid black;*/
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
     border-radius:5px;
     background:#436F8D;
     color:#fff !important;
     text-shadow:1px 1px 1px #333;
-
+    border-bottom: 1px solid #000;
 }
 
-#content h1 {
+article h1 {
     border-bottom: 1px dotted  #436F8D;
+    margin-top: 0.5em;
     margin-bottom: 0.5em;
     font-size: 2em;
     text-shadow: 1px 1px 2px #ddd;
@@ -386,34 +398,35 @@ a:hover {
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
 }
-
 #searchbox fieldset {
     padding: 0 5px 2px 5px;
     text-align:center;
 }
 
+
+
 cite#abstractsource { /* mine */
     margin-top:-1em;
-    margin-bottom:3em;
+    margin-bottom:2em;
     display:block;
 }
-cite#abstractsource img {
+cite#abstractsource > img {
     vertical-align:top;
     margin-right: 0.5em;
 }
-cite#abstractsource small {
-    float:right;
+cite#abstractsource > img.cc-info {
+	cursor:help;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
 /* NAV */
-
-nav ul {
+nav > ul {
     margin-bottom: 1px;
     list-style-type: none;
-    text-align: left;
 }
-
-nav ul li {
+nav > ul > li {
     display: inline;
 }
 
@@ -423,7 +436,6 @@ body#a-videos   li.a-videos a,
 body#a-news     li.a-news a,
 body#a-refresh  li.a-refresh a
 {
-    position: relative;
     color: #000;
     background-color: #fff;
 }
@@ -432,7 +444,7 @@ li.a-refresh {
     position:absolute;
 }
 
-nav ul li a {
+nav > ul > li > a {
     padding: 3px 4px;
     margin-right: 0px;
     text-decoration: none;
@@ -443,14 +455,14 @@ nav ul li a {
     font-weight: bold;
 }
 
-nav ul li a:hover {
+nav > ul > li > a:hover {
     background-color: #ffc !important;
     color:#333 !important;
     text-shadow:1px 1px 1px #ccc;
 }
 
-nav ul li a,
-nav ul li a:hover {
+nav > ul > li > a,
+nav > ul > li > a:hover {
     -webkit-border-top-left-radius: 5px;
     -webkit-border-top-right-radius: 5px;
     -moz-border-radius-topleft: 5px;
@@ -490,9 +502,82 @@ ul#tag-cloud {
 #tag-cloud .t3 {font-size: 1.4em;}
 #tag-cloud .t4 {font-size: 1.6em;}
 
- #youtube-videos {display:block; text-align: center}
-#youtube-videos li {float:left; margin: 5px; display:block; position:relative; padding: 5px; font-size: x-small; border: 1px solid #888; max-width: 130px; height:150px;}
+/* ARTIST IMAGES */
+.artist-images li,
+.artist-images a,
+.artist-images img {
+    display:block;
+}
+.artist-images li {
+    float:left;
+    margin:0.5em;
+}
+.artist-images a {
+    padding:0px;
+    border:none;
+}
+.artist-images img {
+    background-color: #fff;
+    padding: 2px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    box-shadow: 2px 2px 5px #ccc;
+    -moz-box-shadow: 2px 2px 5px #ccc;
+    -webkit-box-shadow: 2px 2px 5px #ccc;
+}
+.artist-images img:hover {
+    border: 1px solid #436F8D;
+    box-shadow: 2px 2px 5px #888;
+    -moz-box-shadow: 2px 2px 5px #888;
+    -webkit-box-shadow: 2px 2px 5px #888;
+}
+/* ARTIST VIDEOS */
+/* TODO: refactor for many video sources */
+#youtube-videos img,
+#youtube-videos li,
+#youtube-videos a {
+    display:block;
+}
+#youtube-videos li {
+    position:relative;
+    float:left;
+    margin: 1em;
+    width: 212px;
+    height:159px;
+}
+#youtube-videos img {
+    background-color: #fff;
+    padding: 2px;
+    border: 1px solid #ccc;
+    width: 200px;
+    height:150px;
+    box-shadow: 2px 2px 5px #ccc;
+    -moz-box-shadow: 2px 2px 5px #ccc;
+    -webkit-box-shadow: 2px 2px 5px #ccc;
+}
+#youtube-videos img:hover {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
 
+#youtube-videos span {
+    color: #888;
+    display:none;
+    /*TODO: write duration -> timestamp filter */
+}
+#youtube-videos div {
+    position:absolute;
+    top:0;
+    left:0;
+    margin:6px;
+    padding:3px;
+    border-bottom:1px solid #436F8D;
+    color:#fff;
+    text-shadow:1px 1px 1px #000;
+    background-color:#000;
+    /* TODO: transparent png as bg */
+}
 
 /* NEWS FEED */
 ul.news-stream {
@@ -501,9 +586,8 @@ ul.news-stream {
 }
 ul.news-stream li {
     display: block;
-	font-size: 1em;
 }
-ul.news-stream li h1 {
+ul.news-stream li > h1 {
         text-transform: uppercase;
         display: block;
         overflow: hidden;
@@ -511,10 +595,11 @@ ul.news-stream li h1 {
 }
 ul.news-stream li h1 small {
         float:right;
+        font-size:0.6em;
 }
 
 blockquote .opener{
-    color:#ccf;
+    color:#eef;
     display:block;
     float:left;
     font-family: Georgia, Garamond, "Times News Roman", serif;

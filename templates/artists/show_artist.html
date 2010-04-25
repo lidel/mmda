@@ -9,6 +9,9 @@
 <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" />
 <meta name="robots" content="index,nofollow,noarchive"/>
 {% endblock %}
+{% block jquery %}
+    $("#artistgfx").show('slow');
+{% endblock %}
 {% block header %}
 <h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name|addtypography }}</a>
     <small>artist profile</small>
@@ -22,10 +25,17 @@
 <section class="generic fiveeighty clear">
     {% if artist_pictures %}
     <div id="artistgfx">
+    <ul>
     {% for image in artist_pictures %}
-    <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"/></a>
+        <li><a href="{% url show-artist-pictures uri_artist mbid %}" title="Go to pictures page"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"/></a></li>
     {% endfor %}
+    </ul>
+    <div>&hellip;more at <a href="{% url show-artist-pictures uri_artist mbid %}">artist pictures page</a></div>
     </div>
+    <script>
+        $("#artistgfx").hide();
+        $("#artistgfx li > a").hover(function(){$(this).fadeTo('fast',0.5);$(this).fadeTo('slow',1);});
+    </script>
     {% endif %}
 
     {% abstract_for artist %}
@@ -85,11 +95,6 @@
 
     {% urls_for artist artist._id %}
 
-    {% if artist.tags %}
-        <h1>Folksonomy</h1>
-        {% tag_cloud_for artist.tags %}
-    {% endif %}
-
     {% if artist.members or  artist.member_of  or artist.collaborations or  artist.collaboration_of  %}
     <section id="artist-relationships">
         <h1>Relationships</h1>
@@ -143,6 +148,11 @@
         {% endif %}
 
     </section>
+    {% endif %}
+
+    {% if artist.tags %}
+        <h1>Folksonomy</h1>
+        {% tag_cloud_for artist.tags %}
     {% endif %}
 </section>
 

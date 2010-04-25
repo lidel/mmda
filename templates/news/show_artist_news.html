@@ -40,7 +40,7 @@
 {% for news in news_stream %}
 
 <li><h1><a href="{{ news.url }}">{{ news.title|safe }}</a> <small>{{ news.date|iso2date|date }}</small></h1>
-{% if news.summary %}<blockquote cite="{{ news.url }}"><p><span class="opener">“</span>{{ news.summary|truncatewords_html:100|safe }}” <cite>read {% if news.summary %}more{% endif %} at <a href="{{ news.url }}">{{ news.source }}</a></cite></p></blockquote>{% endif %}
+{% if news.summary %}<blockquote cite="{{ news.url }}"><p><span class="opener">&ldquo;</span>{{ news.summary|truncatewords_html:100|safe }}&rdquo; <cite>read {% if news.summary %}more{% endif %} at <a href="{{ news.url }}">{{ news.source }}</a></cite></p></blockquote>{% endif %}
 </li>
 
 {% endfor %}

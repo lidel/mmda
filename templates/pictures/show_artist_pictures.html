@@ -6,6 +6,9 @@
 {% block meta %}
 <meta name="robots" content="noindex,nofollow,noarchive"/>
 {% endblock %}
+{% block jquery %}
+    $(".artist-images a").hover(function(){$(this).fadeTo('fast',0.5);$(this).fadeTo('slow',1);});
+{% endblock %}
 
 {% block header %}
 <h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_pictures.artist_name|addtypography }}</a>
@@ -22,9 +25,11 @@
 <h1>Last.fm</h1>
 <p>Top-rated images in descending order.</p>
 {% if artist_pictures.lastfm %}
+<ul class="artist-images">
 {% for image in artist_pictures.lastfm %}
-    <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"  /></a>
+<li><a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"  /></a></li>
 {% endfor %}
+</ul>
 {% else %}
 <p>Sorry, nothing here <big>:'-(</big></p>
 {% endif %}
@@ -34,9 +39,11 @@
 <h1>Flickr</h1>
 <p>Top results  for “{{ artist_pictures.artist_name }}” tag. </p>
 {% if artist_pictures.flickr %}
+<ul class="artist-images">
 {% for image in artist_pictures.flickr %}
-    <a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="75" height="75" alt="{{ image.title }}"  /></a>
+<li><a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="75" height="75" alt="{{ image.title }}"  /></a></li>
 {% endfor %}
+</ul>
 {% else %}
 <p>Sorry, nothing here <big>:'-(</big></p>
 {% endif %}

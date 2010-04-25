@@ -20,7 +20,8 @@
 <script src="/static/js/jquery.favicons.min.js"></script>
 <script>
 google.setOnLoadCallback(function() {
-    jQuery('.favicons').favicons({insert: 'insertBefore', defaultIco: 'http://www.askthecssguy.com.nyud.net/examples/faviconcues/external.gif'});
+    $('.favicons').favicons({insert: 'insertBefore', defaultIco: 'http://www.askthecssguy.com.nyud.net/examples/faviconcues/external.gif'});
+    {% block jquery %}{% endblock %}
 });
 </script>
 
@@ -33,13 +34,13 @@ google.setOnLoadCallback(function() {
 
 {% block navigation %}{% endblock %}
 
-<article id="content">
+<article>
 {% block content %}{% endblock %}
 </article>
 
-<footer id="foot" class="generic nineforty">{% block footer %}
-MMDA 1.0 powered by MusicBrainz, Wikipedia, Last.fm, Flickr and Youtube APIs.
-{% endblock %}</footer>
+<footer class="generic nineforty">MMDA 1.0 powered by MusicBrainz, Wikipedia, Last.fm, Flickr and Youtube APIs.
+{% block footer %}{% endblock %}
+</footer>
 <aside id="searchbox">
 <form action="/search/" method="post">
 <fieldset>
