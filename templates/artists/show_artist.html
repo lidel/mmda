@@ -13,7 +13,8 @@
 {% endblock %}
 
 {% block jquery %}
-    $("#artistgfx").show('slow');
+    $(".w8").hide('fast',function(){$(this).remove();});
+    $(".gfx").show('slow');
 {% endblock %}
 
 {% block header %}
@@ -28,17 +29,14 @@
 
 <section class="generic fiveeighty clear">
     {% if artist_pictures %}
-    <div id="artistgfx">
-    <ul>
+    <ul class="gfx" id="artist-top-gfx">
     {% for image in artist_pictures %}
         <li><a href="{% url show-artist-pictures uri_artist mbid %}" title="Go to pictures page"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"/></a></li>
     {% endfor %}
     </ul>
-    <div>&hellip;more at <a href="{% url show-artist-pictures uri_artist mbid %}">artist pictures page</a></div>
-    </div>
     <script>
-        $("#artistgfx").hide();
-        $("#artistgfx li > a").hover(function(){$(this).fadeTo('fast',0.5);$(this).fadeTo('slow',1);});
+        $(".gfx").parent().prepend('<div class="w8">Loading gfx..</div>');
+        $(".gfx").hide();
     </script>
     {% endif %}
 

@@ -230,32 +230,15 @@ ul li.caption{
 /* THE END, REST IS MINE LOL */
 
 /* ARTIST PAGE */
-
-#artistgfx {
-    position:relative;
-}
-#artistgfx > div {
-    position:absolute;
-    right:0;
-    bottom:0;
-}
-#artistgfx li {
-    display:inline;
-}
-#artistgfx li > a:hover {
-    background:none;
-    border:none;
-}
-#artistgfx img {
-    -moz-border-radius:15px;
-    -webkit-border-radius:15px;
-    border-radius:15px;
-    box-shadow: 5px 5px 5px #ccc;
-    -moz-box-shadow: 5px 5px 5px #ccc;
-    -webkit-box-shadow: 5px 5px 5px #ccc;
-    margin: 1em 5px 2em 5px;
+.w8 {
+	background: url('http://imgur.com/2Pv6j.gif') 1.5em left no-repeat;
+    padding: 2em;
+    padding-left:3em;
 }
 
+#artist-top-gfx {
+    margin-bottom:1.5em;
+}
 
 .favicons {
     line-height: 16px;
@@ -503,62 +486,58 @@ ul#tag-cloud {
 #tag-cloud .t4 {font-size: 1.6em;}
 
 /* ARTIST IMAGES */
-.artist-images li,
-.artist-images a,
-.artist-images img {
+.gfx li,
+.gfx a,
+.gfx img {
     display:block;
 }
-.artist-images li {
+.gfx li {
+	background: url('http://imgur.com/vGqiP.gif') 50% 50% no-repeat;
     float:left;
     margin:0.5em;
 }
-.artist-images a {
+.gfx a {
     padding:0px;
     border:none;
 }
-.artist-images img {
-    background-color: #fff;
-    padding: 2px;
+.gfx a:hover {
+    background:none;
+}
+.gfx li {
     border: 1px solid #ccc;
+}
+.gfx li:hover {
+    border: 1px solid #436F8D;
+}
+.gfx img {
+    border: 2px solid #fff;
     font-size: 1em;
     box-shadow: 2px 2px 5px #ccc;
     -moz-box-shadow: 2px 2px 5px #ccc;
     -webkit-box-shadow: 2px 2px 5px #ccc;
 }
-.artist-images img:hover {
-    border: 1px solid #436F8D;
+.gfx img:hover {
     box-shadow: 2px 2px 5px #888;
     -moz-box-shadow: 2px 2px 5px #888;
     -webkit-box-shadow: 2px 2px 5px #888;
 }
 /* ARTIST VIDEOS */
 /* TODO: refactor for many video sources */
-#youtube-videos img,
-#youtube-videos li,
-#youtube-videos a {
-    display:block;
-}
 #youtube-videos li {
     position:relative;
-    float:left;
     margin: 1em;
-    width: 212px;
-    height:159px;
+    width: 204px;
+    height:154px;
 }
+#youtube-videos li:hover div {
+    border-bottom:1px solid #8D6f43;
+    color:#000;
+    text-shadow:1px 1px 2px #ccc;
+    background-color:#fff;
+} 
 #youtube-videos img {
-    background-color: #fff;
-    padding: 2px;
-    border: 1px solid #ccc;
     width: 200px;
     height:150px;
-    box-shadow: 2px 2px 5px #ccc;
-    -moz-box-shadow: 2px 2px 5px #ccc;
-    -webkit-box-shadow: 2px 2px 5px #ccc;
-}
-#youtube-videos img:hover {
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
 }
 
 #youtube-videos span {
@@ -570,13 +549,15 @@ ul#tag-cloud {
     position:absolute;
     top:0;
     left:0;
-    margin:6px;
+    margin:2px;
     padding:3px;
     border-bottom:1px solid #436F8D;
     color:#fff;
-    text-shadow:1px 1px 1px #000;
+    text-shadow:1px 1px 0px #000;
     background-color:#000;
-    /* TODO: transparent png as bg */
+    opacity: .8;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);/* For IE 5-7 */
+    -MS-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";/* For IE 8 */
 }
 
 /* NEWS FEED */

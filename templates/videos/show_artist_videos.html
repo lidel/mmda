@@ -9,7 +9,10 @@
 {% endblock %}
 
 {% block jquery %}
-    $("#youtube-videos a").hover(function(){$(this).fadeTo('fast',0.5);$(this).fadeTo('slow',1);});
+    $(".gfx img").lazyload({
+        placeholder : "/static/empty.gif",
+        effect      : "fadeIn"
+    });
 {% endblock %}
 
 {% block header %}
@@ -32,12 +35,15 @@
 </section>
 
 <section class="generic nineforty end">
-<ul id="youtube-videos">
+<ul id="youtube-videos" class="gfx">
 {% for video in artist_videos.youtube %}
 <li><a href="{{ video.url }}"><img src="{{ video.thumb }}" alt="" />
     <div>{{ video.title }} <span>({{ video.duration }}s)</span></div></a>
 </li>
 {% endfor %}
+<li><a href="{% if artist_videos.youtube_channel %}{{ artist_videos.youtube_channel }}{% else %}http://www.youtube.com/results?search_category=10&search_query={{ artist_videos.artist_name }}&search_type=videos{% endif %}"><img src="http://youtube.com/favicon.ico" />
+    <div>→ See more videos at YouTube</div></a>
+</li>
 </ul>
 </section>
 {% endblock %}

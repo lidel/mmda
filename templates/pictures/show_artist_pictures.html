@@ -9,7 +9,10 @@
 {% endblock %}
 
 {% block jquery %}
-    $(".artist-images a").hover(function(){$(this).fadeTo('fast',0.5);$(this).fadeTo('slow',1);});
+ $(".gfx img").lazyload({
+     placeholder : "/static/empty.gif",
+     effect      : "fadeIn"
+ });
 {% endblock %}
 
 {% block header %}
@@ -22,14 +25,15 @@
 
 {% block content %}
 
+
 {% if artist_pictures.lastfm or artist_pictures.flickr %}
 <section class="generic sixforty clear">
 <h1>Last.fm</h1>
 <p>Top-rated images in descending order.</p>
 {% if artist_pictures.lastfm %}
-<ul class="artist-images">
+<ul class="artist-images gfx">
 {% for image in artist_pictures.lastfm %}
-<li><a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"  /></a></li>
+<li class="gfx126"><a rel="prettyPhoto" href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"  /></a></li>
 {% endfor %}
 </ul>
 {% else %}
@@ -41,7 +45,7 @@
 <h1>Flickr</h1>
 <p>Top results  for “{{ artist_pictures.artist_name }}” tag. </p>
 {% if artist_pictures.flickr %}
-<ul class="artist-images">
+<ul class="artist-images gfx">
 {% for image in artist_pictures.flickr %}
 <li><a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="75" height="75" alt="{{ image.title }}"  /></a></li>
 {% endfor %}
@@ -58,5 +62,4 @@
 </section>
 
 {% endif %}
-
 {% endblock %}
