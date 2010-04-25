@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 {% load release_helpers %}
+
 {% block title %}“{{ search_result.query_string|escape }}” – tag search results{% endblock %}
+
 {% block meta %}
-<meta name="robots" content="noindex,nofollow,noarchive"/>
+    <meta name="robots" content="noindex,nofollow,noarchive"/>
 {% endblock %}
+
 {% block header %}
-<h1>Tag search results</h1>
-
-<span class="query">for query <big>“<a href="{% url show-search-result query_type query_string query_id %}">{{ search_result.query_string|escape }}</a>”</big></span>
-
+    <h1>Tag search results</h1>
+    <span class="query">for query <big>“<a href="{% url show-search-result query_type query_string query_id %}">{{ search_result.query_string|escape }}</a>”</big></span>
 {% endblock %}
+
 {% block content %}
 <section class="generic nineforty end search-results" id="tag-search-results">
     <ul class="twocols">

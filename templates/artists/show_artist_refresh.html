@@ -3,15 +3,18 @@
 {% load universal_abstract %}
 {% load related_websites %}
 {% load tag_cloud %}
+
 {% block bodytag %}<body id="a-refresh">{% endblock %}
 {% block title %}{{ artist.name }} - refresh page at music.aergia.eu{% endblock %}
+
 {% block meta %}
-<meta name="robots" content="noindex,nofollow,noarchive"/>
+    <meta name="robots" content="noindex,nofollow,noarchive"/>
 {% endblock %}
+
 {% block header %}
-<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name|addtypography }}</a>
-    <small>artist refresh page</small>
-</h1>
+    <h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name|addtypography }}</a>
+        <small>artist refresh page</small>
+    </h1>
 {% endblock %}
 
 {% block navigation %}{% include "artists/artistnav.html" %}{% endblock %}
@@ -19,22 +22,24 @@
 {% block content %}
 <section class="generic fourhun">
     <h1>Refresh settings</h1>
-<form action="" method="post">
-<fieldset>
-    <p>
-    Select data to refresh:</p>
-    <p>
-    <input type="checkbox" name="reset" value="artists" /> artist with releases<br/>
-    <input type="checkbox" name="reset" value="pictures" /> pictures<br/>
-    <input type="checkbox" name="reset" value="videos" /> videos<br/>
-    <input type="checkbox" name="reset" value="news" /> news sources<br/>
-    </p>
-    <p>{{ html_for_captcha|safe }}</p>
-    <input type="hidden" name="mbid" value="{{ mbid }}">
-    <input type="hidden" name="uri_artist" value="{{ mbid }}">
-    <p><button type="submit"><span>Force refresh</span></button></p>
-</fieldset>
-</form>
+    <form action="" method="post">
+    <fieldset>
+        <p>
+        Select data to refresh:</p>
+        <p>
+        <input type="checkbox" name="reset" value="artists" /> artist with releases<br/>
+        <input type="checkbox" name="reset" value="pictures" /> pictures<br/>
+        <input type="checkbox" name="reset" value="videos" /> videos<br/>
+        <input type="checkbox" name="reset" value="news" /> news sources<br/>
+        </p>
+
+        <p>{{ html_for_captcha|safe }}</p>
+
+        <input type="hidden" name="mbid" value="{{ mbid }}">
+        <input type="hidden" name="uri_artist" value="{{ mbid }}">
+        <p><button type="submit"><span>Force refresh</span></button></p>
+    </fieldset>
+    </form>
 
 </section>
 <section class="generic fivetwenty end">

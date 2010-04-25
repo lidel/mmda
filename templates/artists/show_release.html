@@ -2,17 +2,19 @@
 {% load release_helpers %}
 {% load universal_abstract %}
 {% load related_websites %}
+
 {% block title %}“{{ release.title }}” release page at mmda{% endblock %}
+
 {% block meta %}
-<meta name="robots" content="index,nofollow,noarchive"/>
+    <meta name="robots" content="index,nofollow,noarchive"/>
 {% endblock %}
+
 {% block header %}
-
-{% if release.cover %}<div id="artwork"><img src="{{ release.cover|coralize }}" alt="{{ release_group.title }} artwork" width="152" height="152" class="artwork" /><div></div></div>{% endif %}
-<h1 class="release-title">“<a href="{% url show-release uri_artist, uri_release, mbid %}">{{ release.title|addtypography }}</a>”
+    {% if release.cover %}<div id="artwork"><img src="{{ release.cover|coralize }}" alt="{{ release_group.title }} artwork" width="152" height="152" class="artwork" /><div></div></div>{% endif %}
+    <h1 class="release-title">“<a href="{% url show-release uri_artist, uri_release, mbid %}">{{ release.title|addtypography }}</a>”
     <span class="by">by <a href="{% url show-artist uri_artist, release_group.artist_mbid %}">{{ release_group.artist_name }}</a></span> <small>{{ release_group.release_type }} release</small></h1>
-
 {% endblock %}
+
 {% block content %}
 
 <section class="generic fiveeighty">

@@ -3,19 +3,23 @@
 {% load universal_abstract %}
 {% load related_websites %}
 {% load tag_cloud %}
+
 {% block bodytag %}<body id="a-profile">{% endblock %}
 {% block title %}{{ artist.name }} - artist page at music.aergia.eu{% endblock %}
+
 {% block meta %}
-<link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" />
-<meta name="robots" content="index,nofollow,noarchive"/>
+    <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href="/artist/{{ uri_artist }}/news/{{ mbid}}/feed/" />
+    <meta name="robots" content="index,nofollow,noarchive"/>
 {% endblock %}
+
 {% block jquery %}
     $("#artistgfx").show('slow');
 {% endblock %}
+
 {% block header %}
-<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name|addtypography }}</a>
-    <small>artist profile</small>
-</h1>
+    <h1><a href="{% url show-artist uri_artist mbid %}">{{ artist.name|addtypography }}</a>
+        <small>artist profile</small>
+    </h1>
 {% endblock %}
 
 {% block navigation %}{% include "artists/artistnav.html" %}{% endblock %}

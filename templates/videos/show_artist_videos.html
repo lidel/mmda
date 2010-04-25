@@ -1,17 +1,21 @@
 {% extends "base.html" %}
 {% load release_helpers %}
+
 {% block bodytag %}<body id="a-videos">{% endblock %}
 {% block title %}{{ artist_videos.artist_name }} - artist videos page at music.aergia.eu{% endblock %}
+
 {% block meta %}
-<meta name="robots" content="noindex,nofollow,noarchive"/>
+    <meta name="robots" content="noindex,nofollow,noarchive"/>
 {% endblock %}
+
 {% block jquery %}
     $("#youtube-videos a").hover(function(){$(this).fadeTo('fast',0.5);$(this).fadeTo('slow',1);});
 {% endblock %}
+
 {% block header %}
-<h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_videos.artist_name|addtypography }}</a>
-    <small>videos</small>
-</h1>
+    <h1><a href="{% url show-artist uri_artist mbid %}">{{ artist_videos.artist_name|addtypography }}</a>
+        <small>videos</small>
+    </h1>
 {% endblock %}
 
 {% block navigation %}{% include "artists/artistnav.html" %}{% endblock %}

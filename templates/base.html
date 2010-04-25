@@ -2,26 +2,26 @@
 <html lang="en">
 <head>
   <title>{% block title %}{% endblock %}</title>
-{% block meta %}{% endblock %}
-  <meta name="robots" content="NONE,NOARCHIVE" />
   <meta charset="utf-8" />
   <link rel="stylesheet" type="text/css" href="/static/css/mmda.css" media="screen" />
+{% block meta %}{% endblock %}
 
 
-<!--[if lte IE 9]>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-<script src="http://www.google.com/jsapi"></script>
-<script>
-  // Load jQuery
-  google.load("jquery", "1.4.2");
-  google.load("jqueryui", "1.8.0");
-</script>
-<script src="/static/js/jquery.favicons.min.js"></script>
+    <!--[if lte IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="http://www.google.com/jsapi"></script>
+    <script>
+    // Load jQuery
+    google.load("jquery", "1.4.2");
+    google.load("jqueryui", "1.8.0");
+    </script>
+    <script src="/static/js/jquery.favicons.min.js"></script>
+
 <script>
 google.setOnLoadCallback(function() {
     $('.favicons').favicons({insert: 'insertBefore', defaultIco: 'http://www.askthecssguy.com.nyud.net/examples/faviconcues/external.gif'});
-    {% block jquery %}{% endblock %}
+{% block jquery %}{% endblock %}
 });
 </script>
 
@@ -41,6 +41,7 @@ google.setOnLoadCallback(function() {
 <footer class="generic nineforty">MMDA 1.0 powered by MusicBrainz, Wikipedia, Last.fm, Flickr and Youtube APIs.
 {% block footer %}{% endblock %}
 </footer>
+
 <aside id="searchbox">
 <form action="/search/" method="post">
 <fieldset>
@@ -56,6 +57,7 @@ google.setOnLoadCallback(function() {
 </fieldset>
 </form>
 </aside>
+
 </div>
 </body>
 </html>
