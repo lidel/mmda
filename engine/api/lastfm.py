@@ -63,7 +63,7 @@ def populate_artist_lastfm(artist):
                 artist_pictures = CachedArtistPictures.get_or_create(artist._id)
                 if 'lastfm' not in artist_pictures:
                     artist_pictures.artist_name = artist.name
-                    artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images()]
+                    artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.original, 'url':i.url,'title':i.title} for i in lastfm_images()]
                     artist_pictures.cache_state['lastfm'] = [1,datetime.utcnow()]
                     artist_pictures.save()
                     mmda_logger('db','store',artist_pictures)
@@ -171,7 +171,7 @@ def populate_artist_pictures_lastfm(artist_pictures):
             mmda_logger('pylast','ERROR',e)
         else:
             if lastfm_images:
-                artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.extralarge, 'url':i.url,'title':i.title} for i in lastfm_images]
+                artist_pictures.lastfm = [ {'sq':i.sizes.largesquare, 'big':i.sizes.original, 'url':i.url,'title':i.title} for i in lastfm_images]
             artist_pictures.cache_state['lastfm'] = [2,datetime.utcnow()]
             artist_pictures.changes_present = True
 

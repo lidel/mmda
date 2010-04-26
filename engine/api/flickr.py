@@ -26,7 +26,7 @@ def populate_artist_pictures_flickr(artist_pictures):
         if 'artist_aliases' in artist_pictures:
             artist_tags += ',' + ','.join(artist_pictures.artist_aliases)
 
-        includes = 'owner_name, url_sq, url_m'
+        includes = 'owner_name, url_sq, url_o'
         licenses = '1,2,3,4,5,6,7' # http://www.flickr.com/services/api/flickr.photos.licenses.getInfo.html
 
         data_walker = flickr.walk(tag_mode='any',tags=artist_tags.lower(),media='photos',license=licenses,extras=includes,per_page=FLICKR_LIMIT)
@@ -37,8 +37,7 @@ def populate_artist_pictures_flickr(artist_pictures):
             t = mmda_logger('flkr','request','artist pictures',artist_pictures._id)
             for i in xrange(FLICKR_LIMIT):
                 f_photo = data_walker.next()
-                f_photo_url = "http://www.flickr.com/photos/%s/%s" % (f_photo.get('owner'), f_photo.get('id'))
-                photo = {'title':f_photo.get('title'), 'sq':f_photo.get('url_sq'), 'big':f_photo.get('big'), 'url':f_photo_url, 'owner':f_photo.get('ownername')}
+                photo = {'owner_id':f_photo.get('owner'), 'id':f_photo.get('id'), 'title':f_photo.get('title'), 'sq':f_photo.get('url_sq'), 'big':f_photo.get('url_o'), 'owner':f_photo.get('ownername')}
                 flickr_photos.append(photo)
             mmda_logger('flkr','result','found pictures',len(flickr_photos), t)
         except Exception, e:

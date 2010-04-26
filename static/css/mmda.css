@@ -59,7 +59,7 @@ body{
 
 }
 /* wrapper */
-body > div {
+body > div#wrapper {
 	width:94em;
 	margin:0 auto;
     border-left: 15px solid #fefefe;
@@ -69,7 +69,7 @@ body > div {
     overflow:hidden;
     position:relative;
 }
-body > div > header {
+body > div#wrapper > header {
 	width:94em;
 	float:left;
 	padding-top:5em;
@@ -492,7 +492,7 @@ ul#tag-cloud {
     display:block;
 }
 .gfx li {
-	background: url('http://imgur.com/vGqiP.gif') 50% 50% no-repeat;
+	background: #fff url('http://imgur.com/vGqiP.gif') 50% 50% no-repeat;
     float:left;
     margin:0.5em;
 }
@@ -529,12 +529,6 @@ ul#tag-cloud {
     width: 204px;
     height:154px;
 }
-#youtube-videos li:hover div {
-    border-bottom:1px solid #8D6f43;
-    color:#000;
-    text-shadow:1px 1px 2px #ccc;
-    background-color:#fff;
-} 
 #youtube-videos img {
     width: 200px;
     height:150px;
@@ -547,18 +541,25 @@ ul#tag-cloud {
 }
 #youtube-videos div {
     position:absolute;
+    width:194px;
     top:0;
     left:0;
     margin:2px;
     padding:3px;
-    border-bottom:1px solid #436F8D;
-    color:#fff;
-    text-shadow:1px 1px 0px #000;
-    background-color:#000;
+    border-bottom: 1px solid #ccc;
+    color:#000;
+    background-color:#fff;
+    text-shadow:1px 1px 2px #ccc;
     opacity: .8;
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);/* For IE 5-7 */
     -MS-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";/* For IE 8 */
 }
+#youtube-videos li:hover div {
+    border-bottom:1px solid #436F8D;
+    color:#fff;
+    background-color:#000;
+    text-shadow:1px 1px 0px #000;
+} 
 
 /* NEWS FEED */
 ul.news-stream {
@@ -765,7 +766,6 @@ section.search-results a {
 section#similar-artists span.score,
 section#artist-search-results span.score {
     color:#aaa;
-    font-size: 1.2em;
     float:right;
     display:block;
 }
@@ -783,4 +783,48 @@ section#release-search-results span.score {
 section#release-search-results span.artist {
     margin-left:1em;
     font-size:0.8em;
+}
+
+
+
+/* FANCYBOX */
+#fancybox-outer {
+    border: 1px solid #ccc;
+}
+
+#fb-caption {
+    padding-left:0.5em;
+    float:left;
+    text-align:left;
+    line-height:1.5em;
+}
+#fb-caption > a {
+    font-weight:bold;
+}
+#fb-caption > img {
+    vertical-align:text-top;
+}
+
+#fb-nav {
+    float:right;
+    margin-right:0.5em;
+}
+#fb-nav > div {
+    float:left;
+    padding-top:3px;
+    height: 27px;
+    line-height: 27px;
+    margin-right:1em;
+}
+#fb-nav > a {
+    vertical-align:text-top;
+    float:left;
+    display:block;
+    border:none;
+    line-height:1em;
+    padding-bottom:0;
+    margin:0;
+}
+#fb-nav > #close-button {
+    margin-left:1em;
 }

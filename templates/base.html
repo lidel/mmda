@@ -4,9 +4,6 @@
   <title>{% block title %}{% endblock %}</title>
   <meta charset="utf-8" />
   <link rel="stylesheet" type="text/css" href="/static/css/mmda.css" media="screen" />
-{% block meta %}{% endblock %}
-
-
     <!--[if lte IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -16,12 +13,16 @@
     google.load("jquery", "1.4.2");
     google.load("jqueryui", "1.8.0");
     </script>
-    <script src="/static/js/jquery.favicons.min.js"></script>
-    <script src="/static/js/jquery.lazyload.min.js"></script>
+
+{% block meta %}{% endblock %}
+
+<script src="/static/js/jquery.favicons.min.js"></script>
+<script src="/static/js/jquery.lazyload.min.js"></script>
 
 <script>
 google.setOnLoadCallback(function() {
     $('.favicons').favicons({insert: 'insertBefore', defaultIco: 'http://www.askthecssguy.com.nyud.net/examples/faviconcues/external.gif'});
+
 {% block jquery %}{% endblock %}
 });
 </script>

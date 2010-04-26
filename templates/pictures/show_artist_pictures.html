@@ -6,13 +6,68 @@
 
 {% block meta %}
     <meta name="robots" content="noindex,nofollow,noarchive"/>
+
+    <link rel="stylesheet" type="text/css" href="/static/fancybox/jquery.fancybox-1.3.1.css" media="screen" />
+    <script src="/static/fancybox/jquery.easing-1.3.pack.js"></script>
+    <script src="/static/fancybox/jquery.fancybox-1.3.1.pack.js"></script>
 {% endblock %}
 
 {% block jquery %}
- $(".gfx img").lazyload({
-     placeholder : "/static/empty.gif",
-     effect      : "fadeIn"
- });
+    $('.gfx li > a[href^=http://www.last.fm]').each(function(){
+            $(this).fancybox({
+                  'padding'             : 0,
+                  'margin'              : 40,
+                  'autoScale'           : true,
+                  'overlayShow'         : false,
+                  'transitionIn'        : 'elastic',
+                  'transitionOut'       : 'elastic',
+                  'easingIn'            : 'easeOutBack',
+                  'easingOut'           : 'easeOutBack',
+                  'opacity'             : true,
+                  'title'               : this.title,
+                  'titlePosition'       : 'inside',
+                  'titleFormat'         : function formatTitle(title, currentArray, currentIndex, currentOpts) {
+                                          return '<div><div id="fb-caption">' + (title && title.length ? title : '' )  + '</div><div id="fb-nav"><div>'+ (currentIndex + 1) + ' / ' + currentArray.length + '</div><a href="javascript:;" onclick="$.fancybox.prev();"><img alt="prev" src="/static/fancybox/fancy_nav_left.png"/></a><a href="javascript:;" onclick="$.fancybox.next();"><img alt="next" src="/static/fancybox/fancy_nav_right.png"/></a><a id="close-button" href="javascript:;" onclick="$.fancybox.close();"><img alt="close" src="/static/fancybox/fancy_close.png"/></a></div></div>';
+                                          },
+                  'showCloseButton'     : false,
+                  'showNavArrows'       : false,
+                  'cyclic'              : true,
+                  'centerOnScroll'      : true,
+                  'href'                : $(this).children('img:first-child').attr('alt'),
+                  'onComplete'          : function() { $('#fb-caption').favicons({insert: 'insertBefore'}); },
+                  'type'                : 'image'
+                  });
+    });
+    $('.gfx li > a[href^=http://www.flickr.com]').each(function(){
+            $(this).fancybox({
+                  'padding'             : 0,
+                  'margin'              : 40,
+                  'autoScale'           : true,
+                  'overlayShow'         : false,
+                  'transitionIn'        : 'elastic',
+                  'transitionOut'       : 'elastic',
+                  'easingIn'            : 'easeOutBack',
+                  'easingOut'           : 'easeOutBack',
+                  'opacity'             : true,
+                  'title'               : this.title,
+                  'titlePosition'       : 'inside',
+                  'titleFormat'         : function formatTitle(title, currentArray, currentIndex, currentOpts) {
+                                          return '<div><div id="fb-caption">' + (title && title.length ? title : '' )  + '</div><div id="fb-nav"><div>'+ (currentIndex + 1) + ' / ' + currentArray.length + '</div><a href="javascript:;" onclick="$.fancybox.prev();"><img alt="prev" src="/static/fancybox/fancy_nav_left.png"/></a><a href="javascript:;" onclick="$.fancybox.next();"><img alt="next" src="/static/fancybox/fancy_nav_right.png"/></a><a id="close-button" href="javascript:;" onclick="$.fancybox.close();"><img alt="close" src="/static/fancybox/fancy_close.png"/></a></div></div>';
+                                          },
+                  'showCloseButton'     : false,
+                  'showNavArrows'       : false,
+                  'cyclic'              : true,
+                  'centerOnScroll'      : true,
+                  'href'                : $(this).children('img:first-child').attr('src').replace(new RegExp("_s", ""), '_b'),
+                  'onComplete'          : function() { $('#fb-caption').favicons({insert: 'insertBefore'}); },
+                  'type'                : 'image'
+                  });
+    });
+
+    $(".gfx img").lazyload({
+        placeholder : "/static/empty.gif",
+        effect      : "fadeIn"
+    });
 {% endblock %}
 
 {% block header %}
@@ -33,7 +88,10 @@
 {% if artist_pictures.lastfm %}
 <ul class="artist-images gfx">
 {% for image in artist_pictures.lastfm %}
-<li class="gfx126"><a rel="prettyPhoto" href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.title }}"  /></a></li>
+<li><a rel="gallery"
+    title="{% filter force_escape %}{% if image.title %}“{{ image.title|default:"" }}”<br/>{% endif %}<a href="{{ image.url }}">last.fm</a>{% endfilter %}"
+       href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="126" height="126" alt="{{ image.big }}"  /></a>
+</li>
 {% endfor %}
 </ul>
 {% else %}
@@ -47,7 +105,10 @@
 {% if artist_pictures.flickr %}
 <ul class="artist-images gfx">
 {% for image in artist_pictures.flickr %}
-<li><a href="{{ image.url }}"><img src="{{ image.sq|coralize }}" width="75" height="75" alt="{{ image.title }}"  /></a></li>
+<li><a rel="gallery"
+    title="{% filter force_escape %}“{{ image.title|default:"" }}”<br/>by <a href="http://www.flickr.com/photos/{{ image.owner_id }}/{{ image.id }}/">{{ image.owner }}</a>{% endfilter %}"
+       href="http://www.flickr.com/photos/{{ image.owner_id }}/{{ image.id }}/"><img src="{{ image.sq|coralize }}" width="75" height="75" alt="{{ image.title }}"  /></a>
+</li>
 {% endfor %}
 </ul>
 {% else %}
