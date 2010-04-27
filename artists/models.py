@@ -5,7 +5,6 @@ class CachedArtist(Document, CachedDocument):
     """
     Contains artist related data fetched from various sources.
     """
-    images      = DictProperty(default={})
     urls        = DictProperty(default={})
     cache_state = DictProperty(default={})
 
