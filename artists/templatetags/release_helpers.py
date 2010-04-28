@@ -159,3 +159,29 @@ def addtypography(string):
         print e 
         return string
 addtypography.is_safe = True
+
+@register.inclusion_tag('artists/tags/abstract.html')
+def abstract_for(entity):
+    """
+    Node that displays Cached*.abstract
+    """
+    return {'entity': entity}
+
+@register.inclusion_tag('artists/tags/urls.html')
+def urls_for(entity, mbid):
+    """
+    Node that displays Cached*.urls
+    """
+    if entity._doc_type == 'CachedArtist':
+        entity_type = 'artist'
+    else:
+        entity_type = 'release'
+
+    return {'entity': entity, 'entity_type':entity_type, 'mbid': mbid}
+
+@register.inclusion_tag('artists/tags/tags.html')
+def tag_cloud_for(tags):
+    """
+    Node that displays Cached*.tags
+    """
+    return {'tags': tags}

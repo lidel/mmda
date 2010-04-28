@@ -4,9 +4,9 @@
 <ul class="favicons">
     {% for type,links in entity.urls.items %}
     {% if links|length_is:"1" %}
-    <li><a href="{{ links|first }}" class="url-{{ type|lower }}">{{ type|spacecamel }}</a></li>
+    <li><a href="{{ links|first }}">{{ type|spacecamel }}</a></li>
     {% else %}{% for link in links %}
-    <li><a href="{{ link }}" class="url-{{ type|lower }}">{{ type|spacecamel }} #{{ forloop.counter }}</a></li>
+    <li><a href="{{ link }}">{{ type|spacecamel }} #{{ forloop.counter }}</a></li>
     {% endfor %}
     {% endif %}
     {% endfor %}

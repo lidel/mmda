@@ -1,3 +1,4 @@
+{% if entity.abstract %}
 <section id="abstract">
 <h1>Abstract</h1>
 <blockquote cite="#abstractsource"><p class="drop intro">{{ entity.abstract.content|urlize }}</p></blockquote>
@@ -6,3 +7,4 @@
 <a href="{{ entity.abstract.url }}">read more at {{ entity.abstract.provider }}{% ifnotequal entity.abstract.lang 'en' %} [{{ entity.abstract.lang }}]{% endifnotequal %}</a>
 </cite>
 </section>
+{% endif %}
