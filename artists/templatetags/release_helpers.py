@@ -12,19 +12,19 @@ from datetime import datetime
 register = template.Library()
 
 @register.filter
-def inclusivedictsort(value, arg):
+def inclusivedictsort(list, key):
     """
     Sort list of dicts by specified field.
 
     Put the ones without such field at the end. (generic dictsort removed such from sorted list)
     The main use is to have releases sorted descending by year.
 
-    @param value: a list of dicts
-    @param arg: a dict key to sort the list by
+    @param list: a list of dicts
+    @param key: a dict key to sort the list by
 
     @return: a sorted list of dicts
     """
-    decorated = [(i[arg] if arg in i else '', i) for i in value]
+    decorated = [(i[key] if key in i else '', i) for i in list]
     decorated.sort()
     decorated.reverse()
     return [item[1] for item in decorated]

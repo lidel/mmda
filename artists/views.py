@@ -68,6 +68,7 @@ def show_artist_refresh(request, uri_artist, mbid):
                 release_groups = get_db('artists').view('artists/release_groups', key=mbid)
                 for group in release_groups:
                     del get_db('artists')[group['id']]
+            # TODO: remove 'lastfm' from artist cache_state if pictures were removed.
 
     artist              = get_basic_artist(mbid)
     artist_cache_state  = get_artist_cache_state(mbid)
