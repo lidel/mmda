@@ -172,7 +172,7 @@ def urls_for(entity, mbid):
     """
     Node that displays Cached*.urls
     """
-    if entity._doc_type == 'CachedArtist':
+    if '_doc_type' in entity and entity._doc_type == 'CachedArtist':
         entity_type = 'artist'
     else:
         entity_type = 'release'
