@@ -8,5 +8,5 @@ urlpatterns = patterns('mmda.artists.views',
 )
 urlpatterns += patterns('mmda.search.views',
    (r'^\S+/release/(?P<query_string>\S+)/$', 'create_search_result', {'query_type':'release'}),
-   (r'^(?P<query_string>\S+)/$', 'create_search_result', {'query_type':'artist'}),
+   (r'^(?P<query_string>[-\s\w\&]+)/$', 'create_search_result', {'query_type':'artist'}),
 )
