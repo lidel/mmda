@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load release_helpers %}
+{% block title %}mmda{% endblock %}
+
+{% block header %}
+<h1>Welcome to <a href="/">MMDA</a>
+
+    <small>Music MetaData Aggregator</small></h1>
+{% endblock %}
+
+{% block content %}
+
+<section class="generic fiveeighty clear">
+    <h1>What is MMDA?</h1>
+    <p>This page is a state of the art mashup that uses music related APIs, Python language and CouchDB to provide information about artists..</p>
+</section>
+
+<section class="generic threeforty end">
+    <h1>Recent artists</h1>
+
+    <ul>
+        {% for artist in recent_artists %}
+        <li><a href="{% url show-artist artist.name|slugify2 artist.mbid %}">{{ artist.name }}</a></li>
+        {% empty %}
+        <li> no info, yet</li>
+        {% endfor %}
+    </ul>
+
+</section>
+
+{% endblock %}

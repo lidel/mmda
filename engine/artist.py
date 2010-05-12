@@ -68,12 +68,23 @@ def get_artist_best_pictures(mbid):
 
     @return: a list of dicts with artist picture meta-data
     """
-    view = get_db('pictures').view('pictures/best_pictures', key=mbid)
+    view = get_db('pictures').view('pictures/best_pictures', key=mbid, limit=4)
     best_pictures = [group['value'] for group in view.all()]
 
     shuffle(best_pictures)
 
-    return best_pictures[:4]
+    return best_pictures
+
+def get_recent_artists():
+    """
+    Get recently cached artists required by mmda.artists.index
+
+    @return: a list of dicts with artist name and mbid
+    """
+    view = get_db('artists').view('artists/recent_artists', limit=10, descending=True)
+    recent_artists = [group['value'] for group in view.all()]
+
+    return recent_artists
 
 def get_artist_cache_state(mbid):
     """

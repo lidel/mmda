@@ -22,7 +22,7 @@ MB_WEBSERVICE_HOST  = 'www.uk.musicbrainz.org'             # mmda is efficient, 
                                                     # when deployed
 
 
-USER_AGENT = "MMDA/0.1 +http://music.aergia.eu/"    # how MMDA should say hello to other servers ;-)
+USER_AGENT = "MMDA/0.1 +http://music.aergia.eu/"    # how MMDA should say hello to other servers
 
 # Django settings for mmda project.
 
@@ -66,7 +66,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -108,6 +108,7 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'couchdbkit.ext.django',
+    'gunicorn',
     'mmda.artists',
     'mmda.tags',
     'mmda.news',

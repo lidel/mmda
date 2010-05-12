@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.core.urlresolvers import reverse
 from mmda.artists.templatetags.release_helpers import slugify2
 
-from mmda.engine.artist import get_basic_artist, get_artist_cache_state, get_populated_artist, get_artist_primary_releases, get_artist_best_pictures
+from mmda.engine.artist import get_recent_artists, get_basic_artist, get_artist_cache_state, get_populated_artist, get_artist_primary_releases, get_artist_best_pictures
 from mmda.engine.release import get_populated_releasegroup_with_release
 
 import recaptcha.client.captcha as rc
@@ -16,7 +16,8 @@ from couchdbkit.ext.django.loading import get_db
 
 def index(request):
     #TODO: ee?
-    return render_to_response('artists/index.html', locals())
+    recent_artists = get_recent_artists()
+    return render_to_response('index.html', locals())
 
 def show_artist(request, uri_artist, mbid):
     """

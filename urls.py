@@ -10,10 +10,11 @@ urlpatterns = patterns('',
     (r'^artist/', include('mmda.pictures.urls')),
     (r'^artist/', include('mmda.videos.urls')),
     (r'^artist/', include('mmda.news.urls')),
+    (r'^artist/', include('mmda.artists.urls')),
     (r'^(?P<url>.+)/feed/$','django.contrib.syndication.views.feed', {'feed_dict': feeds}),
     (r'^artist/', include('mmda.artists.urls')),
     (r'^tag/', include('mmda.tags.urls')),
     (r'^search/', include('mmda.search.urls')),
     (r'^static/(?P<path>.*)$', 'django.views.static.serve',{'document_root': settings.STATIC_DOC_ROOT, 'show_indexes': True}),
-
+    url(r'^$', 'mmda.artists.views.index', name='welcome-page'),
 )
