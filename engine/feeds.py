@@ -44,7 +44,7 @@ class ArtistNewsFeed(Feed):
             return 'There are no news sources for this artist at this time, but as soon they will be added this feed will include them.'
 
     def link(self, artist):
-        return reverse('show-artist-news', args=(slugify2(artist.name),'0cd12ab3-9628-45ef-a97b-ff18624f14a0'))
+        return reverse('show-artist-news', args=(slugify2(artist.name),'0cd12ab3-9628-45ef-a97b-ff18624f14a0')) # TODO? wtf
 
     def categories(self, artist):
         return ('music', artist.name)

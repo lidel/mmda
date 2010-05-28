@@ -3,7 +3,7 @@
 from datetime import datetime
 from django.conf import settings
 
-import gdata.youtube as yt
+import gdata.youtube as yt  # TODO: comment?
 import gdata.youtube.service as yts
 
 from mmda.engine.artist import get_basic_artist

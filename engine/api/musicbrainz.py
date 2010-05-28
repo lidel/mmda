@@ -15,6 +15,8 @@ class ExtendedArtistIncludes(ws.IIncludes):
 mb_webservice = ws.WebService(host=settings.MB_WEBSERVICE_HOST)
 mb_query = ws.Query(mb_webservice)
 
+# TODO: put mb timestamp in django cache (to limit hits) TODO
+
 MB_ARTIST_INCLUDES  = ExtendedArtistIncludes()
 MB_RELEASE_INCLUDES = ws.ReleaseIncludes(
                         tracks=True,
@@ -22,6 +24,6 @@ MB_RELEASE_INCLUDES = ws.ReleaseIncludes(
                         artistRelations=True,
                         releaseRelations=True,
                         urlRelations=True,
-                        )
+)
 MB_RELEASE_ARTIST   = ws.ReleaseIncludes(artist=True)
 
