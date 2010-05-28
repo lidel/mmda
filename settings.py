@@ -94,9 +94,13 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
+    'mmda.engine.cache.NginxMemcachedMiddleware',
     #'django.contrib.sessions.middleware.SessionMiddleware',
     #'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
+
+NGINX_CACHE_PREFIX = 'mmda'
+#CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
 
 ROOT_URLCONF = 'mmda.urls'
 

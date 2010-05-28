@@ -7,6 +7,7 @@ from mmda.artists.templatetags.release_helpers import slugify2
 
 from mmda.engine.artist import get_recent_artists, get_basic_artist, get_artist_cache_state, get_populated_artist, get_artist_primary_releases, get_artist_best_pictures
 from mmda.engine.release import get_populated_releasegroup_with_release
+from mmda.engine.cache import delete_memcached_keys
 
 import recaptcha.client.captcha as rc
 from mmda.engine.api.recaptcha import get_captcha_html
@@ -60,6 +61,7 @@ def show_artist_refresh(request, uri_artist, mbid):
         captcha = rc.submit(rc_token, rc_input, settings.RECAPTCHA_PRIV_KEY, rc_ip)
 
         if captcha.is_valid:
+            delete_memcached_keys(get_basic_artist(mbid))
             for db in reset:
                 try:
                     del get_db(db)[mbid]
