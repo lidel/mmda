@@ -27,6 +27,7 @@ USER_AGENT = "MMDA/0.1 +http://music.aergia.eu/"    # how MMDA should say hello 
 # Django settings for mmda project.
 
 DEBUG = True
+#DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -108,6 +109,7 @@ STATIC_DOC_ROOT = '/home/lidel/work/magisterka/django_app/mmda/static'
 
 TEMPLATE_DIRS = (
     '/home/lidel/work/magisterka/django_app/mmda/templates',
+    #'/home/lidel/httpd/music.aergia.eu/mmda/templates',
 )
 
 INSTALLED_APPS = (

@@ -49,7 +49,6 @@ def delete_memcached_keys(artist):
     """
     Quick hook that removes artist-related pages from memcached backend.
     """
-    # TODO: plug as hook after artist refresh
     if not settings.DEBUG:
 
         uri_name = slugify2(artist.name)
@@ -61,11 +60,10 @@ def delete_memcached_keys(artist):
                 "/artist/%s/videos/%s/" % uri,
                 "/artist/%s/news/%s/" % uri,
                ]
+
         # and all artist's releases
         artist_releases = get_db('artists').view('artists/all_artists_releases', key=artist.get_id)
         keys.extend([ "/artist/%s/release/%s/%s/" % (uri_name, slugify2(r['value'][0]), r['value'][1]) for r in artist_releases])
-
-        print keys # TODO: remove after debug
 
         for key in keys:
             cache.delete("%s:%s" % (settings.NGINX_CACHE_PREFIX, key))
