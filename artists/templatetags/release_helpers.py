@@ -5,6 +5,7 @@ import random
 from django import template
 from django.conf import settings
 from django.template.defaultfilters import slugify, urlencode, force_escape, safe
+from unidecode import unidecode
 
 from musicbrainz2.utils import extractUuid
 from datetime import datetime
@@ -52,20 +53,14 @@ trim.is_safe = True
 @register.filter
 def slugify2(value):
     """
-    Thin wrapper around default slugify to handle extreme unicode cases (such as japanese etc).
-
-    When generic slugify removes all characters in process, we decide to pass
-    original value in lowercase with '-' separator in such cases.
+    Thin wrapper around default slugify to handle extreme unicode cases (such as japanese etc)
+    using Unidecode library (http://pypi.python.org/pypi/Unidecode/0.04.1).
 
     @param value: a string
 
     @return: a SEO-friendly URL-ish string
     """
-    slugified = slugify(value)
-    if len(slugified):
-        return safe(force_escape(slugified))
-    else:
-        return safe(force_escape(value.strip().replace(' ','-').lower()))
+    return slugify(unidecode(value))
 slugify2.is_safe = True
 
 @register.filter
