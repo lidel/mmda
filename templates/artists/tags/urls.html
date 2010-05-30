@@ -1,6 +1,6 @@
 {% load release_helpers %}
 <section id="related-urls">
-<h1>{{ entity_type }} related websites</h1>
+<h1>{{ entity_type|capfirst }} related websites</h1>
 <ul class="favicons">
     {% for type,links in entity.urls.items %}
     {% if links|length_is:"1" %}
