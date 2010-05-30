@@ -42,6 +42,9 @@ li > ul {
 
 
 /* MAIN STRUCTURE STYLES */
+
+@import url("http://fonts.googleapis.com/css?family=Droid+Sans|Droid+Serif|Droid+Sans+Mono");
+
 html{
 	font-size:100%;
 	min-height:101%;
@@ -50,7 +53,7 @@ html{
 
 body{
 	font-size:62.5%;
-    font-family: verdana, helvetica, arial, sans-serif;
+    font-family: 'Droid Sans', arial, sans-serif;
 	color:#444;
 	background:/*url(images/grid.gif) top center repeat-y*/ #eee; /* Uncomment to display the grid */
 	border-top:0.5em solid #436F8D;
@@ -166,9 +169,12 @@ body > div#wrapper > header {
 	margin-bottom:1.5em;
 }
 /* Styles an introductory paragraph, similar to newspapers. Assign this class to the first paragraph in an article */
+/*
 p.intro:first-line{
 	font-variant:small-caps;
 }
+*/
+
 /* Styles a drop cap on each paragraph with this class */
 p.drop:first-letter{
 	float:left;
@@ -180,7 +186,7 @@ p.drop:first-letter{
 
 /* OTHER*/
 blockquote p{
-    font-family: Georgia, Garamond, "Times New Roman", serif;
+    font-family: 'Droid Serif', Georgia, Garamond, serif;
     text-align: justify;
 	/*font-size:1.4em!important;
 	line-height:1.7em!important;*/
@@ -194,7 +200,7 @@ blockquote p{
 	font-weight:inherit;
 }
 .amp{
-	font-family:Baskerville, "Goudy Old Style", "Palatino", "Book Antiqua", serif;
+	font-family: Baskerville, "Goudy Old Style", Palatino, "Book Antiqua", "Droid Serif", serif;
 	font-style:italic;
 	font-weight:normal;
 	line-height:inherit;
@@ -303,7 +309,7 @@ ul.out > li {
 
 
 h1 {
-    font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
+    font-family: 'Droid Serif', Georgia, Garamond, serif;
     font-weight:normal;
     letter-spacing: 0px;
 }
@@ -313,7 +319,7 @@ header > h1 {
     position:relative;
 }
 header > h1 > span.by {
-    font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
+    font-family: 'Droid Serif', Georgia, Garamond, serif;
     font-style: italic;
     font-size: 25%;
     margin-left:2em;
@@ -325,9 +331,10 @@ header > h1 > span.by a {
     font-style: normal;
 }
 header > h1 > small {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-family: 'Droid Sans', arial, serif;
     text-transform: uppercase;
     font-size: 0.2em;
+    letter-spacing:0.2em;
     text-shadow: 1px 1px 0 #FFFFFF;
 	white-space:nowrap;
     display:block;
@@ -584,7 +591,7 @@ blockquote .opener{
     color:#eef;
     display:block;
     float:left;
-    font-family: Georgia, Garamond, "Times News Roman", serif;
+    font-family: 'Droid Serif', Georgia, Garamond, serif;
     font-size: 10em;
     margin: 25px 10px 0 -25px;
     padding-right: 10px;
@@ -593,7 +600,6 @@ blockquote .opener{
     /*border: 1px solid red;*/
 }
 ul.news-stream li blockquote cite {
-    font-family: helvetica, arial, verdana, sans-serif;
     font-size:0.8em;
     margin-bottom:20px;
     white-space: nowrap;
@@ -622,7 +628,7 @@ ol#tracklisting > li:hover {
     background:#eef;
 }
 ol#tracklisting > li > span.duration {
-	font-family: monospace;
+	font-family: 'Droid Sans Mono', monospace;
     position:absolute;
     top:0;
     right:0;
@@ -710,7 +716,7 @@ section#artist-releases * { /* make local reset, just to be sure it wont break i
 #artist-releases li.year,
 #artist-releases li.type {
     list-style-type:none;
-    font-family: Georgia, Garamond, "Times New Roman", serif;
+    font-family: 'Droid Serif', Georgia, Garamond, serif;
 }
 #artist-releases li.type h2 {
     padding-top: 0.5em !important;
@@ -741,7 +747,7 @@ section#artist-releases * { /* make local reset, just to be sure it wont break i
 /* multi-column */
 
 #header span.query {
-    font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
+    font-family: 'Droid Serif', Georgia, Garamond, serif;
     font-style: italic;
     margin-left:1em;
     font-size: 200%;
@@ -751,7 +757,7 @@ section#artist-releases * { /* make local reset, just to be sure it wont break i
 }
 
 section.search-results li {
-    font-family: Georgia, Garamond, Arial, Helvetica, sans-serif;
+    font-family: 'Droid Serif', Georgia, Garamond, serif;
     list-style-type:none;
     margin-top: 1em;
     margin-bottom: 1em;
