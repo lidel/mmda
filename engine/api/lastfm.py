@@ -192,9 +192,8 @@ def populate_tag_lastfm(tag):
         lastfm.enable_caching()
         try:
             t = mmda_logger('last','request','tag-artists',tag.get_id)
-            lastfm_tag = lastfm.get_tag(tag.get_id)
+            lastfm_tag = lastfm.get_tag(tag.get_id.replace('-',' ')) # TODO: this is an ugly fix, make it pretty
             lastfm_artists = _lastfm_get_tag_artists_optimized(lastfm_tag)
-            #dir(lastfm_artists)
             mmda_logger('last','result','found',len(lastfm_artists),t)
         except Exception, e:
             mmda_logger('pylast','ERROR',e)

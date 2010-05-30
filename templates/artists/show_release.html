@@ -67,7 +67,7 @@
 
 
     {% if release.credits %}
-        <h1>Credits:</h1>
+        <h1>Credits</h1>
         {% regroup release.credits|dictsort:"type" by type as credits %}
         <ul id="release-credits">
         {% for credit_type in credits %}

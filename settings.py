@@ -15,8 +15,8 @@ RECAPTCHA_PRIV_KEY = ''
 
 
 
-#MB_WEBSERVICE_HOST  = 'musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
-MB_WEBSERVICE_HOST  = 'www.uk.musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
+MB_WEBSERVICE_HOST  = 'musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
+#MB_WEBSERVICE_HOST  = 'www.uk.musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
 #MB_WEBSERVICE_HOST  = 'music.aergia.eu'             # mmda is efficient, but with many concurrent users it can
                                                     # make more than 1 req/s, so it should use mirror server
                                                     # when deployed

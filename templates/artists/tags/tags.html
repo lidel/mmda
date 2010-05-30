@@ -1,6 +1,7 @@
+{% load release_helpers %}
 <ul id="tag-cloud">
     {% for tag,size in tags %}
-    <li><a class="t{{ size }}" href="{% url show-tag tag %}">{{ tag }}</a></li>
+    <li><a class="t{{ size }}" href="{% url show-tag tag|slugify2 %}">{{ tag }}</a></li>
     {% empty %}
     <li>no tags :-(</li>
     {% endfor %}
