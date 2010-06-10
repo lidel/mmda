@@ -1,837 +1,164 @@
-/* Selection of classes from:
- * TYPOGRIDPHY - TYPOGRAPHICAL AND GRID LAYOUT CSS FRAMEWORK FROM HARRY ROBERTS OF CSS WIZARDRY
- * v 0.1.1 / May 2008 /  http://csswizardry.com
- * */
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans|Droid+Serif|Droid+Sans+Mono);
 
 /* RESET CSS */
-body,div,header,article,section,aside,footer,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td {
-	margin:0;
-	padding:0;
-}
-fieldset,img {
-	border:0;
-}
-address,caption,cite,code,dfn,em,strong,th,var {
-	font-style:normal;
-	font-weight:normal;
-}
-h1,h2,h3,h4,h5,h6 {
-	font-size:100%;
-	font-weight:normal;
-}
-q:before,q:after {
-	content:'';
-}
-abbr,acronym {
-	border:0;
-}
+body,div,header,article,section,aside,footer,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0;padding:0;}
+fieldset,img{border:0;}
+address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:400;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:400;}
+q:before,q:after{content:'';}
+abbr,acronym{border:0;}
 /* RESET LISTS */
-ul {
-    list-style-position:inside;
-    margin-bottom:1em; /*TODO?*/
-}
-ul li {
-    list-style-type: none;
-}
-li > ul {
-    margin-left:1em;
-}
+ul{list-style-position:inside;margin-bottom:1em;/*TODO?*/}
+ul li{list-style-type:none;}
+li > ul{margin-left:1em;}
 /* END RESET CSS */
-
-
-
-
-/* MAIN STRUCTURE STYLES */
-
-@import url("http://fonts.googleapis.com/css?family=Droid+Sans|Droid+Serif|Droid+Sans+Mono");
-
-html{
-	font-size:100%;
-	min-height:101%;
-}
-
-
-body{
-	font-size:62.5%;
-    font-family: 'Droid Sans', arial, sans-serif;
-	color:#444;
-	background:/*url(images/grid.gif) top center repeat-y*/ #eee; /* Uncomment to display the grid */
-	border-top:0.5em solid #436F8D;
-	padding:0 1em;
-    text-shadow:1px 1px 1px #eee;
-
-}
+/* MAIN STYLES */
+html{font-size:100%;min-height:101%;}
+body{font-size:62.5%;font-family:'Droid Sans', arial, sans-serif;color:#444;background:#eee;border-top:.5em solid #436F8D;padding:0 1em;text-shadow:1px 1px 1px #eee;}
 /* wrapper */
-body > div#wrapper {
-	width:94em;
-	margin:0 auto;
-    border-left: 15px solid #fefefe;
-    border-right:15px solid #fefefe;
-    height:100%;
-    background: #fefefe;
-    overflow:hidden;
-    position:relative;
-}
-body > div#wrapper > header {
-	width:94em;
-	float:left;
-	padding-top:5em;
-	margin-bottom:4em;
-}
-
-/*GRIDS*/
-
-.generic{
-	border-top:0.5em solid #436F8D; /* The border at the top of each grid */
-	float:left;
-	padding-top:0.5em;
-	margin-bottom:2em;
-}
-/* Sets styles for any 'start' grids - this class MUST be given to a grid that is the first in a horizontal series */
-.clear{
-	clear:both;
-}
-/* Sets styles for any 'end' grids - this class MUST be given to a grid that is the last in a horizontal series */
-.end{
-	margin-left:0 !important;
-	margin-right:0 !important;
-}
-/* 220px */
-.twotwenty{
-	width:22em;
-	margin-right:2em;
-}
-/* 280px */
-.twoeighty{
-	width:28em;
-	margin-right:2em;
-}
-/* 340px */
-.threeforty{
-	width:34em;
-	margin-right:2em;
-}
-/* 400px */
-.fourhun{
-	width:40em;
-	margin-right:2em;
-}
-/* 460px */
-.foursixty{
-	width:46em;
-	margin-right:2em;
-}
-/* 520px */
-.fivetwenty{
-	width:52em;
-	margin-right:2em;
-}
-/* 580px */
-.fiveeighty{
-	width:58em;
-	margin-right:2em;
-}
-/* 640px */
-.sixforty{
-	width:64em;
-	margin-right:2em;
-}
-/* 700px */
-.sevenhun{
-	width:70em;
-	margin-right:2em;
-}
-/* 760px */
-.sevensixty{
-	width:76em;
-	margin-right:2em;
-}
-/* 820px */
-.eighttwenty{
-	width:82em;
-	margin-right:2em;
-}
-/* 880px */
-.eighteighty{
-	width:88em;
-	margin-right:2em;
-}
-/* 940px */
-.nineforty{
-	width:94em;
-}
-
+body > div#wrapper{width:94em;margin:0 auto;border-left:15px solid #fefefe;border-right:15px solid #fefefe;height:100%;background:#fefefe;overflow:hidden;position:relative;}
+body > div#wrapper > header{width:94em;float:left;padding-top:5em;margin-bottom:4em;}
+/* GRIDS */
+/* BEGIN TYPOGRIDPHY: Selection of classes from: TYPOGRIDPHY v 0.1.1 / May 2008 /  http://csswizardry.com */
+.generic{border-top:.5em solid #436F8D;float:left;padding-top:.5em;margin-bottom:2em;}
+/* Sets styles for any 'start' grids - this class MUST be given to a grid that is the first in a horizontal series */.clear{clear:both;}
+/* Sets styles for any 'end' grids - this class MUST be given to a grid that is the last in a horizontal series */.end{margin-left:0!important;margin-right:0!important;}
+/* 220px */.twotwenty{width:22em;margin-right:2em;}
+/* 280px */.twoeighty{width:28em;margin-right:2em;}
+/* 340px */.threeforty{width:34em;margin-right:2em;}
+/* 400px */.fourhun{width:40em;margin-right:2em;}
+/* 460px */.foursixty{width:46em;margin-right:2em;}
+/* 520px */.fivetwenty{width:52em;margin-right:2em;}
+/* 580px */.fiveeighty{width:58em;margin-right:2em;}
+/* 640px */.sixforty{width:64em;margin-right:2em;}
+/* 700px */.sevenhun{width:70em;margin-right:2em;}
+/* 760px */.sevensixty{width:76em;margin-right:2em;}
+/* 820px */.eighttwenty{width:82em;margin-right:2em;}
+/* 880px */.eighteighty{width:88em;margin-right:2em;}
+/* 940px */.nineforty{width:94em;}
+/* END TYPOGRIDPHY */
 /*PARAGRAPHS*/
-
-.generic p{
-	font-size:1.2em;
-	line-height:1.5em;
-	margin-bottom:1.5em;
-}
-/* Styles an introductory paragraph, similar to newspapers. Assign this class to the first paragraph in an article */
-/*
-p.intro:first-line{
-	font-variant:small-caps;
-}
-*/
-
-/* Styles a drop cap on each paragraph with this class */
-p.drop:first-letter{
-	float:left;
-	font-size:2em;
-	margin-top:-0.05em;
-	margin-right:0.05em;
-	margin-bottom:-0.5em;
-}
-
+.generic p{font-size:1.2em;line-height:1.5em;margin-bottom:1.5em;}
+p.drop:first-letter{float:left;font-size:2em;margin-top:-.05em;margin-right:.05em;margin-bottom:-.5em;}
 /* OTHER*/
-blockquote p{
-    font-family: 'Droid Serif', Georgia, Garamond, serif;
-    text-align: justify;
-	/*font-size:1.4em!important;
-	line-height:1.7em!important;*/
-	margin-bottom:1.3em!important;
-}
-.generic strong{
-	font-variant:small-caps;
-}
-.generic em{
-	font-style:italic;
-	font-weight:inherit;
-}
-.amp{
-	font-family: Baskerville, "Goudy Old Style", Palatino, "Book Antiqua", "Droid Serif", serif;
-	font-style:italic;
-	font-weight:normal;
-	line-height:inherit;
-}
-abbr{
-	border-bottom:1px dotted #666;
-	border-color:inherit;
-	cursor:help;
-}
-.right-float{ /* Float any item to the right */
-	float:right;
-	margin-left:2em;
-	margin-right:0;
-}
-.left-float{ /* Float any item to the left */
-	float:left;
-	margin-right:2em;
-	margin-left:0;
-}
-
+blockquote p{font-family:'Droid Serif', Georgia, Garamond, serif;text-align:justify;margin-bottom:1.3em!important;}
+.generic strong{font-variant:small-caps;}
+.generic em{font-style:italic;font-weight:inherit;}
+.amp{font-family:Baskerville, "Goudy Old Style", Palatino, "Book Antiqua", "Droid Serif", serif;font-style:italic;font-weight:400;line-height:inherit;}
+abbr{border-bottom:1px dotted #666;border-color:inherit;cursor:help;}
+.right-float{float:right;margin-left:2em;margin-right:0;}
+.left-float{float:left;margin-right:2em;margin-left:0;}
 /* IMAGE STYLES */
-img{
-	font-size:1em;
-}
-
+img{font-size:1em;}
 /* LIST STYLES */
-ul li.caption{
-	font-variant:small-caps;
-	list-style:none;
-	color:#222;
-}
-
-/* THE END, REST IS MINE LOL */
-
+ul li.caption{font-variant:small-caps;list-style:none;color:#222;}
 /* ARTIST PAGE */
-.w8 {
-	background: url('http://imgur.com/2Pv6j.gif') 1.5em left no-repeat;
-    padding: 2em;
-    padding-left:3em;
-}
-
-#artist-top-gfx {
-    margin-bottom:1.5em;
-}
-
-.favicons {
-    line-height: 16px;
-}
-.favicons img {
-    vertical-align:text-top;
-    margin-right:1em;
-    width:16px;
-    height:16px;
-    box-shadow: 1px 1px 5px #aaa;
-    -moz-box-shadow: 1px 1px 5px #aaa;
-    -webkit-box-shadow: 1px 1px 5px #aaa;
-}
-
-
-.twocols {
-    -moz-column-count: 2;
-    -webkit-column-count: 2;
-    column-count: 2;
-
-    -moz-column-gap: 3em;
-    -webkit-column-gap: 3em;
-    column-gap: 3em;
-}
-.threecols {
-    -moz-column-count: 3;
-    -webkit-column-count: 3;
-    column-count: 3;
-
-    -moz-column-gap: 2em;
-    -webkit-column-gap: 2em;
-    column-gap: 2em;
-}
-.colrule {
-    -moz-column-rule: 1px dotted #aaa;
-    -webkit-column-rule: 1px dotted #aaa;
-    column-rule: 1px dotted #aaa;
-}
-ul.colrule {
-    list-style-position:inside;
-}
-
-/*
-ul.in > li {
-    list-style-position: inside !important;
-}
-ul.out > li {
-    list-style-position: outside !important;
-    margin-left:1.5em;
-}
-*/
-/*
-.nobr,
-.nobr * {
-	white-space: nowrap !important;
-}
-.br,
-.br * {
-	white-space: normal !important;
-}
-*/
-
-
-h1 {
-    font-family: 'Droid Serif', Georgia, Garamond, serif;
-    font-weight:normal;
-    letter-spacing: 0px;
-}
-header > h1 {
-    text-shadow: 1px 1px 3px #ccc;
-    font-size: 500%;
-    position:relative;
-}
-header > h1 > span.by {
-    font-family: 'Droid Serif', Georgia, Garamond, serif;
-    font-style: italic;
-    font-size: 25%;
-    margin-left:2em;
-    margin-top:0.5em;
-    display:block;
-}
-header > h1 > span.by a {
-    font-size: 150%;
-    font-style: normal;
-}
-header > h1 > small {
-    font-family: 'Droid Sans', arial, serif;
-    text-transform: uppercase;
-    font-size: 0.2em;
-    letter-spacing:0.2em;
-    text-shadow: 1px 1px 0 #FFFFFF;
-	white-space:nowrap;
-    display:block;
-    position:absolute;
-    left:10em;
-    padding-top:0.5em;
-}
-
-
-header > h1.release-title {/* hung quotes */
-    text-indent: -0.5em;
-    margin-left:0.5em;
-}
-
-
-a {
-    text-decoration:none;
-    color:#436F8D;
-    padding:3px;
-}
-a:hover {
-    -moz-border-radius:5px;
-    -webkit-border-radius:5px;
-    border-radius:5px;
-    background:#436F8D;
-    color:#fff !important;
-    text-shadow:1px 1px 1px #333;
-    border-bottom: 1px solid #000;
-}
-
-article h1 {
-    border-bottom: 1px dotted  #436F8D;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    font-size: 2em;
-    text-shadow: 1px 1px 2px #ddd;
-}
-
-#searchbox {
-    display: block;
-    position: absolute;
-    top:-0.5em;
-    right:0px;
-    background:#436F8D;
-    text-shadow:none;
-    color:#fff;
-
-    -webkit-border-bottom-right-radius: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    border-bottom-right-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-#searchbox fieldset {
-    padding: 0 5px 2px 5px;
-    text-align:center;
-}
-
-
-
-cite#abstractsource { /* mine */
-    margin-top:-1em;
-    margin-bottom:2em;
-    display:block;
-}
-cite#abstractsource > img {
-    vertical-align:top;
-    margin-right: 0.5em;
-}
-cite#abstractsource > img.cc-info {
-	cursor:help;
-    box-shadow: none;
-    -moz-box-shadow: none;
-    -webkit-box-shadow: none;
-}
-
-/* NAV */
-nav > ul {
-    margin-bottom: 1px;
-    list-style-type: none;
-}
-nav > ul > li {
-    display: inline;
-}
-
-body#a-profile  li.a-profile a,
-body#a-pictures li.a-pictures a,
-body#a-videos   li.a-videos a,
-body#a-news     li.a-news a,
-body#a-refresh  li.a-refresh a
-{
-    color: #000;
-    background-color: #fff;
-}
-li.a-refresh {
-    right:0;
-    position:absolute;
-}
-
-nav > ul > li > a {
-    padding: 3px 4px;
-    margin-right: 0px;
-    text-decoration: none;
-    border: 1px solid #436F8D;
-    border-bottom: none;
-    color: #666;
-    background-color: #eee;
-    font-weight: bold;
-}
-
-nav > ul > li > a:hover {
-    background-color: #ffc !important;
-    color:#333 !important;
-    text-shadow:1px 1px 1px #ccc;
-}
-
-nav > ul > li > a,
-nav > ul > li > a:hover {
-    -webkit-border-top-left-radius: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    -webkit-border-bottom-right-radius: 0px;
-    -webkit-border-bottom-left-radius: 0px;
-    -moz-border-radius-bottomright: 0px;
-    -moz-border-radius-bottomleft: 0px;
-    border-bottom-right-radius: 0px;
-    border-bottom-left-radius: 0px;
-}
-
-
-
-
-/* TAG CLOUD PROTOTYPE */
-ul#tag-cloud {
-    text-align: center;
-    padding: 0.1em;
-    margin:0 0 1.5em 0;
-    display:block;
-}
-#tag-cloud li {
-    display: inline;
-}
-#tag-cloud a {
-    color: #223;
-    vertical-align:middle;
-    line-height: 1.4em;
-    white-space: nowrap;
-}
-#tag-cloud .t0 {font-size: 0.8em;}
-#tag-cloud .t1 {font-size: 1.0em;}
-#tag-cloud .t2 {font-size: 1.2em;}
-#tag-cloud .t3 {font-size: 1.4em;}
-#tag-cloud .t4 {font-size: 1.6em;}
-
+.w8{background:url(data:image/gif;base64,R0lGODlhEAAQAPEAAP///8LCwoKCggAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQACgD/ACwAAAAAEAAQAAACGoQfMhLnrsZ6VFr64sRIMQ6G4kiW5ommqloAACH5BAAKAP8ALAAAAAAQABAAAAIahI+pEDISFnLjyVPzNdTu9kTbSJbmiabquhYAIfkEAAoA/wAsAAAAABAAEAAAAhqEj6nLFjJEaAaOSMHd2WL6RFNGluaJpupaFgAh+QQACgD/ACwAAAAAEAAQAAACGoSPqcvtj4IYIrw56Mv8cvFIlAWV5omm6lMAACH5BAAKAP8ALAAAAAAQABAAAAIahI+py+0Po4xBDBGeHffxr33CU13ZhKaqUQAAIfkEAAoA/wAsAAAAABAAEAAAAhmEj6nL7Q+jnLTaF8QQ4emxPeDojQKmcUkBACH5BAAKAP8ALAAAAAAQABAAAAIZhI+py+0P4wtiiPDqsG/77AlTdUnmiaZJAQAh+QQACgD/ACwAAAAAEAAQAAACGoSPqcvdIYYIDsQhK971ZgdJVEWW5ommKloAACH5BAAKAP8ALAAAAAAQABAAAAIahI+pEDISFnLjyVPzNdTu9kTbSJbmiabquhYAOw%3D%3D) 1.5em left no-repeat;padding:2em;padding-left:3em;}
+#artist-top-gfx{margin-bottom:1.5em;}
+.favicons{line-height:16px;}
+.favicons img{vertical-align:text-top;margin-right:1em;width:16px;height:16px;box-shadow:1px 1px 5px #aaa;-moz-box-shadow:1px 1px 5px #aaa;-webkit-box-shadow:1px 1px 5px #aaa;}
+.twocols{-moz-column-count:2;-webkit-column-count:2;column-count:2;-moz-column-gap:3em;-webkit-column-gap:3em;column-gap:3em;}
+.threecols{-moz-column-count:3;-webkit-column-count:3;column-count:3;-moz-column-gap:2em;-webkit-column-gap:2em;column-gap:2em;}
+.colrule{-moz-column-rule:1px dotted #aaa;-webkit-column-rule:1px dotted #aaa;column-rule:1px dotted #aaa;}
+ul.colrule{list-style-position:inside;}
+h1{font-family:'Droid Serif', Georgia, Garamond, serif;font-weight:400;letter-spacing:0;}
+header > h1{text-shadow:1px 1px 3px #ccc;font-size:500%;position:relative;}
+header > h1 > span.by{font-family:'Droid Serif', Georgia, Garamond, serif;font-style:italic;font-size:25%;margin-left:2em;margin-top:.5em;display:block;}
+header > h1 > span.by a{font-size:150%;font-style:normal;}
+header > h1 > small{font-family:'Droid Sans', arial, serif;text-transform:uppercase;font-size:.2em;letter-spacing:.2em;text-shadow:1px 1px 0 #FFF;white-space:nowrap;display:block;position:absolute;left:10em;padding-top:.5em;}
+header > h1.release-title{/* hung quotes */text-indent:-.5em;margin-left:.5em;}
+a{text-decoration:none;color:#436F8D;padding:3px;}
+a:hover{-moz-border-radius:5px;-webkit-border-radius:5px;border-radius:5px;background:#436F8D;color:#fff!important;text-shadow:1px 1px 1px #333;border-bottom:1px solid #000;}
+article h1{border-bottom:1px dotted #436F8D;margin-top:.5em;margin-bottom:.5em;font-size:2em;text-shadow:1px 1px 2px #ddd;}
+#searchbox{display:block;position:absolute;top:-.5em;right:0;background:#436F8D;text-shadow:none;color:#fff;-webkit-border-bottom-right-radius:5px;-webkit-border-bottom-left-radius:5px;-moz-border-radius-bottomright:5px;-moz-border-radius-bottomleft:5px;border-bottom-right-radius:5px;border-bottom-left-radius:5px;}
+#searchbox fieldset{padding:0 5px 2px;text-align:center;}
+cite#abstractsource{/* mine */margin-top:-1em;margin-bottom:2em;display:block;}
+cite#abstractsource > img{vertical-align:top;margin-right:.5em;}
+cite#abstractsource > img.cc-info{cursor:help;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;}
+/* NAV */nav > ul{margin-bottom:1px;list-style-type:none;}
+nav > ul > li{display:inline;}
+body#a-profile li.a-profile a,body#a-pictures li.a-pictures a,body#a-videos li.a-videos a,body#a-news li.a-news a,body#a-refresh li.a-refresh a{color:#000;background-color:#fff;}
+li.a-refresh{right:0;position:absolute;}
+nav > ul > li > a{padding:3px 4px;margin-right:0;text-decoration:none;border:1px solid #436F8D;border-bottom:none;color:#666;background-color:#eee;font-weight:700;}
+nav > ul > li > a:hover{background-color:#ffc!important;color:#333!important;text-shadow:1px 1px 1px #ccc;}
+nav > ul > li > a,nav > ul > li > a:hover{-webkit-border-top-left-radius:5px;-webkit-border-top-right-radius:5px;-moz-border-radius-topleft:5px;-moz-border-radius-topright:5px;border-top-left-radius:5px;border-top-right-radius:5px;-webkit-border-bottom-right-radius:0;-webkit-border-bottom-left-radius:0;-moz-border-radius-bottomright:0;-moz-border-radius-bottomleft:0;border-bottom-right-radius:0;border-bottom-left-radius:0;}
+/* TAG CLOUD */
+ul#tag-cloud{text-align:center;padding:.1em;margin:0 0 1.5em;display:block;}
+#tag-cloud li{display:inline;}
+#tag-cloud a{color:#223;vertical-align:middle;line-height:1.4em;white-space:nowrap;}
+#tag-cloud .t0{font-size:.8em;}
+#tag-cloud .t1{font-size:1em;}
+#tag-cloud .t2{font-size:1.2em;}
+#tag-cloud .t3{font-size:1.4em;}
+#tag-cloud .t4{font-size:1.6em;}
 /* ARTIST IMAGES */
-.gfx li,
-.gfx a,
-.gfx img {
-    display:block;
-}
-.gfx li {
-	background: #fff url('http://imgur.com/vGqiP.gif') 50% 50% no-repeat;
-    float:left;
-    margin:0.5em;
-}
-.gfx a {
-    padding:0px;
-    border:none;
-}
-.gfx a:hover {
-    background:none;
-}
-.gfx li {
-    border: 1px solid #ccc;
-}
-.gfx li:hover {
-    border: 1px solid #436F8D;
-}
-.gfx img {
-    border: 2px solid #fff;
-    font-size: 1em;
-    box-shadow: 2px 2px 5px #ccc;
-    -moz-box-shadow: 2px 2px 5px #ccc;
-    -webkit-box-shadow: 2px 2px 5px #ccc;
-}
-.gfx img:hover {
-    box-shadow: 2px 2px 5px #888;
-    -moz-box-shadow: 2px 2px 5px #888;
-    -webkit-box-shadow: 2px 2px 5px #888;
-}
-/* ARTIST VIDEOS */
-/* TODO: refactor for many video sources */
-#youtube-videos li {
-    position:relative;
-    margin: 1em;
-    width: 204px;
-    height:154px;
-}
-#youtube-videos img {
-    width: 200px;
-    height:150px;
-}
-
-#youtube-videos span {
-    color: #888;
-    display:none;
-    /*TODO: write duration -> timestamp filter */
-}
-#youtube-videos div {
-    position:absolute;
-    width:194px;
-    top:0;
-    left:0;
-    margin:2px;
-    padding:3px;
-    border-bottom: 1px solid #ccc;
-    color:#000;
-    background-color:#fff;
-    text-shadow:1px 1px 2px #ccc;
-    opacity: .8;
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);/* For IE 5-7 */
-    -MS-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";/* For IE 8 */
-}
-#youtube-videos li:hover div {
-    border-bottom:1px solid #436F8D;
-    color:#fff;
-    background-color:#000;
-    text-shadow:1px 1px 0px #000;
-} 
-
+.gfx li,.gfx a,.gfx img{display:block;}
+.gfx li{background:#fff url(data:image/gif;base64,R0lGODlhGAAYAPQAAP///87Ozvr6+uDg4LCwsOjo6I6OjsjIyJycnNjY2KioqMDAwPLy8nZ2doaGhri4uGhoaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJBwAAACwAAAAAGAAYAAAFriAgjiTwPGVaCgnpOKSgkkOzjBA0MoM8i47GQJQTCQbDn2jRQABhgMKAoTqSDA3qSTQoxEYDg+FgVHhHgjOA1xsdxAjfTzotFRQGglJakJcYVEqCgyoBBAgIBAGDDHQFDIaIioyOgYSXAn6XIgULBGRzXZoJBAQLmil0lgWlLSIBlgBpO0g+s26nUWddXyoDC4sACa5SsTMLC4EBwUdJPwwLzsu0qHYkw72bBWozIQAh+QQJBwAAACwAAAAAGAAYAAAFsCAgjiSwLGVaCgNpGGQgqGNhHGPTjA+U0KNXC6ATJSA7oOhgUIheT8hDJSiQEAaGCcWAOEgz0QChCIgEBGsNEWYMBmFAAIEgxGmFt5ZUeCBQQHkFd2CESoeIIwkLBAQLP4cMeQMFDIuNj4iSb5WJnmeGngwBC2aBlIQDJziHk3sABSdDAHBgagButSKvAAkyuHuUYHgBkAVqebw0AQHBQyyzNKO3byNuoSS8x8OfwIchACH5BAkHAAAALAAAAAAYABgAAAW4ICCOJHAcZVoKA4kgZCKoY4EEo2GMS9PSIgWiINKJBg0HcBRAPEQvaGOhEhBHBATDhGI0diOZqEAgJESCxbammAEeDQhOlCgv3DSBAwJ5kgoLBChACBAGZ1V4KgxrS44pAwcLCwc/SwwFAwMFDJGTlY+YmpyPpSQCiqYiDAkBliqZBakFAQGIS5kDjQy1VwCyp76dA3iNvz+MR74AqSOdVwXQuo+abppo10ssjdkAnc0rf8vgl8YqIQAh+QQJBwAAACwAAAAAGAAYAAAFrCAgjiQQBGVaCgVJEOQgqGNBJCOCjIfR0qLXTycaGAzAUYKwCMIACsOBxiAtCLMTgGHYjWSiwmIxEAkO1RpWtHA0cMXxNCkwNBpNEiOwQAEVDQhlKgIzQAxpSYopBQknCT9JDw4QEA4PjY+RQJOVl4ugoYssA5uMpYYjDAOliwWsiQKwNakALKqsqbWvIohFm7V6rQAFP6+JQLlFg7KDQLKJrLjBKbvAor3IKiEAIfkECQcAAAAsAAAAABgAGAAABbUgII4kkCRlmhbkspCDoI7MMowEMQYIO4suhignKiAUv9FgEQC+AA9EUyUcHRayE4CB0Cll20DABwhURTXwwWC4FcWopADBPpQYiYB7RjAoyCUCYDMMZ0mHdwUDAwWGMwsGDQ0GCwyKjI4qkJKUiJ6faJkiAoqAKQgQBnE0i6YpAg4QEA8jAotnBYMApCMPDRBTuySKoSKMJAm6rD4FzAOiJYtgi6PUcs9Kewwxh7rNJMqIhYchACH5BAkHAAAALAAAAAAYABgAAAW0ICCOJDAMZZoy5HGQhaCOTFCMyzImxD2LgQALkBMVCITfqBBIiFyiBcGpku0CshNAQNAtrYLT0GQVMQ7WgAKBMp98Py4CESgJCgO4aoF46JUpAmWAhDR4eWM/BwgGBggHDIcFiTOLjY+FmZkMlCN3eUoKDWwlDG+AAgYNDV5bYl8wCFYLDg1UWzBtnAAMEA4kA4M0oAAFPgYQD4QnVloACRANqANjzgAPELczg8YkWJq8nSUhACH5BAkHAAAALAAAAAAYABgAAAWtICCOJFAUZZoKZJKQqDoKAzMGwTgstiwOAxYAJ2IsFr4RYxBziQKLgUwoKkhNKMHiABPSaqMCFcDIiRIEQowMXE8X6RdJYHWnDoSFPVkSjPmARVZMPUkBBAgIBAEMgwWFPoeJi4GVlQyQc3VJBAYKV0ptfAIIBgZcIl+FYjAKQgemoGNWIg8PZA0GXSpLMQ4OIggNSHxAQhAQPw3ASTSFyCMLDaBTJL8tf3y2fCEAIfkECQcAAAAsAAAAABgAGAAABa8gII4kwDBlmgpkUZCoOgpDDAzDWAS2jLO3nCkQkMEGL4BLlAgkVy3hCSAIJGAznK0AFNFGg8XiycA9jQexcFZAGgGBBe/9FnTp+BGjjezJEgsEBAsJe2Z+KoCChHmNjVMqAm1nKQsID5RlbnUECAhFXlpeCGcFBEABCghrdw4QKGImBggtdyMPEAYiBroACgYHeA0QVwANDSIFvHQJEA8jxyMHBpQlVSTLYLZ0sW8hACH5BAkHAAAALAAAAAAYABgAAAW0ICCOJMAwZZoKZFGQrDoKAyoOw8gMsQzgMZyIlvOJdi+AS1SoyXrK4umWPM5wNiVUUC0EAtndoOpLfMkA7tg4CCSyRpUAGq8fm2O4bHBYLA41eAV6Knx+gHaJR4QwdCMJBhAIRgcEC2gPEBAOjjALBAQJIwEQDQ9DCmQMCzEJoEkCoiMGDSgHB2kIBC2dCw2TAAjADwgBdQ4NRQYGTAgKcQMNC7PMIgEIaCWxJMIkPIoAt3EhACH5BAkHAAAALAAAAAAYABgAAAWtICCOJMAwZZoKZFGQrDoKAyoOw8gMsQzgMZyIlvOJdi+AS1SoyXrK4umWHM5wNiVUUN3xdLiqr+mENcWpM9TIbrsBDwcE4ni0C4lAIFGIz+t3eXtob0ZTPgJrIwMIDQpGAQsBWSILDQ0GiiUHCwtFAAkNDgtDBGIMB0GdSTQkCAYoegACBKQ6MgcGjwAEBJUECW0GBkkICEy9bAUGByPGIwmmRq0jySMFmj6yRiEAIfkECQcAAAAsAAAAABgAGAAABbIgII4kwDBlmgpkUZCsOgoDKg7DyAyxDOAxnIiW84l2L4BLVKipBIlW8XRLDkcBSOMxKvQAAuuON3pAII6vqukkJQwQhLHplVGN+LxqYWg0DAt5DGwFDHx+gIKENnqNdzICaiMDCgYERgMBCYwiBwYGCJIlCQEBVgOfB0MLnAwBXaU2YSQEoQAJUQILqjoyAQhcAAuBAAELRUYKCEkElybDeAUIryLNk6xGNCTQXY0juHghACH5BAkHAAAALAAAAAAYABgAAAWzICCOJMAwZVoKAVkUpKCSCfSMwzAygzyLDUhClBMJij/RA2IQvZwDVOpIckBQJyJs5AMkGo6FEbE1lnm90aLRMHRnhZwUh2gokvHCm5RN+v8qBwgGBggHfwxxAwUMgoSGiIqMgJQifZUjBQ8IYj95ewEICAR7KYpzAwgKLQACB3OtOpY5PgJlAAukAEUsQ1wzCQSdB4deAbczBARbC50MAayeBL64nQAFAbBTt8R8mLuyPyEAOw%3D%3D) 50% 50% no-repeat;float:left;margin:.5em;}
+.gfx a{padding:0;border:none;}
+.gfx a:hover{background:none;}
+.gfx li{border:1px solid #ccc;}
+.gfx li:hover{border:1px solid #436F8D;}
+.gfx img{border:2px solid #fff;font-size:1em;box-shadow:2px 2px 5px #ccc;-moz-box-shadow:2px 2px 5px #ccc;-webkit-box-shadow:2px 2px 5px #ccc;}
+.gfx img:hover{box-shadow:2px 2px 5px #888;-moz-box-shadow:2px 2px 5px #888;-webkit-box-shadow:2px 2px 5px #888;}
+/* ARTIST VIDEOS */ /* TODO: refactor for many video sources */
+#youtube-videos li{position:relative;margin:1em;width:204px;height:154px;}
+#youtube-videos img{width:200px;height:150px;}
+#youtube-videos span{color:#888;display:none;/*TODO: write duration -> timestamp filter */}
+#youtube-videos div{position:absolute;width:194px;top:0;left:0;margin:2px;padding:3px;border-bottom:1px solid #ccc;color:#000;background-color:#fff;text-shadow:1px 1px 2px #ccc;opacity:.8;filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=80);/* For IE 5-7 */-ms-filter:progid:DXImageTransform.Microsoft.Alpha(Opacity=80);/* For IE 8 */}
+#youtube-videos li:hover div{border-bottom:1px solid #436F8D;color:#fff;background-color:#000;text-shadow:1px 1px 0 #000;}
 /* NEWS FEED */
-ul.news-stream {
-    margin-left:5px;
-    margin-right:5px;
-}
-ul.news-stream li {
-    display: block;
-}
-ul.news-stream li > h1 {
-        text-transform: uppercase;
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-}
-ul.news-stream li h1 small {
-        float:right;
-        font-size:0.6em;
-}
-
-blockquote .opener{
-    color:#eef;
-    display:block;
-    float:left;
-    font-family: 'Droid Serif', Georgia, Garamond, serif;
-    font-size: 10em;
-    margin: 25px 10px 0 -25px;
-    padding-right: 10px;
-    text-align:right;
-    width:3px;
-    /*border: 1px solid red;*/
-}
-ul.news-stream li blockquote cite {
-    font-size:0.8em;
-    margin-bottom:20px;
-    white-space: nowrap;
-}
-ul.news-stream li blockquote cite:before {
-    content:'– ';
-    font-size:100%;
-}
-
-
+ul.news-stream{margin-left:5px;margin-right:5px;}
+ul.news-stream li{display:block;}
+ul.news-stream li > h1{text-transform:uppercase;display:block;overflow:hidden;text-overflow:ellipsis;}
+ul.news-stream li h1 small{float:right;font-size:.6em;}
+blockquote .opener{color:#eef;display:block;float:left;font-family:'Droid Serif', Georgia, Garamond, serif;font-size:10em;margin:25px 10px 0 -25px;padding-right:10px;text-align:right;width:3px;/*border: 1px solid red;*/}
+ul.news-stream li blockquote cite{font-size:.8em;margin-bottom:20px;white-space:nowrap;}
+ul.news-stream li blockquote cite:before{content:'– ';font-size:100%;}
 /* TRACKLISTING */
-ol#tracklisting {
-    list-style-type: decimal-leading-zero;
-    display:block;
-}
-ol#tracklisting > li {
-    position:relative;
-    list-style-position: outside;
-    margin-left:2.5em;
-    margin-bottom:0.5em;
-    color: #aaa;
-    line-height: 1.5em;
-    border-bottom: 1px dotted #ddd;
-}
-ol#tracklisting > li:hover {
-    background:#eef;
-}
-ol#tracklisting > li > span.duration {
-	font-family: 'Droid Sans Mono', monospace;
-    position:absolute;
-    top:0;
-    right:0;
-    color: #888;
-    font-size:1.1em;
-}
-ol#tracklisting > li > span.title {
-    color: #555;
-    font-size:1.1em;
-    max-width: 39em;
-    display:block;
-}
-div#artwork {
-    position:relative;
-    width:160px;
-    height:152px;
-
-    float:right;
-    margin-left:5em;
-    margin-top:-2em;
-}
-div#artwork > img {
-    right:1px;
-    top:1px;
-    position:absolute;
-    width:150px;
-    height:150px;
-}
-div#artwork > div {
-    height:152px;
-    width:160px;
-    position:absolute;
-    left:0;
-    top:0;
-    background-image: url('http://i.imgur.com/u8lwN.png');
-}
-
-#other-track-listings > li > a {
-	white-space: normal !important;
-}
-#other-track-listings > li > small {
-	white-space: nowrap !important;
-}
-
-/* ARTIST DISCOGRAPHY */
-
-/* list of release types */
-section#artist-releases * { /* make local reset, just to be sure it wont break in future */
-    margin:0;
-    padding:0;
-}
-#artist-releases a {
-    padding:3px;
-}
-#artist-releases #release-types { /* hide if no javascript */
-     display: none;
-}
-.ui-tabs .ui-tabs-hide {
-     display: none;
-}
-#artist-releases #release-types li {
-    display:inline;
-    border-right: 1px solid #ccc;
-    padding: 0 5px 0 2px;
-}
-#artist-releases #release-types a {
-    color: #666;
-}
-
-#artist-releases li.ui-tabs-selected a {
-    font-weight: bold;
-}
-#artist-releases li.ui-tabs-selected a:before {
-	content:'☉ ' !important;
-}
-#artist-releases .last {
-    border-right: none !important;
-}
-
+ol#tracklisting{list-style-type:decimal-leading-zero;display:block;}
+ol#tracklisting > li{position:relative;list-style-position:outside;margin-left:2.5em;margin-bottom:.5em;color:#aaa;line-height:1.5em;border-bottom:1px dotted #ddd;}
+ol#tracklisting > li:hover{background:#eef;}
+ol#tracklisting > li > span.duration{font-family:'Droid Sans Mono', monospace;position:absolute;top:0;right:0;color:#888;font-size:1.1em;}
+ol#tracklisting > li > span.title{color:#555;font-size:1.1em;max-width:39em;display:block;}
+div#artwork{position:relative;width:160px;height:152px;float:right;margin-left:5em;margin-top:-2em;}
+div#artwork > img{right:1px;top:1px;position:absolute;width:150px;height:150px;}
+div#artwork > div{height:152px;width:160px;position:absolute;left:0;top:0;background-image:url(http://i.imgur.com/u8lwN.png);}
+#other-track-listings > li > a{white-space:normal!important;}
+#other-track-listings > li > small{white-space:nowrap!important;}
+/* ARTIST DISCOGRAPHY *//* list of release types */
+section#artist-releases *{/* make local reset, just to be sure it wont break in future */margin:0;padding:0;}
+#artist-releases a{padding:3px;}
+#artist-releases #release-types{/* hide if no javascript */display:none;}
+.ui-tabs .ui-tabs-hide{display:none;}
+#artist-releases #release-types li{display:inline;border-right:1px solid #ccc;padding:0 5px 0 2px;}
+#artist-releases #release-types a{color:#666;}
+#artist-releases li.ui-tabs-selected a{font-weight:700;}
+#artist-releases li.ui-tabs-selected a:before{content:'☉ '!important;}
+#artist-releases .last{border-right:none!important;}
 /* release-list*/
-#artist-releases ul.release-list {
-    margin-top: 1em !important;
-}
-#artist-releases li.title,
-#artist-releases li.year,
-#artist-releases li.type {
-    list-style-type:none;
-    font-family: 'Droid Serif', Georgia, Garamond, serif;
-}
-#artist-releases li.type h2 {
-    padding-top: 0.5em !important;
-    font-size: 1.2em !important;
-}
-#artist-releases li.year ul {
-    margin: 0.25em 0 0.25em 3.5em !important;
-    font-size: 1.25em !important;
-    line-height: 1.75em !important;
-}
-#artist-releases li.year h3 {
-    border-top:1px dotted #eee;
-    color: #aaa;
-    padding-top: 0.5em !important;
-    margin-bottom:-2em !important;
-    font-size: 1.1em !important;
-    display:block;
-}
-#artist-releases li.title {
-	white-space:nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-
-/* TAG PAGE (TAG ARTISTS) */
-/* SEARCH RESULTS */
-/* multi-column */
-
-#header span.query {
-    font-family: 'Droid Serif', Georgia, Garamond, serif;
-    font-style: italic;
-    margin-left:1em;
-    font-size: 200%;
-}
-#header span.query big {
-    font-size: 150%;
-}
-
-section.search-results li {
-    font-family: 'Droid Serif', Georgia, Garamond, serif;
-    list-style-type:none;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    border-bottom: 1px dotted #eee;
-    display:block;
-}
-section.search-results a {
-    font-size: 1.5em;
-	white-space:normal;
-}
+#artist-releases ul.release-list{margin-top:1em!important;}
+#artist-releases li.title,#artist-releases li.year,#artist-releases li.type{list-style-type:none;font-family:'Droid Serif', Georgia, Garamond, serif;}
+#artist-releases li.type h2{padding-top:.5em!important;font-size:1.2em!important;}
+#artist-releases li.year ul{margin:.25em 0 .25em 3.5em!important;font-size:1.25em!important;line-height:1.75em!important;}
+#artist-releases li.year h3{border-top:1px dotted #eee;color:#aaa;padding-top:.5em!important;margin-bottom:-2em!important;font-size:1.1em!important;display:block;}
+#artist-releases li.title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* TAG PAGE (TAG ARTISTS) *//* SEARCH RESULTS *//* multi-column */
+#header span.query{font-family:'Droid Serif', Georgia, Garamond, serif;font-style:italic;margin-left:1em;font-size:200%;}
+#header span.query big{font-size:150%;}
+section.search-results li{font-family:'Droid Serif', Georgia, Garamond, serif;list-style-type:none;margin-top:1em;margin-bottom:1em;border-bottom:1px dotted #eee;display:block;}
+section.search-results a{font-size:1.5em;white-space:normal;}
 /*artist search specific */
-section#similar-artists span.score,
-section#artist-search-results span.score {
-    color:#aaa;
-    float:right;
-    display:block;
-}
-section#artist-search-results span.disambiguation {
-    font-variant: small-caps;
-    margin-left:1em;
-}
+section#similar-artists span.score,section#artist-search-results span.score{color:#aaa;float:right;display:block;}
+section#artist-search-results span.disambiguation{font-variant:small-caps;margin-left:1em;}
 /*release search specific */
-section#release-search-results span.score {
-    color:#aaa;
-    font-size: 1.2em;
-    float:right;
-    display:block;
-}
-section#release-search-results span.artist {
-    margin-left:1em;
-    font-size:0.8em;
-}
-
-
-
+section#release-search-results span.score{color:#aaa;font-size:1.2em;float:right;display:block;}
+section#release-search-results span.artist{margin-left:1em;font-size:.8em;}
 /* FANCYBOX */
-#fancybox-outer {
-    border: 1px solid #ccc;
-}
-
-#fb-caption {
-    padding-left:0.5em;
-    float:left;
-    text-align:left;
-    line-height:1.5em;
-}
-#fb-caption > a {
-    font-weight:bold;
-}
-#fb-caption > img {
-    vertical-align:text-top;
-}
-
-#fb-nav {
-    float:right;
-    margin-right:0.5em;
-}
-#fb-nav > div {
-    float:left;
-    padding-top:3px;
-    height: 27px;
-    line-height: 27px;
-    margin-right:1em;
-}
-#fb-nav > a {
-    vertical-align:text-top;
-    float:left;
-    display:block;
-    border:none;
-    line-height:1em;
-    padding-bottom:0;
-    margin:0;
-}
-#fb-nav > #close-button {
-    margin-left:1em;
-}
+#fancybox-outer{border:1px solid #ccc;}
+#fb-caption{padding-left:.5em;float:left;text-align:left;line-height:1.5em;}
+#fb-caption > a{font-weight:700;}
+#fb-caption > img{vertical-align:text-top;}
+#fb-nav{float:right;margin-right:.5em;}
+#fb-nav > div{float:left;padding-top:3px;height:27px;line-height:27px;margin-right:1em;}
+#fb-nav > a{vertical-align:text-top;float:left;display:block;border:none;line-height:1em;padding-bottom:0;margin:0;}
+#fb-nav > #close-button{margin-left:1em;}
