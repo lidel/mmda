@@ -92,7 +92,7 @@
         </ul>
     {% endif %}
 
-    {% urls_for artist artist._id %}
+    {% urls_for artist artist.get_id %}
 
     {% if artist.members or  artist.member_of  or artist.collaborations or  artist.collaboration_of  %}
     <section id="artist-relationships">

@@ -1,19 +1,4 @@
-# keys, apis, and other stuff that mmda uses
-
-LASTFM_API_KEY = '' # key that is used with last.fm database queries
-                                                    # if you use this software please replace it with your own key(!)
-                                                    # it can be obtained for free at http://www.last.fm/api/account
-
-FLICKR_API_KEY = '' # flickr key
-                                                    # if you use this software please replace it with your own key(!)
-                                                    # it can be obtained for free at http://www.flickr.com/services/api
-
-                                                    # reCAPTCHA
-                                                    # you can get them at: https://admin.recaptcha.net/recaptcha/createsite/
-RECAPTCHA_PUB_KEY  = ''
-RECAPTCHA_PRIV_KEY = ''
-
-
+from keys import LASTFM_API_KEY, FLICKR_API_KEY, RECAPTCHA_PUB_KEY, RECAPTCHA_PRIV_KEY
 
 MB_WEBSERVICE_HOST  = 'musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
 #MB_WEBSERVICE_HOST  = 'www.uk.musicbrainz.org'             # mmda is efficient, but with many concurrent users it can
