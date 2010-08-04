@@ -35,5 +35,7 @@ Dependencies
 License
 -------
 
-This is free and unencumbered software released into the *public domain*. See `UNLICENSE`.
+MMDA is free and unencumbered software released into the *public domain*. See `UNLICENSE`.
+
+Third party libraries may be available under different license conditions.
 
