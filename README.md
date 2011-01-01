@@ -5,14 +5,6 @@ A poof-of-concept mashup that uses music related APIs, Python and CouchDB to pro
 
 Developed as a demo application for my thesis (in polish): [Programowanie i wdrażanie aplikacji sieciowych w języku Python](http://lidel.org/mgr/).
 
-
-Demo
-----
-
-Testing instance is available at <http://music.aergia.eu> (HTTP auth: `mmda`/`mmda`).
-Still very raw, but basic functionality is there.
-
-
 Dependencies
 ------------
 
