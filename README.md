@@ -5,6 +5,8 @@ A poof-of-concept mashup that uses music related APIs, Python and CouchDB to pro
 
 Developed as a demo application for my thesis (in polish): [Programowanie i wdrażanie aplikacji sieciowych w języku Python](http://lidel.org/mgr/).
 
+No longer maintained. See [mmda2](http://github.com/lidel/mmda2) which is new take on music meta-data aggregation. This time in pure HTML5/JS/CSS.
+
 Dependencies
 ------------
 
@@ -27,7 +29,9 @@ Dependencies
 License
 -------
 
-MMDA is free and unencumbered software released into the *public domain*. See `UNLICENSE`.
+To the extent possible under law, the author have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty. 
+
+You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>. 
 
 Third party libraries may be available under different license conditions.
 
