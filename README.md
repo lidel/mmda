@@ -5,7 +5,7 @@ A poof-of-concept mashup that uses music related APIs, Python and CouchDB to pro
 
 Developed as a demo application for my thesis (in polish): [Programowanie i wdrażanie aplikacji sieciowych w języku Python](http://lidel.org/mgr/).
 
-No longer maintained. See [mmda2](http://github.com/lidel/mmda2) which is new take on music meta-data aggregation. This time in pure HTML5/JS/CSS.
+No longer maintained. See [mmda2](http://github.com/lidel/mmda2) which is a new take on music meta-data aggregation. This time in pure HTML5/JS/CSS.
 
 Dependencies
 ------------
