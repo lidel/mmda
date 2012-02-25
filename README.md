@@ -3,7 +3,7 @@ MMDA
 
 A poof-of-concept mashup that uses music related APIs, Python and CouchDB to provide various informations about artists.
 
-Developed as a demo application for my thesis (in polish): [Programowanie i wdrażanie aplikacji sieciowych w języku Python](http://lidel.org/mgr/).
+Developed as a demo application for my thesis (in polish): [Programowanie i wdrażanie aplikacji sieciowych w języku Python](http://lidel.org/mmda/).
 
 No longer maintained. See [mmda2](http://github.com/lidel/mmda2) which is a new take on music meta-data aggregation. This time in pure HTML5/JS/CSS.
 
