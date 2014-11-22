@@ -1,11 +1,17 @@
 MMDA
 ====
 
-A poof-of-concept mashup that uses music related APIs, Python and CouchDB to provide various informations about artists.
+An old poof-of-concept mashup that used music related APIs, Python and CouchDB to provide various informations about artists.
 
-Developed as a demo application for my thesis (in polish): [Programowanie i wdrażanie aplikacji sieciowych w języku Python](http://lidel.org/mmda/).
+Developed as a simple demo application for my thesis (in `pl_PL`): [Programowanie i wdrażanie aplikacji sieciowych w języku Python (2010)](http://lidel.org/mmda/) which was a simple introduction to Python-based web development.
 
-No longer maintained. See [mmda2](http://github.com/lidel/mmda2) which is a new take on music meta-data aggregation. This time in pure HTML5/JS/CSS.
+Warning: legacy code, no longer maintained
+------------
+
+This project *did not aged well* and is left here only due to *personal nostalgia*.   
+[MusicBrainz NGS](https://wiki.musicbrainz.org/Next_Generation_Schema) was introduced in 2011, deprecating the old API used by MMDA.    
+In the following years the [MusicBrainz.org](http://musicbrainz.org/) site got a lot of neat updates making MMDA functionally obsolete.
+
 
 Dependencies
 ------------
